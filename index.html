@@ -55,6 +55,7 @@
             background: var(--glass-bg); backdrop-filter: blur(30px); -webkit-backdrop-filter: blur(30px);
             border-radius: 24px; border: 1px solid var(--glass-border);
             box-shadow: 0 25px 80px -20px rgba(0,0,0,0.1); overflow: hidden;
+            position: relative;
         }
 
         /* HEADER */
@@ -116,7 +117,32 @@
             grid-column: 1 / 2; grid-row: 2 / 3;
             overflow-y: auto; padding: 2.5rem;
             display: flex; flex-direction: column; gap: 2rem; scroll-behavior: smooth;
+            position: relative;
+            z-index: 1;
         }
+
+        #diagram-layer {
+            position: absolute; inset: 0;
+            width: 100%; height: 100%;
+            pointer-events: none; z-index: 3;
+        }
+
+        .diagram-node rect {
+            fill: rgba(255,255,255,0.95);
+            stroke: var(--primary-color);
+            stroke-width: 1.5;
+            rx: 12; ry: 12;
+            filter: drop-shadow(0 6px 18px rgba(0,0,0,0.08));
+        }
+
+        .diagram-node text {
+            font-family: var(--font-display);
+            font-size: 0.9rem;
+            fill: var(--text-dark);
+        }
+
+        .diagram-edge { stroke: var(--secondary-color); stroke-width: 2; opacity: 0.9; }
+        .diagram-label { font-family: var(--font-body); font-size: 0.8rem; fill: var(--text-dark); }
         
         .message {
             max-width: 85%; padding: 1.5rem 2rem;
@@ -291,6 +317,16 @@
             </div>
 
             <div id="chat-history"></div>
+
+            <svg id="diagram-layer" aria-hidden="true">
+                <defs>
+                    <marker id="arrowhead" markerWidth="10" markerHeight="8" refX="10" refY="4" orient="auto" markerUnits="strokeWidth">
+                        <path d="M0,0 L10,4 L0,8 z" fill="var(--secondary-color)"></path>
+                    </marker>
+                </defs>
+                <g id="diagram-edges" stroke-linecap="round" stroke="currentColor"></g>
+                <g id="diagram-nodes"></g>
+            </svg>
 
             <!-- SIDEBAR: TRACKER & VOCAB WALLET -->
             <div id="side-panel">
@@ -790,9 +826,14 @@
             return text;
         }
 
-        async function appendMessage(role, text) {
+        let messageCounter = 0;
+
+        async function appendMessage(role, text, options = {}) {
             const div = document.createElement('div');
             div.className = `message ${role}`;
+            const messageId = options.messageId || `msg-${Date.now()}-${messageCounter++}`;
+            div.id = messageId;
+            div.dataset.messageId = messageId;
             
             let content = text;
             if(role === 'ai') {
@@ -814,7 +855,132 @@
             
             chatEl.appendChild(div);
             chatEl.scrollTop = chatEl.scrollHeight;
+            if(diagramState.nodes.length || diagramState.edges.length) scheduleDiagramSync();
+            return messageId;
         }
+
+        const diagramLayer = document.getElementById('diagram-layer');
+        const diagramNodesGroup = document.getElementById('diagram-nodes');
+        const diagramEdgesGroup = document.getElementById('diagram-edges');
+        const svgNS = 'http://www.w3.org/2000/svg';
+        const diagramState = { nodes: [], edges: [], options: {} };
+        let diagramScheduled = false;
+
+        const syncDiagramViewport = () => {
+            if(!diagramLayer) return { width: 0, height: 0, rect: { left: 0, top: 0 } };
+            const rect = diagramLayer.getBoundingClientRect();
+            diagramLayer.setAttribute('width', rect.width);
+            diagramLayer.setAttribute('height', rect.height);
+            return { width: rect.width, height: rect.height, rect };
+        };
+
+        const getMessageAnchor = (messageId, layerRect) => {
+            if(!messageId) return null;
+            const el = document.getElementById(messageId);
+            if(!el) return null;
+            const rect = el.getBoundingClientRect();
+            return {
+                x: rect.left - layerRect.left + rect.width / 2,
+                y: rect.top - layerRect.top + rect.height / 2
+            };
+        };
+
+        const renderDiagram = () => {
+            diagramScheduled = false;
+            const viewport = syncDiagramViewport();
+            diagramNodesGroup.innerHTML = '';
+            diagramEdgesGroup.innerHTML = '';
+
+            if(!diagramState.nodes.length && !diagramState.edges.length) return;
+
+            const nodeWidth = diagramState.options.nodeWidth || 160;
+            const nodeHeight = diagramState.options.nodeHeight || 64;
+            const positions = {};
+
+            diagramState.nodes.forEach(node => {
+                const anchor = getMessageAnchor(node.messageId, viewport.rect) || null;
+                const x = (node.x ?? anchor?.x ?? viewport.width / 2);
+                const y = (node.y ?? anchor?.y ?? viewport.height / 2);
+
+                positions[node.id] = { x, y };
+
+                const group = document.createElementNS(svgNS, 'g');
+                group.classList.add('diagram-node');
+                group.setAttribute('data-node-id', node.id);
+                group.setAttribute('transform', `translate(${x - nodeWidth / 2}, ${y - nodeHeight / 2})`);
+
+                const rect = document.createElementNS(svgNS, 'rect');
+                rect.setAttribute('width', nodeWidth);
+                rect.setAttribute('height', nodeHeight);
+                if(node.color) rect.setAttribute('fill', node.color);
+
+                const text = document.createElementNS(svgNS, 'text');
+                text.setAttribute('x', nodeWidth / 2);
+                text.setAttribute('y', nodeHeight / 2 + 4);
+                text.setAttribute('text-anchor', 'middle');
+                text.textContent = node.label || node.id;
+
+                group.appendChild(rect);
+                group.appendChild(text);
+                diagramNodesGroup.appendChild(group);
+            });
+
+            diagramState.edges.forEach(edge => {
+                const from = positions[edge.from];
+                const to = positions[edge.to];
+                if(!from || !to) return;
+
+                const line = document.createElementNS(svgNS, 'line');
+                line.setAttribute('x1', from.x);
+                line.setAttribute('y1', from.y);
+                line.setAttribute('x2', to.x);
+                line.setAttribute('y2', to.y);
+                line.setAttribute('class', 'diagram-edge');
+                line.setAttribute('stroke', edge.color || 'var(--secondary-color)');
+                line.setAttribute('marker-end', 'url(#arrowhead)');
+                diagramEdgesGroup.appendChild(line);
+
+                if(edge.label) {
+                    const label = document.createElementNS(svgNS, 'text');
+                    label.setAttribute('class', 'diagram-label');
+                    label.setAttribute('text-anchor', 'middle');
+                    label.setAttribute('x', (from.x + to.x) / 2);
+                    label.setAttribute('y', (from.y + to.y) / 2 - 6);
+                    label.textContent = edge.label;
+                    diagramEdgesGroup.appendChild(label);
+                }
+            });
+        };
+
+        const scheduleDiagramSync = () => {
+            if(diagramScheduled) return;
+            diagramScheduled = true;
+            window.requestAnimationFrame(renderDiagram);
+        };
+
+        window.renderFlow = (nodes = [], edges = [], options = {}) => {
+            diagramState.nodes = nodes;
+            diagramState.edges = edges;
+            diagramState.options = options;
+            scheduleDiagramSync();
+        };
+
+        window.clearFlow = () => {
+            diagramState.nodes = [];
+            diagramState.edges = [];
+            diagramState.options = {};
+            diagramNodesGroup.innerHTML = '';
+            diagramEdgesGroup.innerHTML = '';
+        };
+
+        window.diagramLayoutController = {
+            renderFlow: window.renderFlow,
+            clearFlow: window.clearFlow,
+            sync: scheduleDiagramSync
+        };
+
+        chatEl.addEventListener('scroll', scheduleDiagramSync);
+        window.addEventListener('resize', scheduleDiagramSync);
 
         async function generateResponse(msg) {
             chatHistory.push({ role: "user", parts: [{ text: msg }] });
