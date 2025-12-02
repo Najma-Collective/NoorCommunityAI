@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ELT Materials Showcase | Noor</title>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Questrial&family=Marcellus&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary-color: #3d5a3d;
+            --secondary-color: #7a9b7a;
+            --accent-color: #e67e22;
+            --bg-color: #f5f1e8;
+            --text-dark: #2a3328;
+            --font-display: "Marcellus", serif;
+            --font-body: "Nunito", sans-serif;
+            --font-ui: "Questrial", sans-serif;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: var(--font-body);
+            color: var(--text-dark);
+            background: var(--bg-color);
+            line-height: 1.6;
+        }
+
+        /* Header */
+        header {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(40px);
+            padding: 1rem 2rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        nav {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: flex-end;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        nav a {
+            color: var(--text-dark);
+            text-decoration: none;
+            font-family: var(--font-ui);
+            font-weight: 600;
+            transition: color 0.3s;
+        }
+
+        nav a:hover {
+            color: var(--primary-color);
+        }
+
+        nav a.active {
+            background: var(--primary-color);
+            color: white;
+            padding: 0.5rem 1.5rem;
+            border-radius: 20px;
+        }
+
+        /* Hero Section */
+        .hero {
+            text-align: center;
+            padding: 3rem 2rem;
+            background: var(--bg-color);
+        }
+
+        .hero h1 {
+            font-family: var(--font-display);
+            font-size: 2.5rem;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+
+        .hero p {
+            font-size: 1.1rem;
+            color: var(--secondary-color);
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        /* Main Content */
+        main {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .section {
+            background: white;
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .section-header h2 {
+            font-family: var(--font-display);
+            color: var(--primary-color);
+            font-size: 1.5rem;
+        }
+
+        .section-icon {
+            font-size: 1.5rem;
+        }
+
+        /* Cards Grid */
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .card {
+            background: #fff;
+            border: 2px solid #f0f0f0;
+            border-radius: 12px;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            border-color: var(--accent-color);
+            transform: translateY(-4px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+        }
+
+        .card-icon {
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .card h3 {
+            font-family: var(--font-display);
+            color: var(--text-dark);
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .card p {
+            color: #666;
+            font-size: 0.95rem;
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+
+        .card-button {
+            display: inline-block;
+            padding: 0.6rem 1.5rem;
+            background: var(--accent-color);
+            color: white;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+            border: none;
+            cursor: pointer;
+            font-family: var(--font-ui);
+        }
+
+        .card-button:hover {
+            background: #d35400;
+            transform: translateY(-2px);
+        }
+
+        /* Yellow highlight card */
+        .highlight-card {
+            background: linear-gradient(135deg, #fff8e1 0%, #ffecb3 100%);
+            border: 2px solid #ffa726;
+        }
+
+        .highlight-card .card-icon {
+            color: var(--accent-color);
+        }
+
+        /* Coordinators Section */
+        .coordinator-items {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .coordinator-item {
+            display: flex;
+            align-items: start;
+            gap: 1rem;
+            padding: 1rem;
+            background: #f9f9f9;
+            border-radius: 8px;
+            border-left: 3px solid var(--secondary-color);
+        }
+
+        .coordinator-item-icon {
+            font-size: 1.5rem;
+            color: var(--secondary-color);
+        }
+
+        .coordinator-item h4 {
+            font-family: var(--font-display);
+            color: var(--primary-color);
+            margin-bottom: 0.25rem;
+        }
+
+        .coordinator-item p {
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            background: var(--primary-color);
+            color: white;
+            text-align: center;
+            padding: 3rem 2rem;
+            border-radius: 16px;
+            margin: 3rem 0;
+        }
+
+        .cta-section h2 {
+            font-family: var(--font-display);
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .cta-section p {
+            font-size: 1.1rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+        }
+
+        .cta-button {
+            display: inline-block;
+            padding: 1rem 2.5rem;
+            background: white;
+            color: var(--primary-color);
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 700;
+            font-family: var(--font-ui);
+            transition: all 0.3s;
+        }
+
+        .cta-button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 2rem;
+            color: var(--secondary-color);
+            font-size: 0.9rem;
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            nav {
+                flex-wrap: wrap;
+                gap: 1rem;
+            }
+
+            .cards-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .section {
+                padding: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <nav>
+            <a href="#ethos">Ethos</a>
+            <a href="#al-manar">Al-Manar Society</a>
+            <a href="#join">Join Us</a>
+            <a href="#" class="active">ELT Materials</a>
+        </nav>
+    </header>
+
+    <!-- Hero -->
+    <section class="hero">
+        <h1>ELT Materials Showcase</h1>
+        <p>Choose your role to explore materials and resources designed for trauma-aware, agency-building language education.</p>
+    </section>
+
+    <!-- Main Content -->
+    <main>
+        <!-- For Teachers -->
+        <section class="section">
+            <div class="section-header">
+                <span class="section-icon">👩‍🏫</span>
+                <h2>For Teachers</h2>
+            </div>
+
+            <div class="highlight-card card">
+                <div class="card-icon">🧡</div>
+                <span style="font-weight: 700; color: var(--accent-color);">Trauma-Aware Pedagogy</span>
+                <h3>Trauma Awareness Training</h3>
+                <p>Comprehensive training module for educators to understand and implement trauma-aware teaching practices that create neurocognitively safe learning environments.</p>
+                <a href="#" class="card-button">Access Training ↗</a>
+            </div>
+        </section>
+
+        <!-- For Students -->
+        <section class="section">
+            <div class="section-header">
+                <span class="section-icon">👥</span>
+                <h2>For Students</h2>
+            </div>
+
+            <div class="cards-grid">
+                <div class="card">
+                    <div class="card-icon">📝</div>
+                    <span style="font-size: 0.85rem; color: #999;">A</span>
+                    <h3>Exams</h3>
+                    <p>B2 level examination module with comprehensive assessment tasks designed to evaluate language proficiency across all skills.</p>
+                    <a href="#" class="card-button">Start Exam ↗</a>
+                </div>
+
+                <div class="card">
+                    <div class="card-icon">📚</div>
+                    <span style="font-size: 0.85rem; color: #999;">B</span>
+                    <h3>Asynchronous Learning</h3>
+                    <p>B1 level self-paced learning activities that allow students to work through materials at their own pace with structured pre-task activities.</p>
+                    <a href="#" class="card-button">Begin Learning ↗</a>
+                </div>
+
+                <div class="card">
+                    <div class="card-icon">🤖</div>
+                    <span style="font-size: 0.85rem; color: #999;">C</span>
+                    <h3>AI Instructor Pre-Class</h3>
+                    <p>Interactive AI-powered learning system that provides personalized pre-class instruction and scaffolded support for language development.</p>
+                    <a href="ai-transparency.html" class="card-button">AI Instructor ↗</a>
+                </div>
+
+                <div class="card">
+                    <div class="card-icon">📊</div>
+                    <span style="font-size: 0.85rem; color: #999;">D</span>
+                    <h3>Lesson Slide Deck</h3>
+                    <p>Comprehensive presentation materials for structured lessons with visual supports and interactive components for classroom engagement.</p>
+                    <a href="#" class="card-button">View Slides ↗</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- For Coordinators -->
+        <section class="section">
+            <div class="section-header">
+                <span class="section-icon">📋</span>
+                <h2>For Coordinators</h2>
+            </div>
+
+            <p style="margin-bottom: 1.5rem; color: #666;">
+                <strong>Coming Soon:</strong> Comprehensive coordinator tools including:
+            </p>
+
+            <div class="coordinator-items">
+                <div class="coordinator-item">
+                    <div class="coordinator-item-icon">🗺️</div>
+                    <div>
+                        <h4>Heat Map Dashboard</h4>
+                        <p>Visual analytics showing student gaps, attendance times, to optimize scheduling and resource allocation.</p>
+                    </div>
+                </div>
+
+                <div class="coordinator-item">
+                    <div class="coordinator-item-icon">📚</div>
+                    <div>
+                        <h4>Content Library</h4>
+                        <p>Centralized repository of teaching materials, assessments, and resources with search and filtering capabilities.</p>
+                    </div>
+                </div>
+
+                <div class="coordinator-item">
+                    <div class="coordinator-item-icon">📅</div>
+                    <div>
+                        <h4>Student Timetable Matches</h4>
+                        <p>Spreadsheet tools and for managing student schedules, tracking progress and coordinating session logistics.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA -->
+        <section class="cta-section">
+            <h2>Want to create the next addition?</h2>
+            <p>We are always looking designers to contribute materials that reflect our teaching philosophy, pedagogical values, or request a walkthrough of any item listed above.</p>
+            <a href="#" class="cta-button">Access ELT Materials</a>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2024 Najma Collective | Building trauma-aware, agency-centered language education</p>
+    </footer>
+</body>
+</html>
