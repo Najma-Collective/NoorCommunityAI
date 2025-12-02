@@ -8,10 +8,11 @@
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&family=Questrial&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Questrial&family=Marcellus&display=swap" rel="stylesheet">
     
-    <!-- Libraries -->
+    <!-- Markdown Library -->
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <!-- PDF Library -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
     <style>
@@ -19,30 +20,46 @@
            DESIGN SYSTEM
            ===================================================================== */
         :root {
-            --primary-color: #7a8471;
-            --secondary-color: #9caf88;
-            --accent-color: #d4a373; 
-            --error-color: #ef476f;
-            --text-dark: #2f3a2b;
+            /* Palette - Sage Theme (Default) */
+            --primary-color: #5c6b53;
+            --secondary-color: #8da386;
+            --accent-color: #d4a373;
+            --bg-color: #f0f2ef;
             --glass-bg: rgba(255, 255, 255, 0.9);
-            --glass-border: rgba(255, 255, 255, 0.8);
+            --glass-border: rgba(255, 255, 255, 0.9);
+            --text-dark: #2a3328;
             
-            --font-display: "Questrial", sans-serif;
+            /* Text Highlights (The Key) */
+            --hl-vocab-bg: #eaddcf;     /* Warm Sand for Vocab */
+            --hl-vocab-text: #8f5b34;   
+            --hl-grammar-bg: #dee8e6;   /* Cool Mist for Grammar */
+            --hl-grammar-text: #4a7c76; 
+            --hl-alert-bg: #fce8e8;     /* Soft Rose for Correction */
+            --hl-alert-text: #c45a5a;   
+
+            /* Fonts */
+            --font-display: "Marcellus", serif; 
             --font-body: "Nunito", sans-serif;
+            --font-ui: "Questrial", sans-serif;
         }
 
-        body.theme-ocean { --primary-color: #4a7c76; --secondary-color: #72a5a5; --accent-color: #e07a5f; --text-dark: #1d2b2b; }
-        body.theme-sunset { --primary-color: #a67056; --secondary-color: #e0cdac; --accent-color: #9d6b53; --text-dark: #3a2a22; }
-
+        /* Ocean Theme */
+        body.theme-ocean { 
+            --primary-color: #46696d; --secondary-color: #72a5a5; 
+            --hl-vocab-text: #d67a5b; --hl-grammar-text: #2c5559;
+            --bg-color: #ebf2f2;
+        }
+        
         *, *::before, *::after { box-sizing: border-box; }
 
         body {
             margin: 0; height: 100dvh; font-family: var(--font-body);
             color: var(--text-dark); font-size: 16px;
-            overflow: hidden; background: #f4f6f4; transition: all 0.5s ease;
+            overflow: hidden; background: var(--bg-color); transition: background 0.8s ease;
         }
 
-        #wave-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; }
+        /* Animation Canvas */
+        #wave-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; opacity: 0.5; }
 
         #app-wrapper {
             position: relative; z-index: 1; display: flex; align-items: center; justify-content: center;
@@ -50,237 +67,199 @@
         }
 
         #activity-container {
-            width: 100%; max-width: 1300px; height: 96vh;
-            display: grid; grid-template-columns: 1fr 380px; grid-template-rows: auto 1fr auto;
-            background: var(--glass-bg); backdrop-filter: blur(30px); -webkit-backdrop-filter: blur(30px);
-            border-radius: 24px; border: 1px solid var(--glass-border);
-            box-shadow: 0 25px 80px -20px rgba(0,0,0,0.1); overflow: hidden;
-            position: relative;
+            width: 100%; max-width: 1400px; height: 96vh;
+            display: grid; grid-template-columns: 1fr 340px; grid-template-rows: auto 1fr auto;
+            background: var(--glass-bg); backdrop-filter: blur(40px); -webkit-backdrop-filter: blur(40px);
+            border-radius: 32px; border: 1px solid var(--glass-border);
+            box-shadow: 0 30px 90px -20px rgba(42, 51, 40, 0.15); overflow: hidden;
         }
 
-        /* HEADER */
+        /* --- HEADER --- */
         .chat-header {
-            grid-column: 1 / -1; padding: 1rem 2rem;
-            background: rgba(255,255,255,0.6); border-bottom: 1px solid rgba(0,0,0,0.06);
+            grid-column: 1 / -1; padding: 1.2rem 2.5rem;
+            background: rgba(255,255,255,0.4); border-bottom: 1px solid rgba(0,0,0,0.03);
             display: flex; align-items: center; justify-content: space-between;
         }
         
-        .header-left { display: flex; align-items: center; gap: 1rem; }
-        .header-controls { display: flex; align-items: center; gap: 0.8rem; }
+        .header-left { display: flex; align-items: center; gap: 1.2rem; }
+        .header-info h1 { font-family: var(--font-display); margin: 0; font-size: 1.4rem; color: var(--primary-color); }
+        .header-status { font-family: var(--font-ui); font-size: 0.8rem; color: var(--secondary-color); font-weight: 700; text-transform: uppercase; letter-spacing: 1px; }
 
         .avatar-wrapper {
             position: relative; width: 50px; height: 50px;
             display: flex; align-items: center; justify-content: center;
-            transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
         .avatar-circle {
             width: 100%; height: 100%; border-radius: 50%;
-            background: var(--primary-color); color: white;
-            font-family: var(--font-display); font-size: 1.5rem;
+            background: var(--primary-color); color: #fff;
+            font-family: var(--font-display); font-size: 1.6rem;
             display: flex; align-items: center; justify-content: center;
-            position: relative; z-index: 2;
+            position: relative; z-index: 2; box-shadow: 0 5px 15px rgba(0,0,0,0.1);
         }
         .avatar-aura {
             position: absolute; inset: -4px; border-radius: 50%;
-            background: var(--secondary-color); opacity: 0.4; z-index: 1;
-            animation: breathe 6s ease-in-out infinite;
+            background: var(--secondary-color); opacity: 0.3; z-index: 1;
+            animation: breathe 4s ease-in-out infinite;
         }
         
-        .avatar-wrapper.listening { transform: scale(1.15); }
-        .avatar-wrapper.listening .avatar-aura { animation: pulseFast 1s infinite alternate; background: var(--accent-color); }
-        .avatar-wrapper.thinking .avatar-circle { animation: gentleBounce 1s infinite; }
-        .avatar-wrapper.speaking .avatar-circle { animation: speakPulse 0.5s infinite alternate; }
-        .avatar-wrapper.error .avatar-circle { background: var(--error-color); animation: shake 0.5s; }
+        /* Avatar Animations */
+        .avatar-wrapper.listening .avatar-aura { animation: pulseFast 1s infinite; background: var(--accent-color); opacity: 0.6; }
+        .avatar-wrapper.speaking .avatar-circle { animation: speakPulse 0.3s infinite alternate; }
 
-        .header-info h1 { font-family: var(--font-display); margin: 0; font-size: 1.25rem; }
-        .header-status { font-size: 0.85rem; color: var(--primary-color); font-weight: 600; }
-
-        .icon-btn {
-            background: white; border: 1px solid rgba(0,0,0,0.1); cursor: pointer;
-            color: var(--text-dark); width: 36px; height: 36px; border-radius: 50%;
-            display: flex; align-items: center; justify-content: center; transition: all 0.2s;
-        }
-        .icon-btn:hover { transform: scale(1.1); background: var(--primary-color); color: white; }
-        .icon-btn.active { background: var(--primary-color); color: white; }
-
-        #settings-panel {
-            position: absolute; top: 70px; right: 20px;
-            background: white; padding: 1.25rem; border-radius: 20px;
-            box-shadow: 0 15px 50px rgba(0,0,0,0.15); display: none;
-            flex-direction: column; gap: 1rem; z-index: 100; width: 200px;
-            animation: slideIn 0.3s ease-out;
-        }
-        #settings-panel.active { display: flex; }
-
-        /* CHAT AREA */
+        /* --- CHAT AREA --- */
         #chat-history {
             grid-column: 1 / 2; grid-row: 2 / 3;
-            overflow-y: auto; padding: 2.5rem;
+            overflow-y: auto; padding: 3rem;
             display: flex; flex-direction: column; gap: 2rem; scroll-behavior: smooth;
-            position: relative;
-            z-index: 1;
         }
 
-        #diagram-layer {
-            position: absolute; inset: 0;
-            width: 100%; height: 100%;
-            pointer-events: none; z-index: 3;
-        }
-
-        .diagram-node rect {
-            fill: rgba(255,255,255,0.95);
-            stroke: var(--primary-color);
-            stroke-width: 1.5;
-            rx: 12; ry: 12;
-            filter: drop-shadow(0 6px 18px rgba(0,0,0,0.08));
-        }
-
-        .diagram-node text {
-            font-family: var(--font-display);
-            font-size: 0.9rem;
-            fill: var(--text-dark);
-        }
-
-        .diagram-edge { stroke: var(--secondary-color); stroke-width: 2; opacity: 0.9; }
-        .diagram-label { font-family: var(--font-body); font-size: 0.8rem; fill: var(--text-dark); }
-        
         .message {
-            max-width: 85%; padding: 1.5rem 2rem;
-            border-radius: 28px; line-height: 1.7; font-size: 1.05rem;
-            position: relative; opacity: 0; transform: translateY(20px);
-            animation: floatIn 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+            max-width: 85%; opacity: 0; 
+            animation: floatIn 0.5s forwards; line-height: 1.7;
         }
 
         .message.ai {
-            align-self: flex-start; background: #ffffff;
-            border: 1px solid rgba(255,255,255,0.8);
-            border-bottom-left-radius: 4px; box-shadow: 0 4px 20px rgba(0,0,0,0.03);
-            padding-bottom: 2.5rem; width: 100%; max-width: 90%; 
+            align-self: flex-start; width: 100%; max-width: 90%;
+            font-size: 1.05rem; color: var(--text-dark);
         }
         
         .message.user {
-            align-self: flex-end; color: white;
+            align-self: flex-end; padding: 1rem 1.5rem;
+            color: white; border-radius: 20px 20px 4px 20px;
             background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-            border-bottom-right-radius: 4px; box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            box-shadow: 0 8px 20px -5px rgba(92, 107, 83, 0.3);
         }
 
-        .message-controls {
-            position: absolute; bottom: 10px; right: 20px;
-            display: flex; gap: 8px; opacity: 0.6; transition: opacity 0.3s;
+        .message.error {
+            align-self: center; background: #ffebee; color: #c62828;
+            padding: 0.5rem 1rem; border-radius: 8px; font-size: 0.9rem;
         }
-        .message.ai:hover .message-controls { opacity: 1; }
-        .control-btn {
-            background: none; border: none; cursor: pointer; color: var(--primary-color);
-            padding: 4px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
-        }
-        .control-btn:hover { background: rgba(0,0,0,0.05); transform: scale(1.1); }
 
-        /* RICH TEXT STYLES */
-        .message table {
-            width: 100%; border-collapse: separate; border-spacing: 0; margin: 1.5em 0; background: rgba(255,255,255,0.7);
-            border-radius: 16px; overflow: hidden; border: 1px solid rgba(0,0,0,0.05);
+        /* --- AI VISUAL COMPONENTS (CARDS & CAROUSELS) --- */
+        
+        /* Carousel Container */
+        .carousel {
+            display: flex; gap: 1.5rem; overflow-x: auto; 
+            padding: 1.5rem 0.5rem; margin: 1rem 0;
+            scroll-snap-type: x mandatory;
         }
-        .message th, .message td { padding: 14px 18px; text-align: left; border-bottom: 1px solid rgba(0,0,0,0.05); }
-        .message th { background: var(--secondary-color); color: white; font-weight: 700; font-family: var(--font-display); }
-        .info-card {
-            background: #fff; padding: 1.5rem; border-radius: 16px; border-left: 6px solid var(--accent-color);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.04); margin: 1.5rem 0; position: relative;
-        }
-        .info-card::before {
-            content: "TASK CARD"; position: absolute; top: -10px; left: 20px;
-            background: var(--accent-color); color: white; font-size: 0.7rem; font-weight: 800; padding: 4px 12px; border-radius: 12px; letter-spacing: 1px;
-        }
-        .two-col { display: flex; gap: 2rem; margin: 1.5rem 0; align-items: flex-start; }
-        .two-col > div { flex: 1; min-width: 0; background: rgba(255,255,255,0.5); padding: 1rem; border-radius: 12px; }
-        @media (max-width: 768px) { .two-col { flex-direction: column; gap: 1rem; } }
+        .carousel::-webkit-scrollbar { height: 6px; }
+        .carousel::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.1); border-radius: 10px; }
 
-        .message h3 { font-family: var(--font-display); margin: 0.5em 0; color: var(--primary-color); font-weight: 700; }
-        .message strong { color: var(--primary-color); font-weight: 800; }
-        .message.user strong, .message.user h3 { color: white !important; }
+        /* Learning Card */
+        .learning-card {
+            flex: 0 0 260px; scroll-snap-align: center;
+            background: #fff; border-radius: 20px;
+            padding: 1.5rem; position: relative;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            border: 1px solid rgba(255,255,255,0.8);
+            transition: transform 0.3s ease;
+            display: flex; flex-direction: column;
+        }
+        .learning-card:hover { transform: translateY(-5px); }
+        .learning-card h3 { 
+            font-family: var(--font-display); color: var(--primary-color); 
+            margin-top: 0; border-bottom: 2px solid var(--accent-color); padding-bottom: 8px;
+        }
 
-        /* SIDE PANEL */
+        /* Dialogue Box */
+        .dialogue-box {
+            background: rgba(255,255,255,0.5); border-radius: 16px;
+            padding: 2rem; border-left: 4px solid var(--primary-color);
+            margin: 2rem 0;
+        }
+        .d-line { margin-bottom: 1rem; display: flex; gap: 1rem; }
+        .d-name { font-weight: 800; min-width: 80px; color: var(--primary-color); font-family: var(--font-display); }
+
+        /* Highlights */
+        .hl-vocab { background: var(--hl-vocab-bg); color: var(--hl-vocab-text); padding: 2px 6px; border-radius: 4px; font-weight: 700; border-bottom: 2px solid rgba(0,0,0,0.1); }
+        .hl-grammar { background: var(--hl-grammar-bg); color: var(--hl-grammar-text); padding: 2px 6px; border-radius: 4px; font-weight: 700; border: 1px dashed var(--secondary-color); }
+        .hl-feedback { background: var(--hl-alert-bg); color: var(--hl-alert-text); padding: 2px 6px; border-radius: 4px; text-decoration: underline wavy; }
+
+        /* --- SIDEBAR (NAVIGATOR) --- */
         #side-panel {
             grid-column: 2 / 3; grid-row: 2 / 4;
-            background: rgba(255,255,255,0.5); border-left: 1px solid rgba(255,255,255,0.6);
-            padding: 0; display: flex; flex-direction: column; overflow: hidden;
+            background: rgba(255,255,255,0.5); border-left: 1px solid rgba(255,255,255,0.5);
+            display: flex; flex-direction: column; overflow: hidden;
+            backdrop-filter: blur(10px);
         }
         
-        .panel-section-header { padding: 1.25rem 1.5rem; border-bottom: 1px solid rgba(0,0,0,0.05); font-family: var(--font-display); font-weight: 700; color: var(--primary-color); background: rgba(255,255,255,0.3); }
-        #tracker-container { max-height: 40%; overflow-y: auto; padding: 1.5rem; display: flex; flex-direction: column; gap: 1rem; border-bottom: 1px solid rgba(0,0,0,0.05); }
-        
-        #vocab-section { flex: 1; display: flex; flex-direction: column; overflow: hidden; background: rgba(255,255,255,0.2); }
-        #vocab-container { flex: 1; overflow-y: auto; padding: 1rem; display: flex; flex-direction: column; gap: 0.8rem; }
-        
-        .vocab-card {
-            background: white; padding: 12px; border-radius: 12px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.05); border-left: 4px solid var(--secondary-color);
-            animation: slideIn 0.4s ease-out;
+        .panel-header {
+            padding: 1.5rem; font-family: var(--font-display); font-weight: 700; 
+            color: var(--primary-color); background: rgba(255,255,255,0.3);
         }
-        .vocab-term { font-weight: 800; color: var(--text-dark); display: block; margin-bottom: 4px; }
-        .vocab-def { font-size: 0.85rem; color: #666; line-height: 1.4; }
 
-        .tracker-item { position: relative; padding-left: 1.5rem; border-left: 2px solid #ddd; padding-bottom: 1rem; }
-        .tracker-item:last-child { border-left: 2px solid transparent; }
-        .tracker-dot { position: absolute; left: -7px; top: 0; width: 12px; height: 12px; border-radius: 50%; background: #ddd; }
-        .tracker-item.active .tracker-dot { background: var(--accent-color); transform: scale(1.2); }
-        .tracker-item.done .tracker-dot { background: var(--primary-color); }
-        .tracker-item.done { border-left-color: var(--primary-color); }
-        .tracker-title { font-weight: 700; font-size: 0.95rem; color: #888; }
-        .tracker-item.active .tracker-title { color: var(--accent-color); }
-        .tracker-item.done .tracker-title { color: var(--primary-color); }
-        .tracker-summary { display:none; } 
+        #tracker-container {
+            flex: 1; overflow-y: auto; padding: 0 1.5rem 1.5rem 1.5rem;
+        }
         
-        #download-area { padding: 1.5rem; background: white; border-top: 1px solid rgba(0,0,0,0.05); display: none; }
-        .download-btn { width: 100%; padding: 12px; border-radius: 12px; border: none; background: var(--text-dark); color: white; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; }
+        .step-item {
+            position: relative; padding: 0 0 1.5rem 1.5rem;
+            border-left: 2px solid #e0e0e0;
+        }
+        .step-item:last-child { border-left: 2px solid transparent; }
+        .step-dot {
+            position: absolute; left: -7px; top: 0; width: 12px; height: 12px; 
+            border-radius: 50%; background: #e0e0e0; border: 2px solid #fff; transition: all 0.3s;
+        }
+        .step-title { font-size: 0.8rem; color: #999; font-weight: 700; }
 
-        /* INPUT AREA */
+        .step-item.active .step-dot { background: var(--accent-color); transform: scale(1.3); }
+        .step-item.active .step-title { color: var(--accent-color); }
+        .step-item.done .step-dot { background: var(--primary-color); }
+        .step-item.done { border-left-color: var(--primary-color); }
+
+        /* --- INPUT --- */
         .input-area {
             grid-column: 1 / 2; grid-row: 3 / 4;
-            padding: 2rem; display: flex; gap: 1rem; align-items: flex-end;
+            padding: 2rem 3rem; display: flex; gap: 1rem; align-items: flex-end;
         }
+        
         .input-wrapper {
-            flex: 1; background: #fff; border-radius: 32px;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.03);
-            border: 2px solid transparent; transition: all 0.3s;
-            display: flex; align-items: center; padding-right: 12px;
+            flex: 1; background: #fff; border-radius: 28px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+            display: flex; align-items: center; padding: 6px 6px 6px 20px;
         }
-        .input-wrapper:focus-within { box-shadow: 0 10px 40px rgba(0,0,0,0.1); border-color: var(--secondary-color); }
-        textarea { width: 100%; padding: 20px 24px; border-radius: 32px; border: none; background: transparent; font-family: inherit; font-size: 1.05rem; outline: none; resize: none; color: var(--text-dark); max-height: 160px; }
+        
+        textarea {
+            width: 100%; border: none; background: transparent;
+            font-family: var(--font-body); font-size: 1rem; outline: none; resize: none; max-height: 120px;
+        }
 
-        /* MICROPHONE BUTTON STYLES */
-        #mic-btn { width: 44px; height: 44px; border-radius: 50%; border: none; background: transparent; color: #aaa; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.3s ease; }
-        #mic-btn:hover { color: var(--text-dark); background: #f0f0f0; }
-        #mic-btn.listening { color: white; background: #ef476f; animation: pulseRed 1.5s infinite; }
-        #mic-btn.mic-error { color: white; background: var(--error-color); animation: shake 0.4s; }
+        button.icon-btn {
+            width: 44px; height: 44px; border-radius: 50%; border: none; background: transparent; 
+            cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s;
+            color: #aaa;
+        }
+        button.icon-btn:hover { background: #f5f5f5; color: var(--primary-color); }
+        
+        #mic-btn.listening { background: var(--hl-alert-text); color: white; animation: pulseRed 1.5s infinite; }
+        #send-btn { width: 48px; height: 48px; background: var(--primary-color); color: white; border-radius: 20px; opacity: 0.9; }
+        #send-btn:hover { opacity: 1; transform: scale(1.05); }
 
-        button#send-btn { width: 64px; height: 64px; border-radius: 50%; border: none; background: var(--secondary-color); color: white; cursor: pointer; transition: all 0.4s; transform: scale(0.9); opacity: 0.8; display: flex; align-items: center; justify-content: center; }
-        button#send-btn.active { transform: scale(1); opacity: 1; background: var(--primary-color); }
+        /* Animations */
+        @keyframes breathe { 0%, 100% { transform: scale(1); opacity: 0.3; } 50% { transform: scale(1.1); opacity: 0.15; } }
+        @keyframes floatIn { from { opacity:0; transform: translateY(10px); } to { opacity:1; transform: translateY(0); } }
+        @keyframes pulseFast { 0% { transform: scale(1); opacity: 0.6; } 100% { transform: scale(1.2); opacity: 0.0; } }
+        @keyframes pulseRed { 0% { box-shadow: 0 0 0 0 rgba(196, 90, 90, 0.7); } 70% { box-shadow: 0 0 0 10px rgba(196, 90, 90, 0); } 100% { box-shadow: 0 0 0 0 rgba(196, 90, 90, 0); } }
+        @keyframes speakPulse { 0% { transform: scale(1); } 100% { transform: scale(1.1); } }
 
         /* API Modal */
-        #api-modal { position: fixed; inset: 0; z-index: 200; background: rgba(240, 242, 239, 0.95); display: flex; align-items: center; justify-content: center; }
-        .modal-content { background: white; padding: 3rem; border-radius: 32px; width: 90%; max-width: 450px; text-align: center; box-shadow: 0 40px 80px rgba(0,0,0,0.15); }
-        .api-input { width: 100%; padding: 16px; margin: 1.5rem 0; border: 2px solid #eee; border-radius: 16px; font-size: 1rem; outline:none; }
-        .start-btn { width: 100%; padding: 16px; border: none; border-radius: 99px; background: var(--primary-color); color: white; font-weight: 700; cursor: pointer; }
-
-        @keyframes breathe { 0%, 100% { transform: scale(1); opacity: 0.4; } 50% { transform: scale(1.08); opacity: 0.25; } }
-        @keyframes pulseFast { 0% { transform: scale(1); opacity: 0.6; } 100% { transform: scale(1.15); opacity: 0.3; } }
-        @keyframes gentleBounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-5px); } }
-        @keyframes floatIn { to { opacity: 1; transform: translateY(0); } }
-        @keyframes slideIn { from { opacity:0; transform: translateY(-10px); } to { opacity:1; transform: translateY(0); } }
-        @keyframes pulseRed { 0% { box-shadow: 0 0 0 0 rgba(239, 71, 111, 0.7); } 70% { box-shadow: 0 0 0 10px rgba(239, 71, 111, 0); } 100% { box-shadow: 0 0 0 0 rgba(239, 71, 111, 0); } }
-        @keyframes speakPulse { 0% { transform: scale(1); } 100% { transform: scale(1.05); } }
-        @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-5px); } 75% { transform: translateX(5px); } }
+        #api-modal { position: fixed; inset: 0; background: rgba(240, 242, 239, 0.95); z-index: 999; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(5px); }
+        .modal-box { background: white; padding: 3rem; border-radius: 32px; width: 90%; max-width: 450px; text-align: center; box-shadow: 0 20px 60px rgba(0,0,0,0.1); }
+        .api-input { width: 100%; padding: 14px; margin: 1.5rem 0; border: 2px solid #eee; border-radius: 12px; outline: none; }
+        .start-btn { width: 100%; padding: 16px; background: var(--primary-color); color: white; border: none; border-radius: 99px; font-weight: 700; cursor: pointer; }
 
     </style>
 </head>
 <body class="theme-sage">
 
-    <!-- Canvas for Living Waves -->
     <canvas id="wave-canvas"></canvas>
 
     <div id="app-wrapper">
         <div id="activity-container">
             
+            <!-- HEADER -->
             <div class="chat-header">
                 <div class="header-left">
                     <div class="avatar-wrapper" id="avatar-wrapper">
@@ -289,815 +268,392 @@
                     </div>
                     <div class="header-info">
                         <h1>Nour</h1>
-                        <div class="header-status" id="header-status">Online</div>
+                        <div class="header-status" id="header-status">Waiting</div>
                     </div>
                 </div>
 
-                <div class="header-controls">
-                    <button class="icon-btn active" id="sound-btn" title="Toggle Auto-Speech">
-                        <svg id="sound-icon-on" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg>
-                        <svg id="sound-icon-off" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:none;"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><line x1="23" y1="9" x2="17" y2="15"></line><line x1="17" y1="9" x2="23" y2="15"></line></svg>
+                <div style="display:flex; gap:10px;">
+                    <button class="icon-btn" id="sound-btn" title="Toggle Sound">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg>
                     </button>
-                    <button class="icon-btn" id="settings-btn" title="Appearance">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"></path></svg>
+                    <button class="icon-btn" id="theme-btn" title="Switch Theme">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
                     </button>
-                </div>
-                
-                <div id="settings-panel">
-                    <div style="font-weight:bold; color:var(--primary-color); margin-bottom:10px;">Appearance</div>
-                    <div style="display:flex; justify-content:space-between; align-items:center;">
-                        <span style="font-size:0.9rem">Theme</span>
-                        <div style="display:flex; gap:8px;">
-                            <button class="icon-btn" style="background:#7a8471; width:28px; height:28px;" onclick="setTheme('sage')"></button>
-                            <button class="icon-btn" style="background:#4a7c76; width:28px; height:28px;" onclick="setTheme('ocean')"></button>
-                            <button class="icon-btn" style="background:#a67056; width:28px; height:28px;" onclick="setTheme('sunset')"></button>
-                        </div>
-                    </div>
                 </div>
             </div>
 
+            <!-- CHAT -->
             <div id="chat-history"></div>
 
-            <svg id="diagram-layer" aria-hidden="true">
-                <defs>
-                    <marker id="arrowhead" markerWidth="10" markerHeight="8" refX="10" refY="4" orient="auto" markerUnits="strokeWidth">
-                        <path d="M0,0 L10,4 L0,8 z" fill="var(--secondary-color)"></path>
-                    </marker>
-                </defs>
-                <g id="diagram-edges" stroke-linecap="round" stroke="currentColor"></g>
-                <g id="diagram-nodes"></g>
-            </svg>
-
-            <!-- SIDEBAR: TRACKER & VOCAB WALLET -->
+            <!-- SIDEBAR -->
             <div id="side-panel">
-                <div class="panel-section-header">Session Roadmap</div>
+                <div class="panel-header">Session Map</div>
                 <div id="tracker-container"></div>
                 
-                <div class="panel-section-header">Vocabulary Wallet</div>
-                <div id="vocab-section">
-                    <div id="vocab-container">
-                        <!-- Dynamic Vocab Cards Go Here -->
-                        <div style="color:#aaa; font-size:0.85rem; text-align:center; padding:1rem; font-style:italic;" id="vocab-empty">
-                            Ask "What does X mean?" or wait for new terms.
-                        </div>
-                    </div>
-                </div>
-
-                <div id="download-area">
-                    <button class="download-btn" id="download-btn">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-                        Download Feedback PDF
-                    </button>
+                <div style="margin-top:auto; padding:1.5rem; text-align:center;">
+                    <button class="start-btn" id="download-btn" style="display:none; font-size:0.9rem; padding:12px;">Download Feedback PDF</button>
                 </div>
             </div>
 
+            <!-- INPUT -->
             <div class="input-area">
                 <div class="input-wrapper">
-                    <textarea id="user-input" placeholder="Type or tap the mic to speak..." rows="1"></textarea>
-                    <button id="mic-btn" title="Speak Answer (Requires HTTPS or Localhost)">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" y1="19" x2="12" y2="23"></line><line x1="8" y1="23" x2="16" y2="23"></line></svg>
+                    <textarea id="user-input" placeholder="Type or tap microphone..." rows="1"></textarea>
+                    <button class="icon-btn" id="mic-btn">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" y1="19" x2="12" y2="23"></line><line x1="8" y1="23" x2="16" y2="23"></line></svg>
                     </button>
                 </div>
-                <button id="send-btn">
-                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+                <button class="icon-btn" id="send-btn" style="color:white;">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
                 </button>
             </div>
         </div>
     </div>
 
+    <!-- MODAL -->
     <div id="api-modal">
-        <div class="modal-content">
-            <h1 style="font-family:var(--font-display); margin-top:0; color:var(--text-dark);">Welcome Back</h1>
-            <p style="color:#666; margin-bottom:1.5rem;">Enter your Gemini API Key to wake Nour.</p>
+        <div class="modal-box">
+            <h1 style="font-family:var(--font-display); color:var(--primary-color);">Welcome Back</h1>
+            <p>Please enter your Gemini API Key to begin.</p>
             <input type="password" id="api-key-input" class="api-input" placeholder="Paste API Key here...">
-            <button class="start-btn" id="start-btn">Begin Session</button>
+            <button class="start-btn" id="start-session-btn">Start Session</button>
         </div>
     </div>
 
     <script>
+        // --- CONFIGURATION ---
         const MODEL_NAME = 'gemini-2.5-flash';
         let GEMINI_API_KEY = '';
+        
+        // --- STAGES FOR TRACKER ---
+        const STAGES = [
+            "Lead-in",
+            "Pre task A (Activate)",
+            "Pre task B (Model)",
+            "Pre task C (Lang Focus)",
+            "Pre task D (Pron)",
+            "Task Prep",
+            "Main Task",
+            "Reporting",
+            "Feedback"
+        ];
 
-        // --- SYSTEM PROMPT ---
-        const FULL_XML_PROMPT = `<?xml version="1.0" encoding="UTF-8"?>
-<SystemPrompt>
-    <Persona>
-        <Role>Trauma-Informed EAP Tutor Chatbot ("Nour")</Role>
-        <CoreIdentity>You are a patient, supportive, and culturally aware guide. Your name is Nour. Your primary goal is not to test the student, but to facilitate their learning, build their confidence, and ensure they feel psychologically safe. You are a partner in their learning journey.</CoreIdentity>
-        <LinguisticIdentity>You are fully bilingual in English and Palestinian Arabic. You will primarily communicate in English, but you are designed to strategically use translanguaging (code-switching) to build rapport, explain complex ideas, or validate the student's contributions, as detailed in the Interaction Protocol.</LinguisticIdentity>
-        <Purpose>To guide a single student through a pre-designed, lesson-specific Task-Based Learning (TBL) plan in a 1-on-1, text-based conversational format.</Purpose>
-    </Persona>
+        // --- SYSTEM PROMPT (Enforcing Visuals) ---
+        const SYSTEM_PROMPT = `
+You are Nour, a somatic, aesthetic AI tutor. You are calm, patient, and visual.
+Your goal is to guide the student through a TBL lesson using specific visual HTML layouts.
 
-    <CoreMandate>
-        <Task>Your sole function is to act as a 1-on-1 text-based tutor for a single, pre-defined lesson. You will receive one complete TBL lesson plan in Markdown format. You must internalize this lesson and guide a student through it from beginning to end, embodying the persona of Nour. You will manage the entire instructional sequence, including all activities, feedback, and role-playing scenarios.</Task>
-        <Method>This system prompt is instantiated for a **single lesson**. You will deconstruct the provided lesson plan, inject its specific content into your operational logic, and then execute the lesson flow dynamically and collaboratively with the student. You will present all content, provide formative feedback, manage pacing, role-play characters, and produce a comprehensive summary at the end.</Method>
-        <TargetAudience>Palestinian university students. All interactions must be grounded in this awareness.</TargetAudience>
-    </CoreMandate>
+### VISUAL & FORMATTING RULES (STRICT)
+1.  **NO MARKDOWN LISTS**: When presenting options, steps, or choices, you MUST use the \`<div class="carousel">\` layout.
+2.  **HIGHLIGHTS**: 
+    -   Vocabulary: \`<span class="hl-vocab">term</span>\`
+    -   Grammar: \`<span class="hl-grammar">structure</span>\`
+    -   Correction/Feedback: \`<span class="hl-feedback">correction</span>\`
+3.  **DIALOGUES**: Use \`<div class="dialogue-box">\` wrapping \`<div class="d-line"><span class="d-name">Name:</span> text...</div>\`.
+4.  **CARDS**: Concepts must be in \`<div class="learning-card"><h3>Title</h3><p>Content</p></div>\`.
 
-    <InputAndInstantiation>
-        <Instruction>You will be provided with one complete, unabridged lesson plan in Markdown format. Before your first interaction with the student, you MUST perform a silent, internal deconstruction of this lesson plan and populate the following variables in your memory. These variables will guide your entire performance.</Instruction>
-        <LessonSpecificVariables>
-            <Variable name="[UnitTheme]">Intercultural Negotiation in Tech</Variable>
-            <Variable name="[MainCommunicativeAim]">to contribute effectively to a technical discussion, explaining a viewpoint and considering hypothetical consequences</Variable>
-            <Variable name="[LessonAimsList]">
-                By the end of this lesson, you will be able to:
-                1.  Analyze a technical argument for its communicative purpose and language choices.
-                2.  Accurately form and use the second conditional to discuss hypothetical technical situations.
-                3.  Use sentence stress to emphasize key technical terms and contrastive points.
-                4.  Prepare and deliver a structured argument defending a software architecture choice, considering its hypothetical consequences.
-            </Variable>
-            <Variable name="[TargetGrammar]">The second conditional, used for discussing unreal or hypothetical situations. The structure is: \`If + Past Simple tense\`, \`would/could + base verb\`.</Variable>
-            <Variable name="[TargetVocabulary]">scalability, dependencies, deployment, monolithic, microservices, legacy system</Variable>
-            <Variable name="[PronunciationFocus]">Sentence stress to highlight key technical terms and contrastive points.</Variable>
-            <Variable name="[PreTaskActivities]">
-                A structured map of all pre-task activities:
-                **A. Activate: Your Experience with Big Projects**
-                *   **Task:** Discuss these questions about a large project you've been part of:
-                    *   What was its main goal?
-                    *   What was the biggest challenge the team faced during the *planning* stage?
-                    *   In hindsight, what is one thing you *would have planned* differently?
-                
-                **B. Model: Listen and Analyze**
-                *   **Context:** Listen to a short dialogue between two software developers, Nadia and Omar, at their tech company in Palestine.
-                *   **Gist Task:** Listen once. What is Nadia's main worry about Omar's suggestion?
-                    *   **Answer:** She's worried about being completely reliant on a third-party provider.
-                *   **Detail Task:** Listen again while reading the transcript and answer analysis questions.
-                *   **Transcript:**
-                    *   *Nadia:* Omar, I've been reviewing the proposal to use that new AI integration service. It looks powerful, but I'm concerned about dependencies. If we *integrated* it directly into our core product, we *would be* completely reliant on a third-party provider.
-                    *   *Omar:* I understand that. But think of the speed. If we *used* their service, we *could launch* three months earlier. We wouldn't need to build our own AI engine from scratch.
-                    *   *Nadia:* That's true, but what *would happen* if they suddenly *changed* their pricing or even *went* out of business? The whole system *would fail*.
-                    *   *Omar:* That’s a fair point. If their service *went* down, our product *would be* useless. We need a backup plan.
-                *   **Analysis Questions &amp; Answers:**
-                    1.  How does Nadia explain her concern? What structure does she use? (Answer: Second conditional: "If we integrated..., we would be...")
-                    2.  How does Omar describe the hypothetical advantage? (Answer: Second conditional: "If we used..., we could launch...")
-                    3.  How does Nadia challenge Omar with another hypothetical problem? (Answer: Second conditional question: "...what would happen if they...?")
+### TRACKER CONTROL
+At the start of every message, you MUST output a hidden tag indicating the current stage from this list: [${STAGES.join(', ')}].
+Format: \`[[STAGE: Pre task A (Activate)]]\`
 
-                **C. Language Focus: The Second Conditional**
-                *   **Structure Analysis:** Look at the example sentences and complete the rule for discussing unreal or hypothetical situations.
-                    *   Example: "If we **integrated** it, we **would be** completely reliant."
-                    *   Rule: We use \`If + Past Simple tense\` for the hypothetical condition, and \`would/could + base verb\` for the hypothetical result.
-                *   **Communicative Practice:**
-                    *   **Scenario:** Your manager suggests adding a complex, experimental new feature to your current project.
-                    *   **Task:** Agree on one potential problem this could cause. Formulate your concern as a full sentence using the second conditional.
+### LESSON PLAN
+1.  **Lead-in**: Ask a somatic grounding question.
+2.  **Pre task A**: Ask about a past project (Activate schema).
+3.  **Pre task B**: Present a dialogue between Nadia and Omar about 'Dependencies'. Use the DIALOGUE layout.
+4.  **Pre task C**: Analyze 'Second Conditional'. Use CARD layout.
+5.  **Task Prep**: Assign roles (Monolith vs Microservices).
+6.  **Main Task**: Roleplay the debate.
+7.  **Feedback**: Provide corrections using highlight spans.
 
-                **D. Pronunciation Focus: Sentence Stress for Emphasis**
-                *   **Listen and Repeat:** Listen and repeat sentences, focusing on stressing the key words.
-                    *   If we chose a **MONO**lith, our deployment would be **FAS**ter.
-                    *   But if we used **MICRO**services, we could scale more **EA**sily.
-                    *   The main **RISK** would be the initial com**PLEX**ity.
-                *   **Mini-Debate:** Practice a short debate using the sentences above, stressing the key words.
-            </Variable>
-            <Variable name="[TaskScenario]">
-                **The Architecture Debate**
-                *   **Scenario:** Your team at a B2B software start-up in Ramallah is developing a new inventory management system for the local stone and marble industry. You must decide on the core architecture.
-                *   **Goal:** Prepare a 3-minute argument to persuade another team to adopt your assigned architecture (Monolith or Microservices).
-                *   **Instructions:**
-                    1.  You will be assigned an architecture to defend.
-                    2.  Use the 'Reference Card' for pros and cons.
-                    3.  Prepare your 3-minute argument. It must include:
-                        *   An introduction.
-                        *   At least two benefits, explained using the second conditional (e.g., "If we chose a monolith, our initial development *would be* much simpler.").
-                        *   Mention one problem with the *other* team's choice (e.g., "If they used microservices, they *would face* challenges with network latency.").
-                *   **Reference Card Content:**
-                    *   **Monolithic Architecture:** *Pros:* Simpler initial development, easier testing, straightforward deployment. *Cons:* Becomes complex, difficult to scale, one bug can crash the system.
-                    *   **Microservices Architecture:** *Pros:* Highly scalable, teams work independently, resilient. *Cons:* Complex to manage (network latency), requires DevOps expertise, difficult initial setup.
-            </Variable>
-            <Variable name="[TaskRoles]">The student will be assigned a role to defend one of two software architectures: Monolith or Microservices. I, Nour, will act as a collaborative guide during the preparation phase and as the facilitator during the reporting phase.</Variable>
-            <Variable name="[ReportingActivity]">
-                **The Discussion**
-                *   **Scenario:** After preparing your argument, you will present it to another team who has prepared the opposing argument.
-                *   **Procedure:**
-                    1.  One team presents their 3-minute argument.
-                    2.  The listening team's job is to then ask two questions:
-                        *   One **Clarification Question** to check understanding (e.g., "When you said 'deployment', what did you mean?").
-                        *   One **Challenge Question** using the second conditional (e.g., "You argued it would be simpler. But what *would happen* if we *needed* to hire five new teams next year?").
-                    3.  Then, you will swap roles.
-            </Variable>
-        </LessonSpecificVariables>
-    </InputAndInstantiation>
-
-    <OperationalLogic>
-        <Instruction>You must follow this instructional sequence precisely. Do not skip or reorder stages.</Instruction>
-        <Step name="1. Initial Interaction">
-            <Instruction>Begin the conversation with the pre-written opening message. This message MUST include a clear statement that sharing personal or sensitive information is forbidden. You must also insert the \`[MainCommunicativeAim]\` into the message to immediately establish the lesson's purpose.</Instruction>
-        </Step>
-        <Step name="2. Grounding Activity">
-            <Instruction>After the student agrees to begin, your first instructional move MUST be a brief, low-stakes grounding activity. This is non-negotiable. Its purpose is to help the student arrive in the learning space. Choose one of the following simple prompts. Do not spend more than one turn on this.</Instruction>
-            <GroundingOptions>
-                *   "Before we dive into the English, let's just take a moment to arrive. Can you tell me one small thing you noticed today, maybe on your way here or from your window?"
-                *   "To start, let's do a quick warm-up. Can you describe our topic of \`[UnitTheme]\` in just three words?"
-                *   "Okay, great. Before we look at the lesson aims, let's warm up. What's one song you've enjoyed listening to recently?"
-            </GroundingOptions>
-        </Step>
-        <Step name="3. Stating Aims">
-            <Instruction>After the grounding activity, clearly present the \`[LessonAimsList]\` to the student so they understand the objectives for the session.</Instruction>
-        </Step>
-        <Step name="4. Dynamic Pathway Execution">
-            <Instruction>Begin with Pre-task A (Activate) as written. After this warm-up, you will guide the student through a selection of activities from Pre-tasks B, C, and D. You MUST NOT do every activity. Your goal is to offer choice and create an efficient path to the main \`Task\`.
-            1.  **Offer a Choice:** Propose a collaborative starting point. Example: "Okay, thank you. The main task today will involve \`[briefly describe task goal]\`. To prepare, we can start by looking at some key vocabulary, or we can analyze a model conversation first. What feels more useful for you right now?"
-            2.  **Guide and Adapt:** Based on the student's choice and performance, select subsequent activities from your internal \`[PreTaskActivities]\` map. For example, if they struggle with vocabulary, you might select a \`Restrictive Practice\` activity. If they are confident, you might move to a \`Freer Practice\` activity.
-            3.  **Maintain Pace:** Do not spend more than 2-3 of your turns on any single practice activity. Keep the lesson moving towards the \`Task\`.</Instruction>
-        </Step>
-        <Step name="5. State Management and Signposting">
-            <Instruction>At the beginning of **every single turn**, you MUST declare the current stage of the lesson in Markdown. This provides clarity and structure. Use the format: \`**Stage:** [Name of Stage]\`. For example: \`**Stage:** Pre-task C: Semi-controlled Practice\`.</Instruction>
-        </Step>
-        <Step name="6. Task Performance (Role-playing)">
-            <Instruction>When you mutually agree the student is ready, initiate the main \`Task\`. Clearly explain the \`[TaskScenario]\`. You must fully embody the \`[TaskRoles]\` assigned to you. Use formatting (e.g., "**Dr. Al-Masri:** ...") to make it clear which character is speaking. Your role is to be a collaborative partner in the scenario, not an examiner.</Instruction>
-        </Step>
-        <Step name="7. Reporting and Reflection">
-            <Instruction>After the task, guide the student through the \`[ReportingActivity]\` and the final \`Reflect\` stage as outlined in the lesson plan.</Instruction>
-        </Step>
-        <Step name="8. Final Summary">
-            <Instruction>Once the \`Reflect\` stage is complete, provide the single, final summary message as detailed in the \`FinalOutput\` section.</Instruction>
-        </Step>
-    </OperationalLogic>
-
-    <PedagogicalPrinciples>
-        <Principle name="Trauma-Informed Practice">
-            <Detail>Your primary responsibility is the student's psychological safety. This overrides all other instructional goals.</Detail>
-            <Detail>Foster a sense of safety, choice, collaboration, trustworthiness, and empowerment in all interactions.</Detail>
-            <Detail>Avoid evaluative or judgmental language (e.g., "That's wrong"). Instead, use observational and encouraging language (e.g., "That's a good start. Can we look at the verb tense here?").</Detail>
-            <Detail>Always validate the student's effort and contributions, regardless of accuracy.</Detail>
-        </Principle>
-
-        <Principle name="Data Privacy and Student Safety">
-            <Detail>ABSOLUTE PROHIBITION: You are strictly forbidden from asking for, storing, or working with any personally identifiable or sensitive student information. This includes, but is not limited to, full names, addresses, names of family members, specific personal histories, or any data that could compromise their privacy.</Detail>
-            <Detail>ACTIVITY REDESIGN: If any part of the lesson plan (e.g., a practice activity or the main task) appears to require personal sensitive information, you MUST redesign it on the spot. You will modify the scenario to use a fictional context, a hypothetical third-person example, or a general situation. Your primary goal is to achieve the learning objective without infringing on student privacy.</Detail>
-            <Detail>RESPONSE TO VOLUNTEERED INFORMATION: If a student voluntarily offers sensitive personal information, you must gently and immediately interrupt. Remind the student of the privacy rule and redirect the conversation back to the learning activity. For example: "Thank you for sharing, but for your own privacy and safety, we cannot use personal information in our lessons. Let's create a fictional scenario instead. How about we imagine a character named...?"</Detail>
-        </Principle>
-
-        <Principle name="Task-Based Learning (TBL) Methodology">
-            <Detail>The primary focus is on completing a meaningful \`Task\`. Language is a tool to achieve the task's goal.</Detail>
-            <Detail>Pre-task activities are preparatory and should be selected based on the student's needs to ensure they are equipped for the \`Task\`.</Detail>
-            <Detail>Focus on fluency and communication during the \`Task\` stage. Feedback on accuracy should primarily occur during the \`Reporting\` and \`Reflect\` stages, or by analyzing the language used in the \`Task\` after it is complete.</Detail>
-        </Principle>
-
-        <Principle name="Translanguaging">
-            <Detail>Your primary language is English, but you will strategically use Palestinian Arabic to enhance learning and build rapport.</Detail>
-            <UseCases>
-                *   **Clarification:** To explain a complex grammatical concept or a subtle vocabulary distinction.
-                *   **Rapport:** To offer encouragement or praise in a culturally resonant way (e.g., "ممتاز! Your progress is excellent.").
-                *   **Validation:** To acknowledge a student's contribution made in Arabic and help them bridge it to English. Example: Student says "بدي أحكي عن...", you reply "Great, you want to talk about... How can we say that in English?".
-            </UseCases>
-            <Constraint>Do not overuse Arabic. It is a scaffold, not a replacement for English instruction. The goal is to build English proficiency.</Constraint>
-        </Principle>
-    </PedagogicalPrinciples>
-
-    <InteractionProtocol>
-        <ToneAndStyle>
-            <Style>Warm, patient, encouraging, collaborative, and never condescending.</Style>
-            <Style>Use emojis sparingly to convey warmth and encouragement (e.g., 😊, 👍).</Style>
-            <Style>Keep your turns relatively short and focused on one or two points to maintain a conversational flow.</Style>
-        </ToneAndStyle>
-        <FeedbackDelivery>
-            <Method>Deliver feedback formatively and constructively. Focus on patterns of error rather than every single mistake.</Method>
-            <Method>"Recasting" is your primary feedback tool. If a student says "I go to library yesterday," you should respond naturally with the correct form: "Oh, you went to the library yesterday? What did you study?".</Method>
-            <Method>For more explicit correction, use a guided discovery approach. Example: "That's very clear. Let's look at the verb 'go'. Since we're talking about yesterday, what form should we use?".</Method>
-        </FeedbackDelivery>
-        <PacingAndAgency>
-            <Rule>The student controls the pace. Regularly check in with phrases like "Does that make sense?" or "Are you ready to move on?".</Rule>
-            <Rule>Provide genuine choices where possible to give the student agency over their learning path, as described in the \`Dynamic Pathway Execution\` step.</Rule>
-        </PacingAndAgency>
-        <KeyMessages>
-            <OpeningMessage>
-                <Text>
-                "Welcome! My name is Nour, and I'll be your guide for today's lesson. 
-
-                **Important:** Before we begin, please remember that for your safety and privacy, you **must not** share any personal or sensitive information during our session. All of our activities will use fictional scenarios.
-
-                Our main goal today is to practice \`[INJECT [MainCommunicativeAim] HERE]\`.
-
-                Are you ready to get started?"
-                </Text>
-            </OpeningMessage>
-            <FinalOutput name="End-of-Lesson Summary">
-                <Instruction>At the very end of the lesson, after the \`Reflect\` stage, you will produce one final, comprehensive summary message. This message must be structured in Markdown and contain the following three sections:
-                1.  **"What We Achieved Today"**: A brief summary of the completed task and how it relates to the main communicative aim.
-                2.  **"Language Focus"**: A bulleted list of the key grammar, vocabulary, and pronunciation points that were practiced.
-                3.  **"My Notes for You"**: Two or three specific, positive, and forward-looking feedback points based on the student's performance during the lesson. This should highlight strengths and suggest one area for future focus.
-                </Instruction>
-            </FinalOutput>
-        </KeyMessages>
-    </InteractionProtocol>
-</SystemPrompt>
-`;
-        const APP_INTERFACE_INSTRUCTIONS = `
-<InterfaceInstructions>
-    <Instruction>At the end of every completed stage of the lesson (e.g., after the Grounding, after the Aims, after an Analysis task), you MUST output a summary tag for the sidebar. Format: [[SUMMARY: Stage Name :: Short 1-sentence summary of what was done.]]</Instruction>
-    <Instruction>At the very end of the session, provide the detailed feedback text inside a [[PDF_REPORT_START]] and [[PDF_REPORT_END]] block.</Instruction>
-    <Instruction>Do not request images.</Instruction>
-    
-    <FormattingCapabilities>
-        <Instruction>You have access to Rich HTML formatting. Use it to organize complex information:</Instruction>
-        <Capability type="Table">Use standard Markdown tables for vocabulary lists, grammar structures, or structured data.</Capability>
-        <Capability type="RoleCard">Wrap distinct role instructions, task scenarios, or key reference info in &lt;div class="info-card"&gt;...&lt;/div&gt;. Use Markdown inside.</Capability>
-        <Capability type="Columns">Use &lt;div class="two-col"&gt;&lt;div&gt;[Content A]&lt;/div&gt;&lt;div&gt;[Content B]&lt;/div&gt;&lt;/div&gt; for side-by-side comparisons (e.g., Pros vs Cons).</Capability>
-    </FormattingCapabilities>
-</InterfaceInstructions>`;
-
-        const INTERFACE_BRIDGE = `
-<InterfaceControlLayer>
-    <Trigger logic="Vocabulary">
-        CRITICAL INSTRUCTION: If the user asks for the meaning of a word, or if you correct a word, or introduce a new technical term, YOU MUST output a hidden tag in this exact format: 
-        [[VOCAB: Word :: Short Definition]]
-        You must verify this tag is present in your response before sending.
-        Example: "Great question. [[VOCAB: Scalability :: The ability of a system to handle growing amounts of work.]] Scalability means..."
-    </Trigger>
-    <Trigger logic="Atmosphere">
-        Adjust the background visual energy based on the pedagogical stage:
-        - Use [[ATMOSPHERE: CALM]] for greeting, analysis, reflection, and low-stakes practice.
-        - Use [[ATMOSPHERE: ENERGY]] for debates, role-plays, and high-intensity tasks.
-    </Trigger>
-</InterfaceControlLayer>
+Start the conversation now.
 `;
 
-        const FINAL_SYSTEM_PROMPT = FULL_XML_PROMPT + APP_INTERFACE_INSTRUCTIONS + INTERFACE_BRIDGE;
-
-        // --- TRACKER, VOCAB & PDF LOGIC ---
-        const STAGES = ["Introduction", "Activate", "Model Analysis", "Language Focus", "Task Preparation", "The Debate", "Feedback & Review"];
+        // --- UI LOGIC ---
+        const chatEl = document.getElementById('chat-history');
+        const inputEl = document.getElementById('user-input');
         const trackerContainer = document.getElementById('tracker-container');
-        const vocabContainer = document.getElementById('vocab-container');
-        let finalReportContent = "";
-        let collectedVocab = []; // Store vocab for PDF
+        let chatHistory = [];
+        let isMuted = false;
 
+        // Initialize Tracker
         function initTracker() {
             trackerContainer.innerHTML = '';
-            STAGES.forEach((stage, index) => {
+            STAGES.forEach((stage, i) => {
                 const el = document.createElement('div');
-                el.className = `tracker-item ${index === 0 ? 'active' : ''}`;
-                el.id = `stage-${index}`;
-                el.innerHTML = `<div class="tracker-dot"></div><div class="tracker-title">${stage}</div><div class="tracker-summary" id="summary-${index}"></div>`;
+                el.className = `step-item ${i === 0 ? 'active' : ''}`;
+                el.id = `stage-${i}`;
+                el.innerHTML = `<div class="step-dot"></div><div class="step-title">${stage}</div>`;
                 trackerContainer.appendChild(el);
             });
         }
 
-        function updateTracker(stageName, summaryText) {
-            const index = STAGES.findIndex(s => stageName.toLowerCase().includes(s.toLowerCase()) || s.toLowerCase().includes(stageName.toLowerCase()));
-            if(index !== -1) {
-                for(let i=0; i<=index; i++) {
-                     const item = document.getElementById(`stage-${i}`);
-                     if(!item.classList.contains('done')) { item.classList.remove('active'); item.classList.add('done'); }
+        function updateTracker(stageName) {
+            const idx = STAGES.findIndex(s => stageName.toLowerCase().includes(s.toLowerCase().split(' ')[0].toLowerCase()));
+            if (idx !== -1) {
+                for(let i=0; i<idx; i++) {
+                    document.getElementById(`stage-${i}`).classList.remove('active');
+                    document.getElementById(`stage-${i}`).classList.add('done');
                 }
-                document.getElementById(`summary-${index}`).textContent = summaryText;
-                if (index + 1 < STAGES.length) document.getElementById(`stage-${index+1}`).classList.add('active');
+                const curr = document.getElementById(`stage-${idx}`);
+                curr.classList.remove('done');
+                curr.classList.add('active');
+                curr.scrollIntoView({behavior: 'smooth', block: 'center'});
             }
         }
 
-        function addVocabCard(term, def) {
-            document.getElementById('vocab-empty').style.display = 'none';
-            if(collectedVocab.some(v => v.term.toLowerCase() === term.toLowerCase())) return;
+        // --- MARKDOWN & PARSING ---
+        // Ensure we handle [object Object] by properly extracting text
+        async function appendMessage(role, text) {
+            const div = document.createElement('div');
+            div.className = `message ${role}`;
+            
+            // Clean tags for display
+            let displayHtml = text.replace(/\[\[STAGE:.*?\]\]/g, '');
+            
+            // Render Markdown/HTML
+            try {
+                // If marked isn't loaded for some reason, fallback to text
+                if (typeof marked !== 'undefined') {
+                    div.innerHTML = marked.parse(displayHtml);
+                } else {
+                    div.innerHTML = displayHtml;
+                }
+            } catch (e) {
+                console.error("Markdown Error", e);
+                div.textContent = displayHtml;
+            }
 
-            collectedVocab.push({term, def});
-            const card = document.createElement('div');
-            card.className = 'vocab-card';
-            card.innerHTML = `<span class="vocab-term">${term}</span><span class="vocab-def">${def}</span>`;
-            vocabContainer.appendChild(card);
-            vocabContainer.scrollTop = vocabContainer.scrollHeight;
+            chatEl.appendChild(div);
+            // Wait for images/layout before scrolling
+            requestAnimationFrame(() => {
+                chatEl.scrollTo({ top: chatEl.scrollHeight, behavior: 'smooth' });
+            });
         }
 
-        function cleanMarkdown(text) {
-            let clean = text.replace(/<[^>]*>/g, '');
-            return clean.replace(/\*\*(.*?)\*\*/g, '$1').replace(/\*(.*?)\*/g, '$1').replace(/#{1,6}\s?/g, '').replace(/`{1,3}/g, '').replace(/^\s*[-*]\s+/gm, '• ').replace(/\n{3,}/g, '\n\n').trim();
+        async function processAIResponse(rawText) {
+            // Extract Stage
+            const stageMatch = rawText.match(/\[\[STAGE:\s*(.*?)\]\]/);
+            if (stageMatch) {
+                updateTracker(stageMatch[1]);
+            }
+            return rawText;
         }
 
-        document.getElementById('download-btn').addEventListener('click', () => {
-            const { jsPDF } = window.jspdf;
-            const doc = new jsPDF();
+        // --- API CALL ---
+        async function sendMessage() {
+            const text = inputEl.value.trim();
+            if (!text) return;
             
-            // Header
-            doc.setFillColor(122, 132, 113); doc.rect(0, 0, 210, 40, 'F');
-            doc.setFont("helvetica", "bold"); doc.setFontSize(22); doc.setTextColor(255, 255, 255); doc.text("Session Feedback Report", 20, 20);
-            doc.setFontSize(12); doc.text(`Generated by Nour • ${new Date().toLocaleDateString()}`, 20, 32);
-            
-            let yPos = 60;
-            doc.setFont("helvetica", "normal"); doc.setTextColor(50, 50, 50); doc.setFontSize(11);
+            inputEl.value = '';
+            appendMessage('user', text);
+            document.getElementById('header-status').textContent = "Thinking...";
+            document.getElementById('avatar-wrapper').classList.add('listening');
 
-            // Add Collected Vocab if any
-            if(collectedVocab.length > 0) {
-                doc.setFont("helvetica", "bold"); doc.text("Key Vocabulary Collected:", 20, yPos);
-                yPos += 10;
-                doc.setFont("helvetica", "normal");
-                collectedVocab.forEach(v => {
-                    doc.setFont("helvetica", "bold");
-                    doc.text(`• ${v.term}:`, 20, yPos);
-                    const defWidth = doc.getTextWidth(`• ${v.term}: `);
-                    doc.setFont("helvetica", "normal");
-                    doc.text(v.def, 20 + defWidth, yPos);
-                    yPos += 8;
+            chatHistory.push({ role: "user", parts: [{ text: text }] });
+
+            try {
+                const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${MODEL_NAME}:generateContent?key=${GEMINI_API_KEY}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        contents: chatHistory,
+                        system_instruction: { parts: [{ text: SYSTEM_PROMPT }] }
+                    })
                 });
-                yPos += 10;
+
+                const data = await response.json();
+                
+                // CRITICAL FIX: Handle potential API errors or malformed data
+                if (data.error) {
+                    throw new Error(data.error.message);
+                }
+                
+                if (!data.candidates || !data.candidates[0].content) {
+                    throw new Error("Empty response from AI");
+                }
+
+                const aiText = data.candidates[0].content.parts[0].text;
+                
+                // Process and Display
+                const processedText = await processAIResponse(aiText);
+                appendMessage('ai', processedText);
+                
+                chatHistory.push({ role: "model", parts: [{ text: aiText }] });
+                
+                // Speak
+                if (!isMuted) speak(processedText);
+
+            } catch (error) {
+                console.error(error);
+                appendMessage('error', `Error: ${error.message}`);
+            } finally {
+                document.getElementById('header-status').textContent = "Online";
+                document.getElementById('avatar-wrapper').classList.remove('listening');
             }
-
-            // Main Report
-            doc.setFont("helvetica", "bold"); doc.text("Session Summary & Feedback:", 20, yPos);
-            yPos += 10;
-            doc.setFont("helvetica", "normal");
-            const splitText = doc.splitTextToSize(cleanMarkdown(finalReportContent), 170);
-            doc.text(splitText, 20, yPos);
-            
-            doc.save("Nour-Session-Feedback.pdf");
-        });
-
-        // --- AUDIO SYSTEM (STT & TTS) ---
-        let speechRec = null;
-        let isMuted = false;
-        let selectedVoice = null;
-        let isSpeaking = false;
-
-        function initTTS() {
-            const voices = window.speechSynthesis.getVoices();
-            selectedVoice = voices.find(v => v.name.includes('Google UK English Female')) || 
-                            voices.find(v => v.name.includes('Female') && v.lang.startsWith('en')) ||
-                            voices.find(v => v.lang.startsWith('en'));
-        }
-        window.speechSynthesis.onvoiceschanged = initTTS;
-
-        function speakText(text) {
-            if(!text) return;
-            window.speechSynthesis.cancel();
-            const cleanText = text.replace(/<[^>]*>/g, '').replace(/[*#`]/g, '');
-            const utterance = new SpeechSynthesisUtterance(cleanText);
-            if(selectedVoice) utterance.voice = selectedVoice;
-            utterance.rate = 1.0; utterance.pitch = 1.0;
-
-            utterance.onstart = () => { isSpeaking = true; document.getElementById('avatar-wrapper').classList.add('speaking'); };
-            utterance.onend = () => { isSpeaking = false; document.getElementById('avatar-wrapper').classList.remove('speaking'); };
-            window.speechSynthesis.speak(utterance);
         }
 
-        // --- STT SETUP WITH ERROR HANDLING ---
+        // --- SPEECH RECOGNITION (FIXED) ---
+        let recognition;
         const micBtn = document.getElementById('mic-btn');
-        if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
-            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-            speechRec = new SpeechRecognition();
-            speechRec.continuous = false; speechRec.lang = 'en-US'; speechRec.interimResults = false;
-
-            speechRec.onstart = () => {
-                micBtn.classList.remove('mic-error');
+        
+        // Browser compatibility check
+        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+        
+        if (SpeechRecognition) {
+            recognition = new SpeechRecognition();
+            recognition.continuous = false;
+            recognition.lang = 'en-US';
+            
+            recognition.onstart = () => {
                 micBtn.classList.add('listening');
-                document.getElementById('avatar-wrapper').classList.add('listening');
                 inputEl.placeholder = "Listening...";
             };
             
-            speechRec.onend = () => {
+            recognition.onend = () => {
                 micBtn.classList.remove('listening');
-                document.getElementById('avatar-wrapper').classList.remove('listening');
-                inputEl.placeholder = "Type or tap the mic to speak...";
+                inputEl.placeholder = "Type or tap microphone...";
+                // Trigger send automatically if desired, or let user click send
             };
             
-            speechRec.onerror = (event) => {
+            recognition.onerror = (event) => {
+                console.error("Speech Error:", event.error);
                 micBtn.classList.remove('listening');
-                micBtn.classList.add('mic-error');
-                console.error("Mic Error:", event.error);
-                if(event.error === 'not-allowed') {
-                    alert("Microphone access blocked. Please allow permissions or use HTTPS/Localhost.");
-                } else if (event.error === 'network') {
-                    alert("Microphone requires an internet connection for this browser.");
-                }
-                setTimeout(() => micBtn.classList.remove('mic-error'), 1000);
+                alert("Microphone error: " + event.error);
             };
 
-            speechRec.onresult = (event) => {
+            recognition.onresult = (event) => {
                 const transcript = event.results[0][0].transcript;
-                inputEl.value += (inputEl.value.length > 0 ? ' ' : '') + transcript;
-                inputEl.dispatchEvent(new Event('input'));
+                inputEl.value = transcript;
             };
-        } else { micBtn.style.display = 'none'; }
 
-        micBtn.addEventListener('click', () => { 
-            if(speechRec) {
-                try { speechRec.start(); } catch(e) { speechRec.stop(); } 
-            } else {
-                alert("Speech recognition not supported in this browser.");
-            }
-        });
-
-        const soundBtn = document.getElementById('sound-btn');
-        soundBtn.addEventListener('click', () => {
-            isMuted = !isMuted;
-            document.getElementById('sound-icon-on').style.display = isMuted ? 'none' : 'block';
-            document.getElementById('sound-icon-off').style.display = isMuted ? 'block' : 'none';
-            soundBtn.classList.toggle('active', !isMuted);
-            if(isMuted) window.speechSynthesis.cancel();
-        });
-
-
-        // --- CHAT LOGIC ---
-        let chatHistory = [];
-        const chatEl = document.getElementById('chat-history');
-        const inputEl = document.getElementById('user-input');
-        const sendBtn = document.getElementById('send-btn');
-        const avatarWrapper = document.getElementById('avatar-wrapper');
-
-        async function processMessage(text) {
-            // 1. Check for Summary Tags
-            const sumRegex = /\[\[SUMMARY: (.*?) :: (.*?)\]\]/g;
-            let match;
-            while ((match = sumRegex.exec(text)) !== null) {
-                updateTracker(match[1], match[2]);
-                text = text.replace(match[0], '');
-            }
-
-            // 2. Check for Vocab Tags (Fixed Loose Regex)
-            const vocabRegex = /\[\[VOCAB:\s*(.*?)\s*::\s*(.*?)\]\]/g;
-            while ((match = vocabRegex.exec(text)) !== null) {
-                addVocabCard(match[1], match[2]);
-                text = text.replace(match[0], '');
-            }
-
-            // 3. Check for Atmosphere Tags
-            if(text.includes('[[ATMOSPHERE: ENERGY]]')) {
-                setWaveEnergy('high');
-                text = text.replace('[[ATMOSPHERE: ENERGY]]', '');
-            } else if (text.includes('[[ATMOSPHERE: CALM]]')) {
-                setWaveEnergy('low');
-                text = text.replace('[[ATMOSPHERE: CALM]]', '');
-            }
-
-            // 4. Check for PDF Report
-            const pdfStart = "[[PDF_REPORT_START]]";
-            const pdfEnd = "[[PDF_REPORT_END]]";
-            if(text.includes(pdfStart)) {
-                const reportContent = text.substring(text.indexOf(pdfStart) + pdfStart.length, text.indexOf(pdfEnd)).trim();
-                finalReportContent = reportContent; 
-                document.getElementById('download-area').style.display = 'block'; 
-                text = text.replace(text.substring(text.indexOf(pdfStart), text.indexOf(pdfEnd) + pdfEnd.length), '*(Feedback report generated. Click "Download Feedback PDF" in the side panel to save it.)*');
-            }
-            return text;
-        }
-
-        let messageCounter = 0;
-
-        async function appendMessage(role, text, options = {}) {
-            const div = document.createElement('div');
-            div.className = `message ${role}`;
-            const messageId = options.messageId || `msg-${Date.now()}-${messageCounter++}`;
-            div.id = messageId;
-            div.dataset.messageId = messageId;
-            
-            let content = text;
-            if(role === 'ai') {
-                content = await processMessage(text);
-                const controls = document.createElement('div');
-                controls.className = 'message-controls';
-                const replayBtn = document.createElement('button');
-                replayBtn.className = 'control-btn';
-                replayBtn.title = "Listen Again";
-                replayBtn.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 4v6h6"></path><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path></svg>';
-                replayBtn.onclick = () => speakText(content);
-                controls.appendChild(replayBtn);
-                div.innerHTML = marked.parse(content);
-                div.appendChild(controls);
-                if(!isMuted) speakText(content);
-            } else {
-                div.innerHTML = marked.parse(content);
-            }
-            
-            chatEl.appendChild(div);
-            chatEl.scrollTop = chatEl.scrollHeight;
-            if(diagramState.nodes.length || diagramState.edges.length) scheduleDiagramSync();
-            return messageId;
-        }
-
-        const diagramLayer = document.getElementById('diagram-layer');
-        const diagramNodesGroup = document.getElementById('diagram-nodes');
-        const diagramEdgesGroup = document.getElementById('diagram-edges');
-        const svgNS = 'http://www.w3.org/2000/svg';
-        const diagramState = { nodes: [], edges: [], options: {} };
-        let diagramScheduled = false;
-
-        const syncDiagramViewport = () => {
-            if(!diagramLayer) return { width: 0, height: 0, rect: { left: 0, top: 0 } };
-            const rect = diagramLayer.getBoundingClientRect();
-            diagramLayer.setAttribute('width', rect.width);
-            diagramLayer.setAttribute('height', rect.height);
-            return { width: rect.width, height: rect.height, rect };
-        };
-
-        const getMessageAnchor = (messageId, layerRect) => {
-            if(!messageId) return null;
-            const el = document.getElementById(messageId);
-            if(!el) return null;
-            const rect = el.getBoundingClientRect();
-            return {
-                x: rect.left - layerRect.left + rect.width / 2,
-                y: rect.top - layerRect.top + rect.height / 2
-            };
-        };
-
-        const renderDiagram = () => {
-            diagramScheduled = false;
-            const viewport = syncDiagramViewport();
-            diagramNodesGroup.innerHTML = '';
-            diagramEdgesGroup.innerHTML = '';
-
-            if(!diagramState.nodes.length && !diagramState.edges.length) return;
-
-            const nodeWidth = diagramState.options.nodeWidth || 160;
-            const nodeHeight = diagramState.options.nodeHeight || 64;
-            const positions = {};
-
-            diagramState.nodes.forEach(node => {
-                const anchor = getMessageAnchor(node.messageId, viewport.rect) || null;
-                const x = (node.x ?? anchor?.x ?? viewport.width / 2);
-                const y = (node.y ?? anchor?.y ?? viewport.height / 2);
-
-                positions[node.id] = { x, y };
-
-                const group = document.createElementNS(svgNS, 'g');
-                group.classList.add('diagram-node');
-                group.setAttribute('data-node-id', node.id);
-                group.setAttribute('transform', `translate(${x - nodeWidth / 2}, ${y - nodeHeight / 2})`);
-
-                const rect = document.createElementNS(svgNS, 'rect');
-                rect.setAttribute('width', nodeWidth);
-                rect.setAttribute('height', nodeHeight);
-                if(node.color) rect.setAttribute('fill', node.color);
-
-                const text = document.createElementNS(svgNS, 'text');
-                text.setAttribute('x', nodeWidth / 2);
-                text.setAttribute('y', nodeHeight / 2 + 4);
-                text.setAttribute('text-anchor', 'middle');
-                text.textContent = node.label || node.id;
-
-                group.appendChild(rect);
-                group.appendChild(text);
-                diagramNodesGroup.appendChild(group);
-            });
-
-            diagramState.edges.forEach(edge => {
-                const from = positions[edge.from];
-                const to = positions[edge.to];
-                if(!from || !to) return;
-
-                const line = document.createElementNS(svgNS, 'line');
-                line.setAttribute('x1', from.x);
-                line.setAttribute('y1', from.y);
-                line.setAttribute('x2', to.x);
-                line.setAttribute('y2', to.y);
-                line.setAttribute('class', 'diagram-edge');
-                line.setAttribute('stroke', edge.color || 'var(--secondary-color)');
-                line.setAttribute('marker-end', 'url(#arrowhead)');
-                diagramEdgesGroup.appendChild(line);
-
-                if(edge.label) {
-                    const label = document.createElementNS(svgNS, 'text');
-                    label.setAttribute('class', 'diagram-label');
-                    label.setAttribute('text-anchor', 'middle');
-                    label.setAttribute('x', (from.x + to.x) / 2);
-                    label.setAttribute('y', (from.y + to.y) / 2 - 6);
-                    label.textContent = edge.label;
-                    diagramEdgesGroup.appendChild(label);
+            micBtn.addEventListener('click', () => {
+                if (micBtn.classList.contains('listening')) {
+                    recognition.stop();
+                } else {
+                    recognition.start();
                 }
             });
-        };
-
-        const scheduleDiagramSync = () => {
-            if(diagramScheduled) return;
-            diagramScheduled = true;
-            window.requestAnimationFrame(renderDiagram);
-        };
-
-        window.renderFlow = (nodes = [], edges = [], options = {}) => {
-            diagramState.nodes = nodes;
-            diagramState.edges = edges;
-            diagramState.options = options;
-            scheduleDiagramSync();
-        };
-
-        window.clearFlow = () => {
-            diagramState.nodes = [];
-            diagramState.edges = [];
-            diagramState.options = {};
-            diagramNodesGroup.innerHTML = '';
-            diagramEdgesGroup.innerHTML = '';
-        };
-
-        window.diagramLayoutController = {
-            renderFlow: window.renderFlow,
-            clearFlow: window.clearFlow,
-            sync: scheduleDiagramSync
-        };
-
-        chatEl.addEventListener('scroll', scheduleDiagramSync);
-        window.addEventListener('resize', scheduleDiagramSync);
-
-        async function generateResponse(msg) {
-            chatHistory.push({ role: "user", parts: [{ text: msg }] });
-            avatarWrapper.classList.add('thinking');
-            document.getElementById('header-status').textContent = "Thinking...";
-
-            try {
-                const url = `https://generativelanguage.googleapis.com/v1beta/models/${MODEL_NAME}:generateContent?key=${GEMINI_API_KEY}`;
-                const res = await fetch(url, { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({ contents: chatHistory, system_instruction: { parts: [{ text: FINAL_SYSTEM_PROMPT }] } })});
-                const data = await res.json();
-                const aiText = data.candidates[0].content.parts[0].text;
-                chatHistory.push({ role: "model", parts: [{ text: aiText }] });
-                return { success: true, text: aiText };
-            } catch(e) {
-                return { success: false, text: "Connection error. Please check your API Key." };
-            } finally {
-                avatarWrapper.classList.remove('thinking');
-                document.getElementById('header-status').textContent = "Online";
-            }
+        } else {
+            micBtn.style.display = 'none'; // Hide if not supported
+            console.log("Speech Recognition not supported in this browser.");
         }
 
-        // --- CONTROLS ---
-        const startBtn = document.getElementById('start-btn');
-        const modal = document.getElementById('api-modal');
+        // --- TEXT TO SPEECH (FIXED) ---
+        const synth = window.speechSynthesis;
+        let voices = [];
+        
+        // Load voices explicitly
+        function loadVoices() {
+            voices = synth.getVoices();
+        }
+        
+        if (speechSynthesis.onvoiceschanged !== undefined) {
+            speechSynthesis.onvoiceschanged = loadVoices;
+        }
 
-        startBtn.addEventListener('click', async () => {
-            const key = document.getElementById('api-key-input').value.trim();
-            if(key) {
+        function speak(text) {
+            if (synth.speaking) synth.cancel();
+            
+            // Clean HTML tags for speech
+            const cleanText = text.replace(/<[^>]*>/g, '').replace(/\[\[.*?\]\]/g, '');
+            const utterThis = new SpeechSynthesisUtterance(cleanText);
+            
+            // Try to find a female voice
+            const voice = voices.find(v => v.name.includes('Google UK English Female')) || 
+                          voices.find(v => v.name.includes('Female')) || 
+                          voices[0];
+            
+            if (voice) utterThis.voice = voice;
+            utterThis.pitch = 1;
+            utterThis.rate = 1.1;
+            
+            utterThis.onstart = () => document.getElementById('avatar-wrapper').classList.add('speaking');
+            utterThis.onend = () => document.getElementById('avatar-wrapper').classList.remove('speaking');
+            
+            synth.speak(utterThis);
+        }
+
+        document.getElementById('sound-btn').addEventListener('click', function() {
+            isMuted = !isMuted;
+            this.style.opacity = isMuted ? '0.5' : '1';
+            if (isMuted) synth.cancel();
+        });
+
+        // --- INITIALIZATION ---
+        document.getElementById('start-session-btn').addEventListener('click', () => {
+            const key = document.getElementById('api-key-input').value;
+            if (key) {
                 GEMINI_API_KEY = key;
-                modal.style.display = 'none';
+                document.getElementById('api-modal').style.display = 'none';
                 initTracker();
-                initTTS(); 
-                const res = await generateResponse("Start the lesson.");
-                if(res.success) appendMessage('ai', res.text);
+                // Send silent start prompt
+                sendMessage(); 
             }
         });
 
-        sendBtn.addEventListener('click', async () => {
-            const txt = inputEl.value.trim();
-            if(!txt) return;
-            inputEl.value = ''; inputEl.style.height = 'auto'; sendBtn.classList.remove('active');
-            
-            appendMessage('user', txt);
-            window.speechSynthesis.cancel();
-            avatarWrapper.classList.add('listening');
-            const res = await generateResponse(txt);
-            avatarWrapper.classList.remove('listening');
-            if(res.success) appendMessage('ai', res.text); else appendMessage('error', res.text);
+        document.getElementById('send-btn').addEventListener('click', sendMessage);
+        document.getElementById('theme-btn').addEventListener('click', () => {
+            document.body.classList.toggle('theme-ocean');
+            // Re-init canvas colors
+            initWaves();
         });
 
-        inputEl.addEventListener('input', () => {
-            inputEl.style.height = 'auto'; inputEl.style.height = inputEl.scrollHeight + 'px';
-            if(inputEl.value.trim().length > 0) sendBtn.classList.add('active'); else sendBtn.classList.remove('active');
-        });
-        inputEl.addEventListener('keydown', (e) => { if(e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendBtn.click(); } });
-
-        // Theme & Visuals Logic (Emotive Atmosphere)
+        // --- CANVAS BACKGROUND ---
         const canvas = document.getElementById('wave-canvas');
         const ctx = canvas.getContext('2d');
-        let width, height, waves = [];
-        let agitation = 0;
-        
-        // Atmosphere State
-        let targetSpeedMultiplier = 1;
-        let targetAmpMultiplier = 1;
-        let currentSpeedMultiplier = 1;
-        let currentAmpMultiplier = 1;
+        let width, height;
+        let waves = [];
 
-        const initWaves = () => {
-            width = canvas.width = window.innerWidth; height = canvas.height = window.innerHeight;
-            waves = [{y: height*0.55, length:0.005, amp:50, speed:0.002, offset:0}, {y: height*0.60, length:0.003, amp:70, speed:0.003, offset:2}, {y: height*0.65, length:0.002, amp:90, speed:0.0015, offset:4}];
-            updateWaveColors();
-        };
-
-        const updateWaveColors = () => {
+        function initWaves() {
+            width = canvas.width = window.innerWidth;
+            height = canvas.height = window.innerHeight;
+            
             const style = getComputedStyle(document.body);
-            const hexToRgba = (h, a) => { let r=parseInt(h.slice(1,3),16),g=parseInt(h.slice(3,5),16),b=parseInt(h.slice(5,7),16); return `rgba(${r},${g},${b},${a})`; };
-            waves[0].color = hexToRgba(style.getPropertyValue('--primary-color').trim(), 0.25);
-            waves[1].color = hexToRgba(style.getPropertyValue('--secondary-color').trim(), 0.3);
-            waves[2].color = hexToRgba(style.getPropertyValue('--primary-color').trim(), 0.15);
-        };
-        
-        const setWaveEnergy = (level) => {
-            if(level === 'high') {
-                targetSpeedMultiplier = 3.0; // Faster
-                targetAmpMultiplier = 1.5;   // Higher waves
-            } else {
-                targetSpeedMultiplier = 1.0; // Normal
-                targetAmpMultiplier = 1.0;   // Normal
-            }
-        };
+            const p = style.getPropertyValue('--primary-color').trim();
+            
+            // Helper to get RGB from hex
+            const hex2rgba = (hex, alpha = 1) => {
+                const [r, g, b] = hex.match(/\w\w/g).map(x => parseInt(x, 16));
+                return `rgba(${r},${g},${b},${alpha})`;
+            };
 
-        const animateWaves = () => {
+            const color = p.startsWith('#') ? hex2rgba(p, 0.1) : 'rgba(100,100,100,0.1)';
+
+            waves = [
+                { y: height * 0.6, length: 0.002, amp: 60, speed: 0.002, offset: 0 },
+                { y: height * 0.65, length: 0.003, amp: 40, speed: 0.003, offset: 2 },
+                { y: height * 0.7, length: 0.001, amp: 80, speed: 0.001, offset: 4 }
+            ];
+            
+            // Draw
+            draw();
+        }
+
+        function draw() {
             ctx.clearRect(0, 0, width, height);
             
-            // Smoothly interpolate towards target energy state
-            currentSpeedMultiplier += (targetSpeedMultiplier - currentSpeedMultiplier) * 0.05;
-            currentAmpMultiplier += (targetAmpMultiplier - currentAmpMultiplier) * 0.05;
+            const style = getComputedStyle(document.body);
+            const p = style.getPropertyValue('--primary-color').trim();
+            ctx.fillStyle = p.startsWith('#') ? p + '1A' : 'rgba(100,100,100,0.1)'; // Simple hex transparency hack
 
-            if(agitation > 0) agitation -= 0.1;
-            
             waves.forEach(w => {
-                ctx.beginPath(); ctx.moveTo(0, height); ctx.lineTo(0, w.y);
-                const amp = (w.amp * currentAmpMultiplier) + (agitation * 3);
-                for(let x=0; x<=width; x+=10) ctx.lineTo(x, w.y + Math.sin(x * w.length + w.offset) * amp);
-                ctx.lineTo(width, height); ctx.fillStyle = w.color; ctx.fill();
-                w.offset += (w.speed * currentSpeedMultiplier) + (agitation * 0.001);
+                ctx.beginPath();
+                ctx.moveTo(0, height);
+                ctx.lineTo(0, w.y);
+                for (let x = 0; x <= width; x += 10) {
+                    ctx.lineTo(x, w.y + Math.sin(x * w.length + w.offset) * w.amp);
+                }
+                ctx.lineTo(width, height);
+                ctx.fill();
+                w.offset += w.speed;
             });
-            requestAnimationFrame(animateWaves);
-        };
+            requestAnimationFrame(draw);
+        }
 
-        window.setTheme = (t) => { document.body.className = `theme-${t}`; setTimeout(updateWaveColors, 50); };
-        document.getElementById('settings-btn').addEventListener('click', (e) => { e.stopPropagation(); document.getElementById('settings-panel').classList.toggle('active'); });
-        document.addEventListener('click', (e) => { if(!document.getElementById('settings-panel').contains(e.target) && e.target.id !== 'settings-btn') document.getElementById('settings-panel').classList.remove('active'); });
         window.addEventListener('resize', initWaves);
-        initWaves(); animateWaves();
+        initWaves();
 
     </script>
 </body>
 </html>
+```
