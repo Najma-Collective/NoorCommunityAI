@@ -1,0 +1,317 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<lesson version="1.0">
+  <metadata>
+    <title>Future Forms: Plans and Predictions</title>
+    <level>A2</level>
+    <duration>50</duration>
+    <topic>Grammar: Will, Going to, Present Continuous for future</topic>
+    <keywords>future, plans, predictions, will, going-to, intentions</keywords>
+  </metadata>
+
+  <objectives>
+    <objective>Use 'going to' to talk about plans and intentions</objective>
+    <objective>Use 'will' for spontaneous decisions and predictions</objective>
+    <objective>Understand the difference between planned and unplanned future</objective>
+  </objectives>
+
+  <lessonPlan>
+    <stage name="Lead-in" order="1">
+      <description>
+Ask a somatic grounding question: "Close your eyes for a moment and imagine tomorrow morning. What's the first thing you see yourself doing? Notice how your body responds to thinking about the future - maybe your shoulders relax, or your breath deepens. The future starts in our imagination."
+
+Then transition: "Today we're going to learn how to talk about the future in English - your plans, your dreams, and your predictions."
+      </description>
+    </stage>
+
+    <stage name="Pre task A (Activate)" order="2">
+      <description>
+Elicit prior knowledge about future plans using Socratic questions. Use carousel for options:
+
+Card 1: "What are you planning to do this weekend?"
+Card 2: "What's one goal you have for this year?"
+Card 3: "Where do you see yourself in five years?"
+
+Follow up with deeper questions:
+- "How did you decide on that plan?"
+- "What makes you excited about it?"
+- "What might change your plans?"
+
+Listen for how they express future ideas - they might use present tense ("I go shopping tomorrow") or mixed forms. Don't correct yet, just notice.
+      </description>
+    </stage>
+
+    <stage name="Pre task B (Model)" order="3">
+      <dialogue>
+        <title>Making Weekend Plans</title>
+        <context>Two colleagues, Sara and Ahmed, are talking on Friday afternoon about their weekend plans.</context>
+        <speaker name="Sara">
+So, what are you going to do this weekend, Ahmed?
+        </speaker>
+        <speaker name="Ahmed">
+I'm going to visit my parents on Saturday. We're going to have a big family dinner. What about you?
+        </speaker>
+        <speaker name="Sara">
+I'm not sure yet. I'll probably stay home and relax. Oh wait - it's going to rain tomorrow, I just checked the weather.
+        </speaker>
+        <speaker name="Ahmed">
+Really? Then I'll bring an umbrella. Are you going to do anything on Sunday?
+        </speaker>
+        <speaker name="Sara">
+Yes! I'm meeting some friends for brunch. We're going to try that new café downtown. Want to join us?
+        </speaker>
+        <speaker name="Ahmed">
+That sounds great! Sure, I'll come! What time are you meeting?
+        </speaker>
+        <speaker name="Sara">
+We're meeting at 11. I'll send you the address later.
+        </speaker>
+      </dialogue>
+
+      <conceptChecks>
+After presenting the dialogue, ask:
+- "What is Ahmed's plan for Saturday?" (Visit parents - he decided this before)
+- "Did Sara plan to stay home?" (No, she just decided now)
+- "How do they know it's going to rain?" (Weather prediction - evidence)
+- "Notice Ahmed says 'I'll bring an umbrella' - when did he decide this?" (Right now, spontaneous)
+- "When Sara says 'I'm meeting friends' - is this a plan or a spontaneous decision?" (A plan, already arranged)
+
+Use notice boxes to highlight the different forms they're using.
+      </conceptChecks>
+    </stage>
+
+    <stage name="Pre task C (Lang Focus)" order="4">
+      <grammarFocus>
+        <structure>Three ways to talk about the future</structure>
+
+        <explanation>
+Present the grammar using CARD layout:
+
+**Card 1: GOING TO (for plans and intentions)**
+
+Form: am/is/are + going to + base verb
+
+Use when:
+- You already decided/planned something
+- You have evidence for a prediction
+
+Examples:
+- "I'm going to study tonight." (I already decided)
+- "Look at those clouds - it's going to rain!" (I can see evidence)
+- "They're going to move to Canada next year." (They already made this plan)
+
+**Card 2: WILL (for spontaneous decisions and predictions)**
+
+Form: will + base verb
+
+Use when:
+- You decide something right now (spontaneous)
+- You're making a prediction without evidence
+- You're offering, promising, or refusing
+
+Examples:
+Spontaneous: "I'm thirsty. I'll get some water." (deciding now)
+Prediction: "I think it will be sunny tomorrow." (opinion/guess)
+Offer: "Don't worry, I'll help you!" (promise)
+
+**Card 3: PRESENT CONTINUOUS (for fixed arrangements)**
+
+Form: am/is/are + verb-ing
+
+Use when:
+- You have a fixed arrangement with specific time/place
+- Usually with time expressions
+
+Examples:
+- "I'm meeting John at 3pm." (We arranged this)
+- "We're flying to Paris on Monday." (We booked tickets)
+- "She's having dinner with her boss tomorrow." (Specific arrangement)
+
+**Card 4: Comparison - Use notice box:**
+
+"I'm going to see a movie." → I decided earlier, general plan
+"I'm seeing a movie at 7pm at Cinema 5." → Fixed arrangement, specific details
+"I'll see a movie." → Just decided now, spontaneous
+
+**Card 5: Questions**
+
+Going to: "What are you going to do?"
+Will: "What will happen next?"
+Present Continuous: "What are you doing tomorrow?"
+
+**Card 6: Negatives**
+
+Going to: "I'm not going to quit."
+Will: "It won't rain."
+Present Continuous: "I'm not working tomorrow."
+        </explanation>
+
+        <examples>
+Provide multiple examples using learning cards with context:
+
+- "A: The phone is ringing. B: I'll answer it!" (spontaneous offer)
+- "I'm going to learn Spanish next year. I already bought the textbook." (plan with evidence)
+- "We're having a team meeting on Thursday at 10am." (fixed arrangement)
+- "I think robots will do more jobs in the future." (prediction, no evidence)
+- "Look at the time! We're going to be late!" (prediction with evidence)
+        </examples>
+      </grammarFocus>
+    </stage>
+
+    <stage name="Pre task D (Pron)" order="5">
+      <pronunciationFocus>
+        <feature>Reduction of "going to" → "gonna" in connected speech</feature>
+
+        <guidance>
+Use think prompts: "Listen to how native speakers say 'going to' in casual conversation..."
+
+**Focus areas:**
+
+1. **Reduction: going to → gonna** /ˈɡɒnə/
+   - "I'm going to study" → "I'm gonna study"
+   - "They're going to arrive late" → "They're gonna arrive late"
+
+   Note in dialogue box: "In informal speech, 'going to' sounds like 'gonna'. This is normal! But we still write 'going to'."
+
+2. **Will contraction** + weak form:
+   - I will → I'll /aɪl/
+   - You will → You'll /juːl/
+   - It will → It'll /ˈɪtl/ (very weak)
+
+3. **Won't** /woʊnt/:
+   - "Will not" → "Won't" (notice the /o/ sound, not /ɪ/)
+
+4. **Connected speech**:
+   - "I'll see you" → "I'll-see-you" (flows together)
+   - "What are you going to do?" → "Whadda-ya-gonna-do?" (very casual)
+
+Model examples, then ask student to repeat naturally:
+- "I'm gonna call my mom tonight."
+- "I'll text you later."
+- "What're you gonna do this weekend?"
+        </guidance>
+      </pronunciationFocus>
+    </stage>
+
+    <stage name="Task Prep" order="6">
+      <taskSetup>
+        <scenario>
+Imagine you and a friend are planning an exciting weekend trip together. You need to decide what you're going to do, where you'll go, and make spontaneous decisions along the way.
+        </scenario>
+
+        <roles>
+Assign roles:
+- Student: One friend making suggestions and plans
+- You (Nour): The other friend, asking questions and also making spontaneous decisions
+
+Provide thinking time: "Take 30 seconds to think about: What kind of trip do you want? Beach? Mountains? City? What activities sound fun?"
+        </roles>
+
+        <support>
+Provide sentence stems carousel:
+
+**For plans (going to):**
+- "I'm going to ___"
+- "We're going to ___ and then ___"
+- "I'm not going to ___ because ___"
+
+**For spontaneous decisions (will):**
+- "I'll ___ if you ___"
+- "Don't worry, I'll ___"
+- "I think I'll ___"
+
+**For arrangements (present continuous):**
+- "I'm ___ at [time]"
+- "We're meeting ___ at ___"
+
+Vocabulary support carousel:
+- Activities: swimming, hiking, sightseating, trying local food, taking photos, relaxing
+- Places: beach, mountains, museum, market, café, hotel
+- Time: this weekend, tomorrow morning, next Saturday, at 9am
+        </support>
+      </taskSetup>
+    </stage>
+
+    <stage name="Main Task" order="7">
+      <activity>
+        <description>
+Facilitate a natural planning conversation. Start with:
+
+"So, exciting! We're planning a weekend trip. Where are we going to go?"
+
+As the conversation progresses, create opportunities for different future forms:
+- Ask about pre-made plans: "What are you going to do on Saturday?"
+- Create spontaneous moments: "Oh no, I forgot my camera!" → Student might say "I'll lend you mine!"
+- Ask about specific arrangements: "What time are we meeting the guide?"
+
+Monitor for these common errors WITHOUT interrupting:
+- Using 'will' for plans: "I will visit my parents tomorrow" (should be 'going to' if it's a plan)
+- Using 'going to' for spontaneous: "Oh! I'm going to help you!" (should be 'will')
+- Wrong form: "I'm go to study" instead of "I'm going to study"
+
+Encourage extended conversation. Let them make decisions together, change plans, predict weather, etc.
+        </description>
+      </activity>
+    </stage>
+
+    <stage name="Reporting" order="8">
+      <reflection>
+Use self-assessment widget:
+
+"How confident do you feel about the different future forms now?"
+
+Ask metacognitive questions:
+- "Which form felt easiest: going to, will, or present continuous?"
+- "Can you think of a moment where you chose one form over another? Why?"
+- "What's still a bit confusing?"
+- "If you were teaching a friend, which form would you explain first?"
+      </reflection>
+    </stage>
+
+    <stage name="Feedback" order="9">
+      <feedbackGuidance>
+Focus on 2-3 priority areas using highlights.
+
+Common feedback patterns for A2:
+
+**If they mixed up will/going to:**
+Use a comparison card with notice box:
+"When you said 'I will visit my mom tomorrow' - this sounds like you're deciding now. But if you already planned it, we say 'I'm going to visit my mom.' The difference is: Did you already decide? (going to) Or are you deciding right now? (will)"
+
+**If they had trouble with 'gonna' pronunciation:**
+Use dialogue box to model natural speech, then encourage practice.
+
+**Positive feedback example:**
+✨ "You did really well with time expressions! You said 'I'm meeting you at 5pm' - perfect use of present continuous for a fixed arrangement."
+
+**Correction example:**
+Instead of: "I will go shopping tomorrow." (This sounds unplanned)
+Better: "I'm going to go shopping tomorrow." (Shows it's a plan)
+
+**Your goal for next time:**
+Practice listening for these forms in movies or podcasts. When you hear "I'll" - ask yourself: Is this spontaneous? When you hear "going to" - is there a plan?
+
+End with encouragement: "Your planning conversation felt really natural - I could imagine us actually taking that trip together!"
+      </feedbackGuidance>
+    </stage>
+  </lessonPlan>
+
+  <culturalContext>
+Different cultures have different relationships with planning and spontaneity. Some students come from cultures where detailed planning is the norm; others are more comfortable with spontaneity. Both are valid! Use this lesson to explore how language reflects these differences.
+
+When students share plans, honor their timeline - whether it's a weekend trip or a five-year goal.
+  </culturalContext>
+
+  <vocabularyBank>
+    <word context="time">tomorrow, tonight, next week, this weekend, soon, later, in the future</word>
+    <word context="plans">plan, intention, arrangement, appointment, schedule</word>
+    <word context="activities">visit, meet, travel, study, work, relax, try</word>
+    <word context="predictions">probably, maybe, definitely, possibly, certainly</word>
+  </vocabularyBank>
+
+  <commonErrors>
+    <error>Using 'will' for definite plans: "I will visit" → "I'm going to visit"</error>
+    <error>Forgetting 'to' after 'going': "I'm going study" → "I'm going to study"</error>
+    <error>Wrong form of 'be': "I is going to" → "I am going to"</error>
+    <error>Using 'going to' for spontaneous: "I'm going to help you!" (just decided) → "I'll help you!"</error>
+  </commonErrors>
+</lesson>

@@ -1,0 +1,365 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<lesson version="1.0">
+  <metadata>
+    <title>Mixed Conditionals: Exploring Cause and Effect Across Time</title>
+    <level>B2</level>
+    <duration>70</duration>
+    <topic>Grammar: Mixed conditionals (past/present, present/past)</topic>
+    <keywords>conditionals, mixed, regret, hypothetical, cause-effect, if-clauses</keywords>
+  </metadata>
+
+  <objectives>
+    <objective>Understand and use mixed conditionals to connect past actions with present results</objective>
+    <objective>Use mixed conditionals to express present conditions with past consequences</objective>
+    <objective>Distinguish between standard and mixed conditional forms</objective>
+    <objective>Reflect on life choices and their outcomes using sophisticated language</objective>
+  </objectives>
+
+  <lessonPlan>
+    <stage name="Lead-in" order="1">
+      <description>
+Ask a somatic grounding question: "Think about a choice you made in the past that still affects you today. Maybe it was choosing where to live, what to study, or a relationship you started. Where do you feel that choice in your body right now? Is it in your heart? Your stomach? Your shoulders? Just notice."
+
+Then transition: "Today we're going to explore how to talk about the fascinating connections between past decisions and present realities - and how we might imagine different timelines. This is advanced thinking, and it requires advanced grammar: mixed conditionals."
+      </description>
+    </stage>
+
+    <stage name="Pre task A (Activate)" order="2">
+      <description>
+Elicit prior knowledge about cause and effect across time using deep Socratic questions. Use carousel for philosophical options:
+
+Card 1: "If you had studied a different subject in school, how would your life be different now?"
+
+Card 2: "Think of someone successful you admire. If they hadn't taken a specific risk in their past, where would they be today?"
+
+Card 3: "If the internet didn't exist today, how would your life yesterday have been different?"
+
+These questions naturally elicit mixed conditional thinking (mixing past and present timeframes).
+
+Follow up with probing questions:
+- "What's the connection between that past choice and your present reality?"
+- "Do you think the outcome was inevitable, or could things have gone differently?"
+- "How do you feel about the path not taken?"
+
+Listen for how they express these complex time relationships. They might struggle or use workarounds - this shows you where to focus.
+      </description>
+    </stage>
+
+    <stage name="Pre task B (Model)" order="3">
+      <dialogue>
+        <title>Reflections on Career Paths</title>
+        <context>Two former university classmates, Dr. Zainab and Karim, reconnect after 15 years at a conference.</context>
+        <speaker name="Zainab">
+Karim! I can't believe it's you! How have you been?
+        </speaker>
+        <speaker name="Karim">
+Zainab! Wow, 15 years! I'm doing well. I'm a software engineer now - I work for a tech company in Dubai. What about you?
+        </speaker>
+        <speaker name="Zainab">
+I became a doctor, actually. I'm doing medical research. You know, I often think about our university days. If I hadn't met Professor Hassan in that first year, I wouldn't be in medicine now. He completely changed my direction.
+        </speaker>
+        <speaker name="Karim">
+That's amazing. I had a similar turning point. If I had listened to my parents, I would have studied business. But I followed my passion for technology, and here I am. Though sometimes I wonder... if I were more business-minded now, would I have started my own company back then?
+        </speaker>
+        <speaker name="Zainab">
+It's interesting how life works. If we had known then what we know now, we might have made completely different choices. But then we wouldn't be who we are today.
+        </speaker>
+        <speaker name="Karim">
+Exactly. Actually, if I weren't so focused on coding all these years, I might have traveled more. I regret that sometimes. What about you - any regrets?
+        </speaker>
+        <speaker name="Zainab">
+Sure. If I had taken that research position in London five years ago, I would be living abroad now. But I chose to stay close to family. It's a trade-off.
+        </speaker>
+      </dialogue>
+
+      <conceptChecks>
+After presenting the dialogue, use concept check questions:
+
+- "Zainab says 'If I hadn't met Professor Hassan... I wouldn't be in medicine now.' When did she meet him?" (Past - first year)
+- "What's the result of that meeting?" (Present - she's in medicine now)
+- "Notice the time mix: past condition → present result. Why isn't she saying 'I wouldn't have been in medicine'?" (Because she's talking about her present state, not a past state)
+
+- "Karim says 'If I were more business-minded now, would I have started my own company back then?' What's the condition?" (Present hypothetical - being business-minded)
+- "What's the result?" (Past hypothetical - starting a company then)
+- "This is reversed! Present condition → past result."
+
+Use notice boxes to draw attention to these time mixtures and how they create sophisticated meaning.
+      </conceptChecks>
+    </stage>
+
+    <stage name="Pre task C (Lang Focus)" order="4">
+      <grammarFocus>
+        <structure>Mixed Conditionals</structure>
+        <form>Mixing time frames: past with present, or present with past</form>
+
+        <explanation>
+Present the grammar using CARD layout:
+
+**Card 1: Review of Standard Conditionals**
+
+Before we mix them, let's recall the standard forms:
+
+Second Conditional (unreal present):
+- If + past simple, would + base verb
+- "If I had time, I would travel more." (But I don't have time now)
+
+Third Conditional (unreal past):
+- If + past perfect, would have + past participle
+- "If I had studied harder, I would have passed." (But I didn't study harder, and I didn't pass)
+
+Notice box: "These match time frames: present condition → present result, or past condition → past result."
+
+**Card 2: Mixed Conditional Type 1 - PAST condition → PRESENT result**
+
+Form: If + past perfect, would + base verb
+
+Use when: A past action (or lack of action) has a result that is still true now.
+
+Examples:
+- "If I had studied medicine, I would be a doctor now."
+  (I didn't study medicine [past], so I'm not a doctor [present result])
+
+- "If they had invested in that company, they would be rich today."
+  (They didn't invest [past], so they're not rich [present])
+
+- "If she hadn't met her husband at university, she wouldn't be living in France now."
+  (She did meet him [past], so she is living in France [present result])
+
+Notice box: "Use this when you want to connect a past event to your present reality. It's about REGRET, REFLECTION, or GRATITUDE for how the past shaped the present."
+
+**Card 3: Mixed Conditional Type 2 - PRESENT condition → PAST result**
+
+Form: If + past simple, would have + past participle
+
+Use when: A present situation would have changed a past event.
+
+Examples:
+- "If I were more organized, I wouldn't have missed the deadline."
+  (I'm not organized [present characteristic], so I missed it [past result])
+
+- "If he weren't so stubborn, he would have apologized yesterday."
+  (He is stubborn [present trait], so he didn't apologize [past])
+
+- "If we didn't live so far away, we would have visited them last weekend."
+  (We do live far away [present fact], so we didn't visit [past])
+
+Notice box: "Use this when a present characteristic or situation explains why something happened (or didn't happen) in the past."
+
+**Card 4: Timeline Visualization**
+
+Use learning card with visual description:
+
+Mixed Type 1: PAST ────────────► NOW
+             (condition)      (result)
+"If I had saved money then, I would be wealthy now."
+
+Mixed Type 2: NOW ────────────► PAST
+             (condition)      (result)
+"If I were braver, I would have spoken up yesterday."
+
+**Card 5: Common Situations for Mixed Conditionals**
+
+Use carousel of example contexts:
+
+Card A: Career choices
+"If I had chosen a different major, I would be in a different career now."
+
+Card B: Relationships
+"If we hadn't moved to this city, we wouldn't know our best friends."
+
+Card C: Skills
+"If I had practiced piano as a child, I would be able to play now."
+
+Card D: Personality affecting past
+"If I weren't so introverted, I would have joined more clubs in university."
+
+**Card 6: Questions and Negatives**
+
+Questions:
+- "If you had taken that job, where would you be now?"
+- "If you were more confident, what would you have done differently?"
+
+Negatives (notice the double negative logic):
+- "If I hadn't learned English, I wouldn't be here now." (I did learn it, so I am here)
+- "If she didn't have anxiety, she wouldn't have avoided the interview." (She does have it, so she did avoid it)
+        </explanation>
+
+        <examples>
+Provide multiple nuanced examples using learning cards:
+
+**Real-life reflections:**
+- "If I had learned to code earlier, I would have better job opportunities now."
+- "If my grandparents hadn't emigrated, I wouldn't be living in this country today."
+- "If I were more spontaneous, I would have said yes to that adventure last year."
+- "If the pandemic hadn't happened, we would still be working in the office every day."
+
+**Philosophical thinking:**
+- "If humans hadn't invented smartphones, would we be happier now?"
+- "If I were more decisive, would I have regretted fewer choices in my life?"
+        </examples>
+      </grammarFocus>
+    </stage>
+
+    <stage name="Pre task D (Pron)" order="5">
+      <pronunciationFocus>
+        <feature>Weak forms and contractions in mixed conditionals, plus thought groups</feature>
+
+        <guidance>
+Use think prompts: "Mixed conditionals are long sentences. Native speakers use rhythm and pausing to make them clear..."
+
+**Focus areas:**
+
+1. **Contractions** (essential for natural flow):
+   - would → 'd: "I'd be" /aɪd biː/
+   - would not → wouldn't: "wouldn't be" /ˈwʊdnt biː/
+   - had → 'd: "If I'd known" /ɪf aɪd nəʊn/
+
+2. **Weak forms**:
+   - 'have' in past perfect: /həv/ not /hæv/
+   - "If I had known" → "If I'd known" /ɪf aɪd nəʊn/
+
+3. **Thought groups** (pausing for meaning):
+   "If I had studied medicine, [PAUSE] I would be a doctor now."
+   - Pause after the 'if' clause to separate past from present
+
+4. **Stress patterns**:
+   Stress the content words (actions, states), not grammar words:
+   "If I had STUDIED medicine, I would BE a doctor NOW."
+
+Model examples in dialogue boxes:
+- "If I'd saved money then, I'd be rich now."
+- "If I weren't so busy, I would've called you yesterday."
+
+Then have student practice with emphasis on natural rhythm and pausing.
+        </guidance>
+      </pronunciationFocus>
+    </stage>
+
+    <stage name="Task Prep" order="6">
+      <taskSetup>
+        <scenario>
+You're attending a "Life Reflections" workshop where people share their life stories and think about alternative paths. You'll reflect on your own journey (real or imagined) and explore the choices that shaped you.
+        </scenario>
+
+        <roles>
+Assign roles:
+- Student: Reflects on their life path, choices made, and hypothetical alternatives
+- You (Nour): The facilitator asking deep questions and also sharing reflections
+
+Provide thinking time: "Take a minute to think about: (1) A major choice you made in the past that still affects you today, (2) A present trait or situation you have that affected a past event."
+        </roles>
+
+        <support>
+Provide sentence stems carousel:
+
+**Past → Present (Mixed Type 1):**
+- "If I had ___ [past], I would ___ [now]"
+- "If I hadn't ___ [past], I wouldn't be ___ [now]"
+- "I'm grateful that I ___ [past], because now I ___"
+
+**Present → Past (Mixed Type 2):**
+- "If I were ___ [present trait], I would have ___ [past]"
+- "If I weren't so ___ [present], I wouldn't have ___ [past]"
+
+**Question stems:**
+- "Where would you be now if ___?"
+- "What would have happened if ___?"
+
+Vocabulary support carousel (sophisticated B2 lexis):
+- Reflecting: regret, gratitude, turning point, pivotal moment, crossroads, alternative path
+- Traits: ambitious, cautious, impulsive, risk-averse, determined, open-minded
+- Outcomes: fulfillment, success, stability, growth, opportunity, challenge
+        </support>
+      </taskSetup>
+    </stage>
+
+    <stage name="Main Task" order="7">
+      <activity>
+        <description>
+Facilitate a deep, reflective conversation. Start with an open question:
+
+"Think about who you are today. If you could trace it back to one decision in your past, what would it be?"
+
+As they share, ask follow-up questions that elicit mixed conditionals:
+- "If that hadn't happened, where would you be now?"
+- "Is there a part of your personality that explains why you made that choice?"
+- "If you were different in some way, would things have turned out differently?"
+
+Also share your own reflections (you can use hypothetical scenarios) to model the language naturally.
+
+Monitor for these common errors WITHOUT interrupting:
+- Matching time frames incorrectly: "If I had studied harder, I would have better grades now" (missing 'have' in past perfect)
+- Using wrong conditional: "If I studied harder then, I would be successful now" (should be past perfect: had studied)
+- Forgetting to mix: "If I was braver, I would be different now" (not mixing time frames)
+
+Let the conversation go deep. B2 students can handle philosophical, emotional topics. Allow space for real reflection.
+        </description>
+      </activity>
+    </stage>
+
+    <stage name="Reporting" order="8">
+      <reflection>
+Use self-assessment widget and metacognitive questions:
+
+"How comfortable do you feel with mixed conditionals now? They're complex even for advanced learners."
+
+Deeper reflection questions:
+- "When you were speaking, did you catch yourself thinking about time? Past vs present?"
+- "Which type felt more natural: past→present or present→past?"
+- "Did this conversation make you think about your life differently?"
+- "Was there a moment where you wanted to say something complex but didn't have the language? What was it?"
+      </reflection>
+    </stage>
+
+    <stage name="Feedback" order="9">
+      <feedbackGuidance>
+Focus on 2-3 priority areas. Mixed conditionals are challenging, so be especially encouraging.
+
+Use varied correction strategies:
+
+**If they mixed up time frames:**
+Use a timeline card with notice box:
+"You said: 'If I studied harder, I would be successful now.'
+Close! But 'studied' is past simple. Since you're talking about a past time (when you were in school), we need past perfect: 'If I had studied harder, I would be successful now.'
+
+The 'had' signals that the condition is in the past, even though the result is in the present."
+
+**If they matched time frames (standard conditional instead of mixed):**
+Use recast + explanation:
+Student: "If I had saved money, I would have been rich."
+You: "Ah, interesting - so if you had saved money back then, you would be rich now, right? That's a mixed conditional because the result is still true today."
+
+**Positive feedback example:**
+✨ "Your use of 'If I hadn't moved to this city, I wouldn't know my best friends' was perfect - you showed the beautiful connection between a past choice and a present reality."
+
+**Your goal for next time:**
+Start noticing mixed conditionals in articles, podcasts, or conversations. They often appear when people tell life stories or explain regrets. Try to collect 3-4 examples you hear this week.
+
+End with philosophical encouragement:
+"The way you reflected on your choices today showed real depth. Mixed conditionals aren't just grammar - they're a way to think about how we become who we are. You used them to tell your story, and that's powerful."
+      </feedbackGuidance>
+    </stage>
+  </lessonPlan>
+
+  <culturalContext>
+Different cultures have different relationships with regret, reflection, and discussing "what if" scenarios. Some cultures embrace this kind of reflection; others find it uncomfortable or even taboo. Be sensitive to this.
+
+Also, be mindful that discussing "choices" assumes agency - not everyone has had equal opportunities to choose their path. Frame questions inclusively, acknowledging systemic factors when relevant.
+
+This lesson can become deeply personal. Create a safe space and let students share what they're comfortable with.
+  </culturalContext>
+
+  <vocabularyBank>
+    <word context="reflection">regret, gratitude, turning point, crossroads, pivotal moment, alternative path, sliding doors moment</word>
+    <word context="personality">ambitious, cautious, impulsive, risk-averse, determined, open-minded, stubborn, adaptable</word>
+    <word context="outcomes">fulfillment, success, stability, growth, opportunity, challenge, consequence, trade-off</word>
+    <word context="time">hindsight, looking back, in retrospect, with the benefit of experience</word>
+  </vocabularyBank>
+
+  <commonErrors>
+    <error>Using past simple instead of past perfect in the 'if' clause: "If I studied" → "If I had studied"</error>
+    <error>Using 'would have' in both clauses: "If I had gone, I would have been there now" → "I would be there now"</error>
+    <error>Not mixing time frames when needed: Missing the connection between past and present</error>
+    <error>Overusing mixed conditionals where standard forms work better</error>
+  </commonErrors>
+</lesson>

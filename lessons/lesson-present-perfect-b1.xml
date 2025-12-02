@@ -1,0 +1,290 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<lesson version="1.0">
+  <metadata>
+    <title>Present Perfect: Life Experiences</title>
+    <level>B1</level>
+    <duration>60</duration>
+    <topic>Grammar: Present Perfect for experiences</topic>
+    <keywords>present-perfect, life-experiences, travel, ever, never, been</keywords>
+  </metadata>
+
+  <objectives>
+    <objective>Use present perfect to talk about life experiences without specific time references</objective>
+    <objective>Distinguish between present perfect and past simple</objective>
+    <objective>Ask and answer questions about experiences using 'Have you ever...?'</objective>
+  </objectives>
+
+  <lessonPlan>
+    <stage name="Lead-in" order="1">
+      <description>
+Ask a somatic grounding question to connect body → mind → language. Example: "Before we begin, take a moment... Can you notice where in your body you hold memories of your favorite travel experience? Your chest? Your hands? Just notice, no need to explain yet."
+
+Then transition: "Today we'll explore how to talk about life experiences in English - moments that have shaped who you are."
+      </description>
+    </stage>
+
+    <stage name="Pre task A (Activate)" order="2">
+      <description>
+Elicit prior knowledge about travel and life experiences using Socratic questions. Use carousel for memory retrieval options.
+
+Sample carousel questions:
+- Card 1: "What's a place you've been to that changed your perspective?"
+- Card 2: "Think of an experience you've had that you'll never forget. What made it special?"
+- Card 3: "Have you ever tried something completely outside your comfort zone?"
+
+Follow up with probing questions:
+- "What made that experience meaningful?"
+- "How did it change you?"
+- "Would you do it again?"
+
+Listen for their use of past tense and gently notice it (without correcting yet).
+      </description>
+    </stage>
+
+    <stage name="Pre task B (Model)" order="3">
+      <dialogue>
+        <title>A Conversation About Travel Experiences</title>
+        <context>Two friends, Layla and Hassan, are having coffee and sharing travel stories.</context>
+        <speaker name="Layla">
+I've been to so many countries, but Morocco was the most magical. Have you ever been there?
+        </speaker>
+        <speaker name="Hassan">
+No, I haven't been to Morocco yet, but I've always wanted to go. What did you do there?
+        </speaker>
+        <speaker name="Layla">
+We explored the markets in Marrakech, tried amazing food, and stayed in a traditional riad. I've never experienced anything like it! The colors, the sounds, the smells - everything was so alive.
+        </speaker>
+        <speaker name="Hassan">
+That sounds incredible. I've traveled around Europe quite a bit, but I've never been to North Africa. Have you ever gotten lost in a new place?
+        </speaker>
+        <speaker name="Layla">
+Oh yes! In Fes, actually. We wandered through the medina for hours. It was frustrating at first, but then we just... let go. Some of the best moments have happened when I've been completely lost.
+        </speaker>
+        <speaker name="Hassan">
+I know that feeling. I've had similar experiences in Istanbul. Getting lost is sometimes the best way to find something unexpected.
+        </speaker>
+      </dialogue>
+
+      <conceptChecks>
+After presenting the dialogue, use concept check questions:
+- "When did Layla go to Morocco - do we know exactly when?" (No - that's the point of present perfect!)
+- "Has Hassan been to Morocco?" (No, not yet)
+- "What's more important in their conversation - the specific time, or the experience itself?" (The experience)
+- "Notice how they ask questions: 'Have you ever...?' - what are they asking about?" (Life experiences in general, not a specific moment)
+
+Use notice boxes to draw attention to the structure.
+      </conceptChecks>
+    </stage>
+
+    <stage name="Pre task C (Lang Focus)" order="4">
+      <grammarFocus>
+        <structure>Present Perfect for Experiences</structure>
+        <form>have/has + past participle</form>
+
+        <explanation>
+Present the grammar using CARD layout:
+
+**Card 1: Form**
+Affirmative: I/You/We/They + have + past participle
+           He/She/It + has + past participle
+
+Examples:
+- I have been to Japan.
+- She has tried sushi.
+- They have visited 15 countries.
+
+**Card 2: Questions**
+Have + subject + past participle?
+Has + he/she/it + past participle?
+
+Examples:
+- Have you ever been abroad?
+- Has he ever tried falafel?
+- Have they ever seen the Northern Lights?
+
+**Card 3: Negative**
+haven't / hasn't + past participle
+
+Examples:
+- I haven't been to Egypt yet.
+- She hasn't tried rock climbing.
+- We haven't finished exploring Asia.
+
+**Card 4: Time Expressions**
+Use notice boxes to highlight these patterns:
+- ever (in questions): "Have you ever...?"
+- never (negative meaning): "I've never been..."
+- yet (expected to happen): "I haven't gone yet."
+- already (happened sooner than expected): "I've already visited!"
+- before (at some point in the past): "Have you been here before?"
+
+**Card 5: Present Perfect vs Past Simple**
+Use a comparison card:
+Present Perfect → Focus on EXPERIENCE (time not important/unknown)
+- "I've been to Paris." (In my life, at some point)
+
+Past Simple → Focus on SPECIFIC PAST TIME
+- "I went to Paris last year." (Specific: last year)
+
+Notice box: "If you mention WHEN (yesterday, last week, in 2020), use past simple. If you're talking about life experience without 'when', use present perfect."
+        </explanation>
+
+        <examples>
+Provide multiple examples using learning cards:
+- "I've eaten street food in Bangkok, but I've never tried insects."
+- "Have you ever broken a bone?"
+- "She's written three books, but she hasn't published them yet."
+- "We've studied English for years, and we've already passed B1 level."
+        </examples>
+      </grammarFocus>
+    </stage>
+
+    <stage name="Pre task D (Pron)" order="5">
+      <pronunciationFocus>
+        <feature>Weak forms and contractions in present perfect</feature>
+
+        <guidance>
+Use think prompts for noticing: "Listen carefully to how native speakers say 'have' and 'has' in sentences..."
+
+**Focus areas:**
+
+1. **Contractions** (very common in speech):
+   - I have → I've /aɪv/
+   - You have → You've /juːv/
+   - She has → She's /ʃiːz/
+   - They have → They've /ðeɪv/
+
+2. **Weak form of 'have'** in questions:
+   - "Have you ever...?" → /həv/ (not /hæv/)
+   - Sounds like "Hə-vyou-ever"
+
+3. **Connected speech**:
+   - "Have you ever been" → "Havyou-ever-been" (words flow together)
+   - "I've been to" → "I've-been-tə" ('to' becomes /tə/)
+
+Model examples with dialogue boxes, then ask the student to repeat. Use sentence stems like:
+- "I've been to ___"
+- "Have you ever ___?"
+- "She's never ___"
+
+Encourage natural rhythm, not word-by-word pronunciation.
+        </guidance>
+      </pronunciationFocus>
+    </stage>
+
+    <stage name="Task Prep" order="6">
+      <taskSetup>
+        <scenario>
+You and a new friend are getting to know each other. You're sharing stories about your life experiences to find common ground and interesting differences.
+        </scenario>
+
+        <roles>
+Assign roles:
+- Student: Shares their real or imagined life experiences
+- You (Nour): Will ask follow-up questions and share experiences too, modeling the language
+
+Provide thinking time: "Take 30 seconds to think about 3-4 interesting experiences you've had (or would like to have had). They could be related to: travel, food, learning, challenges, adventures, or meeting people."
+        </roles>
+
+        <support>
+Provide sentence stems carousel:
+- "I've been to ___, and it was ___"
+- "I've never ___, but I'd like to"
+- "Have you ever ___?"
+- "The most ___ thing I've ever done is ___"
+- "I've tried ___ several times"
+
+Vocabulary support carousel (words they can use):
+- Experiences: unforgettable, meaningful, life-changing, challenging, rewarding
+- Travel: journey, destination, explore, wander, discover
+- Feelings: amazed, inspired, nervous, proud, grateful
+        </support>
+      </taskSetup>
+    </stage>
+
+    <stage name="Main Task" order="7">
+      <activity>
+        <description>
+Facilitate a natural conversation about life experiences. You participate as well, modeling the structure.
+
+Start with: "So, tell me - have you ever done something that really surprised you?"
+
+Monitor and note errors WITHOUT interrupting. Pay attention to:
+- Do they use present perfect or past simple? (Common error: "I never went" instead of "I've never been")
+- Do they use correct past participles? (Common error: "I have go" instead of "I have gone")
+- Do they ask questions correctly? ("You have ever...?" instead of "Have you ever...?")
+
+Encourage extended turns with prompts like:
+- "Tell me more about that..."
+- "What was that like?"
+- "How did you feel?"
+
+Let the conversation flow naturally for 5-8 exchanges.
+        </description>
+      </activity>
+    </stage>
+
+    <stage name="Reporting" order="8">
+      <reflection>
+Have the student reflect on their performance using self-assessment widget:
+
+"Let's pause for a moment. How confident do you feel about using the present perfect now?"
+
+Then ask metacognitive questions:
+- "What went well in our conversation?"
+- "Was there a moment where you weren't sure which tense to use?"
+- "Which structure felt most natural: statements, questions, or negatives?"
+- "What's one thing you learned about yourself through this topic?"
+      </reflection>
+    </stage>
+
+    <stage name="Feedback" order="9">
+      <feedbackGuidance>
+Provide corrections using highlights (hl-feedback, hl-grammar). Focus on 2-3 priority areas.
+
+Use varied correction strategies:
+- If they said "I never been to..." → Recast: "Ah yes, you've never been there, interesting!"
+- If they consistently use past simple instead → Use a notice box with the rule
+- If past participles are wrong → Use explicit correction with a grammar card
+
+Example feedback card:
+**Card: What you did well ✨**
+- You asked great questions using "Have you ever...?"
+- Your pronunciation of contractions was natural
+- You shared experiences with good detail
+
+**Card: Let's polish this 🔧**
+[Use hl-grammar highlighting]
+Instead of: "I never went to Morocco"
+Try: "I've never been to Morocco"
+
+Remember: 'never' pairs with present perfect for life experiences!
+
+**Card: Your goal for next time 🎯**
+Practice using "yet" and "already" in your responses. Try this: "I haven't been there yet, but I've already planned my trip!"
+
+End with specific praise: "I loved how you described feeling 'alive' in the markets - that's exactly the kind of sensory detail that makes language come to life!"
+      </feedbackGuidance>
+    </stage>
+  </lessonPlan>
+
+  <culturalContext>
+When discussing travel experiences, be mindful of diverse economic contexts. Not everyone has had opportunities to travel internationally, and that's completely okay. Frame questions inclusively: "experiences" can include trying new foods in your city, learning a skill, meeting someone new, or reading a book that changed your view. The grammar works the same way!
+
+Encourage students to share authentically, whether their experiences are grand adventures or quiet personal moments.
+  </culturalContext>
+
+  <vocabularyBank>
+    <word context="travel">journey, destination, explore, wander, discover, abroad</word>
+    <word context="experiences">unforgettable, meaningful, life-changing, rewarding, challenging</word>
+    <word context="emotions">amazed, inspired, nervous, grateful, proud, alive</word>
+    <word context="time">yet, already, never, ever, before, recently</word>
+  </vocabularyBank>
+
+  <commonErrors>
+    <error>Using past simple instead of present perfect: "I never went" → "I've never been"</error>
+    <error>Wrong past participle: "I have go" → "I have gone"</error>
+    <error>Question word order: "You have ever...?" → "Have you ever...?"</error>
+    <error>Using present perfect with specific time: "I have been there yesterday" → "I went there yesterday"</error>
+  </commonErrors>
+</lesson>
