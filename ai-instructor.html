@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Launch AI Instructor | Nour</title>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Questrial&family=Marcellus&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary-color: #3d5a3d;
+            --secondary-color: #7a9b7a;
+            --accent-color: #e67e22;
+            --bg-color: #f5f1e8;
+            --text-dark: #2a3328;
+            --font-display: "Marcellus", serif;
+            --font-body: "Nunito", sans-serif;
+            --font-ui: "Questrial", sans-serif;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: var(--font-body);
+            color: var(--text-dark);
+            background: var(--bg-color);
+            line-height: 1.6;
+        }
+
+        /* Header */
+        header {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(40px);
+            padding: 1rem 2rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .back-button {
+            padding: 0.5rem 1.2rem;
+            background: var(--primary-color);
+            color: white;
+            border-radius: 20px;
+            text-decoration: none;
+            font-family: var(--font-ui);
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .back-button:hover {
+            background: var(--secondary-color);
+            transform: translateY(-2px);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .nav-link {
+            padding: 0.5rem 1.2rem;
+            border: 2px solid var(--primary-color);
+            color: var(--primary-color);
+            border-radius: 20px;
+            text-decoration: none;
+            font-family: var(--font-ui);
+            font-weight: 600;
+            transition: all 0.3s;
+            font-size: 0.9rem;
+        }
+
+        .nav-link:hover {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        /* Hero */
+        .hero {
+            text-align: center;
+            padding: 3rem 2rem 2rem 2rem;
+            background: var(--bg-color);
+        }
+
+        .hero h1 {
+            font-family: var(--font-display);
+            font-size: 2.5rem;
+            color: var(--primary-color);
+            margin-bottom: 0.8rem;
+        }
+
+        .hero p {
+            font-size: 1.1rem;
+            color: var(--secondary-color);
+            max-width: 800px;
+            margin: 0 auto;
+            font-weight: 600;
+        }
+
+        /* Main Content */
+        main {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .content-card {
+            background: white;
+            border-radius: 20px;
+            padding: 3rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.08);
+            text-align: center;
+        }
+
+        .content-card h2 {
+            font-family: var(--font-display);
+            color: var(--primary-color);
+            font-size: 2rem;
+            margin-bottom: 1.2rem;
+        }
+
+        .content-card p {
+            font-size: 1.15rem;
+            line-height: 1.8;
+            margin-bottom: 1.5rem;
+            color: var(--text-dark);
+        }
+
+        /* Notice Box */
+        .notice-box {
+            background: linear-gradient(135deg, #fff8e1 0%, #ffecb3 100%);
+            border: 2px solid #ffa726;
+            border-left: 6px solid var(--accent-color);
+            border-radius: 12px;
+            padding: 1.8rem;
+            margin: 2rem 0;
+            text-align: left;
+        }
+
+        .notice-box strong {
+            display: block;
+            margin-bottom: 0.8rem;
+            font-family: var(--font-display);
+            font-size: 1.3rem;
+            color: #e65100;
+        }
+
+        .notice-box ul {
+            margin-left: 1.5rem;
+            margin-top: 1rem;
+        }
+
+        .notice-box li {
+            color: #e65100;
+            font-size: 1rem;
+            line-height: 1.8;
+            margin-bottom: 0.5rem;
+        }
+
+        .notice-box a {
+            color: var(--accent-color);
+            font-weight: 700;
+            text-decoration: underline;
+        }
+
+        /* Info Box */
+        .info-box {
+            background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+            border: 2px solid #2196f3;
+            border-left: 6px solid #2196f3;
+            border-radius: 12px;
+            padding: 1.8rem;
+            margin-top: 3rem;
+            text-align: left;
+        }
+
+        .info-box strong {
+            display: block;
+            margin-bottom: 0.8rem;
+            font-family: var(--font-display);
+            font-size: 1.3rem;
+            color: #0d47a1;
+        }
+
+        .info-box p {
+            color: #0d47a1;
+            font-size: 1.05rem;
+            line-height: 1.7;
+            margin: 0.5rem 0 0 0;
+        }
+
+        /* CTA Button */
+        .cta-button {
+            display: inline-block;
+            padding: 1.5rem 4rem;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            border-radius: 50px;
+            text-decoration: none;
+            font-family: var(--font-ui);
+            font-weight: 700;
+            font-size: 1.3rem;
+            box-shadow: 0 10px 30px rgba(61, 90, 61, 0.3);
+            transition: all 0.3s ease;
+            margin: 2rem 0;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(61, 90, 61, 0.4);
+        }
+
+        /* What to Expect Section */
+        .expect-section {
+            background: white;
+            border-radius: 20px;
+            padding: 2.5rem;
+            margin-top: 2rem;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.08);
+            text-align: left;
+        }
+
+        .expect-section h3 {
+            font-family: var(--font-display);
+            color: var(--primary-color);
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .expect-section p {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            margin-bottom: 1.2rem;
+            color: var(--text-dark);
+        }
+
+        .expect-section ol {
+            margin-left: 2rem;
+        }
+
+        .expect-section li {
+            font-size: 1.1rem;
+            line-height: 2;
+            margin-bottom: 0.8rem;
+        }
+
+        .expect-section li strong {
+            color: var(--primary-color);
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 3rem 2rem;
+            color: var(--secondary-color);
+            font-size: 0.9rem;
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .content-card {
+                padding: 2rem;
+            }
+
+            .cta-button {
+                padding: 1.2rem 2.5rem;
+                font-size: 1.1rem;
+            }
+
+            .expect-section {
+                padding: 1.5rem;
+            }
+
+            .nav-links {
+                flex-wrap: wrap;
+            }
+
+            .header-content {
+                flex-direction: column;
+                gap: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="header-content">
+            <a href="ai-transparency.html" class="back-button">← Back to Transparency</a>
+            <div class="nav-links">
+                <a href="system-prompt.html" class="nav-link">System Prompt</a>
+                <a href="technical-info.html" class="nav-link">Technical Info</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero -->
+    <section class="hero">
+        <h1>Experience the AI Instructor</h1>
+        <p>Try our interactive AI-powered learning system</p>
+    </section>
+
+    <!-- Main Content -->
+    <main>
+        <div class="content-card">
+            <h2>Ready to Learn?</h2>
+            <p>Click the button below to access the AI Instructor Pre-Class system. You'll need a Gemini API key to begin your personalized learning session.</p>
+
+            <div class="notice-box">
+                <strong>📋 Before You Begin:</strong>
+                <ul>
+                    <li>Obtain a free Gemini API key from <a href="https://aistudio.google.com/app/apikey" target="_blank">Google AI Studio</a></li>
+                    <li>Ensure you have a stable internet connection</li>
+                    <li>Set aside 30-45 minutes for an uninterrupted learning session</li>
+                    <li>Use headphones for the best audio experience</li>
+                    <li>Remember: Never share personal or sensitive information during your session</li>
+                </ul>
+            </div>
+
+            <a href="index.html" class="cta-button">Launch AI Instructor 🚀</a>
+
+            <div class="info-box">
+                <strong>💬 Need Help?</strong>
+                <p>If you encounter any issues or would like to arrange a demo session, please contact the Najma Collective team. We're here to support your learning journey.</p>
+            </div>
+        </div>
+
+        <!-- What to Expect -->
+        <div class="expect-section">
+            <h3>What to Expect</h3>
+            <p>Your AI tutoring session will follow this structure:</p>
+            <ol>
+                <li><strong>Warm-Up:</strong> A brief grounding activity to help you arrive in the learning space</li>
+                <li><strong>Lesson Aims:</strong> Clear objectives so you know what you'll achieve</li>
+                <li><strong>Pre-Task Activities:</strong> Vocabulary, grammar, and pronunciation preparation tailored to your needs</li>
+                <li><strong>Main Task:</strong> A communicative activity where you apply your knowledge in a realistic scenario</li>
+                <li><strong>Reflection & Feedback:</strong> Personalized feedback on your performance with specific areas for growth</li>
+                <li><strong>Session Summary:</strong> A downloadable PDF report of vocabulary learned and session highlights</li>
+            </ol>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2024 Najma Collective | Building transparent, ethical AI for language education</p>
+    </footer>
+</body>
+</html>
