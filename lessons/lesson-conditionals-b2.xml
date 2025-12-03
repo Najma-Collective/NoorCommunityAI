@@ -18,72 +18,78 @@
   <lessonPlan>
     <stage name="Lead-in" order="1">
       <description>
-Ask a somatic grounding question: "Think about a choice you made in the past that still affects you today. Maybe it was choosing where to live, what to study, or a relationship you started. Where do you feel that choice in your body right now? Is it in your heart? Your stomach? Your shoulders? Just notice."
+Start with a simple, relatable question: "Think about something you learned when you were younger - maybe a language, a sport, or a musical instrument. How does that learning help you today? Take a moment to think about it."
 
-Then transition: "Today we're going to explore how to talk about the fascinating connections between past decisions and present realities - and how we might imagine different timelines. This is advanced thinking, and it requires advanced grammar: mixed conditionals."
+Then transition: "Today we're going to learn how to connect the past and present in English. We'll use mixed conditionals to talk about how past decisions affect us now, or how our present situation explains past actions. It's useful and not as complicated as it sounds!"
       </description>
     </stage>
 
     <stage name="Pre task A (Activate)" order="2">
       <description>
-Elicit prior knowledge about cause and effect across time using deep Socratic questions. Use carousel for philosophical options:
+Activate prior knowledge about cause and effect across time. Use carousel with accessible questions:
 
-Card 1: "If you had studied a different subject in school, how would your life be different now?"
+Card 1: "Think about a skill you wish you had learned earlier. How would your life be different now?"
 
-Card 2: "Think of someone successful you admire. If they hadn't taken a specific risk in their past, where would they be today?"
+Card 2: "Is there a hobby or activity you stopped doing? What would have happened if you had continued?"
 
-Card 3: "If the internet didn't exist today, how would your life yesterday have been different?"
+Card 3: "Think about a decision you made in the past. How does it affect your life today?"
 
 These questions naturally elicit mixed conditional thinking (mixing past and present timeframes).
 
-Follow up with probing questions:
-- "What's the connection between that past choice and your present reality?"
-- "Do you think the outcome was inevitable, or could things have gone differently?"
-- "How do you feel about the path not taken?"
+Follow up with simple questions:
+- "When did you make that choice?" (Focus on time - past or present)
+- "What's the result now?" (Or "What was the result then?")
+- "Do you wish things were different?"
 
-Listen for how they express these complex time relationships. They might struggle or use workarounds - this shows you where to focus.
+Listen for how they express these time relationships. They might use simple past or present - that's okay! This shows what they need to learn.
       </description>
     </stage>
 
     <stage name="Pre task B (Model)" order="3">
       <dialogue>
-        <title>Reflections on Career Paths</title>
-        <context>Two former university classmates, Dr. Zainab and Karim, reconnect after 15 years at a conference.</context>
+        <title>Old Friends Catching Up</title>
+        <context>Two former university friends, Zainab and Karim, meet at a coffee shop after several years.</context>
         <speaker name="Zainab">
-Karim! I can't believe it's you! How have you been?
+Karim! Is that you? I haven't seen you in ages!
         </speaker>
         <speaker name="Karim">
-Zainab! Wow, 15 years! I'm doing well. I'm a software engineer now - I work for a tech company in Dubai. What about you?
+Zainab! Wow, how long has it been? Five years? What have you been up to?
         </speaker>
         <speaker name="Zainab">
-I became a doctor, actually. I'm doing medical research. You know, I often think about our university days. If I hadn't met Professor Hassan in that first year, I wouldn't be in medicine now. He completely changed my direction.
+At least five years! I'm working as a teacher now. You know, if I had studied engineering like I planned, I wouldn't be teaching now. But I'm actually really happy with this path.
         </speaker>
         <speaker name="Karim">
-That's amazing. I had a similar turning point. If I had listened to my parents, I would have studied business. But I followed my passion for technology, and here I am. Though sometimes I wonder... if I were more business-minded now, would I have started my own company back then?
+That's great! I remember you were always good at explaining things to us. I'm working in IT now. If I had known programming was this interesting, I would have started learning it much earlier in university.
         </speaker>
         <speaker name="Zainab">
-It's interesting how life works. If we had known then what we know now, we might have made completely different choices. But then we wouldn't be who we are today.
+You always liked computers! Hey, do you still play guitar? You were really good!
         </speaker>
         <speaker name="Karim">
-Exactly. Actually, if I weren't so focused on coding all these years, I might have traveled more. I regret that sometimes. What about you - any regrets?
+Not much anymore, sadly. If I weren't so busy with work, I would have continued taking lessons. I kind of miss it. What about you? Are you still doing photography?
         </speaker>
         <speaker name="Zainab">
-Sure. If I had taken that research position in London five years ago, I would be living abroad now. But I chose to stay close to family. It's a trade-off.
+A little bit! Actually, if I had taken that photography course in Dubai two years ago, I would be doing it professionally now. But teaching takes up most of my time. No regrets though - I love my students!
+        </speaker>
+        <speaker name="Karim">
+That's awesome. You know what? If I were more organized, I would have kept in touch with more friends from university. We should meet up more often!
+        </speaker>
+        <speaker name="Zainab">
+Definitely! Let's not wait another five years.
         </speaker>
       </dialogue>
 
       <conceptChecks>
 After presenting the dialogue, use concept check questions:
 
-- "Zainab says 'If I hadn't met Professor Hassan... I wouldn't be in medicine now.' When did she meet him?" (Past - first year)
-- "What's the result of that meeting?" (Present - she's in medicine now)
-- "Notice the time mix: past condition → present result. Why isn't she saying 'I wouldn't have been in medicine'?" (Because she's talking about her present state, not a past state)
+- "Zainab says 'If I had studied engineering, I wouldn't be teaching now.' When did she make that choice?" (Past - when she chose her university major)
+- "What's the result of that choice?" (Present - she's a teacher now, not an engineer)
+- "Notice: past action → present result. This is a mixed conditional!"
 
-- "Karim says 'If I were more business-minded now, would I have started my own company back then?' What's the condition?" (Present hypothetical - being business-minded)
-- "What's the result?" (Past hypothetical - starting a company then)
-- "This is reversed! Present condition → past result."
+- "Karim says 'If I weren't so busy with work, I would have continued taking lessons.' What's his condition?" (Present - he's busy now)
+- "What's the result?" (Past - he didn't continue lessons)
+- "This one is reversed! Present situation → past result."
 
-Use notice boxes to draw attention to these time mixtures and how they create sophisticated meaning.
+Use notice boxes to show how mixing time frames helps us connect past decisions with present reality, or explain how our present situation affected past actions.
       </conceptChecks>
     </stage>
 
@@ -238,15 +244,15 @@ Then have student practice with emphasis on natural rhythm and pausing.
     <stage name="Task Prep" order="6">
       <taskSetup>
         <scenario>
-You're attending a "Life Reflections" workshop where people share their life stories and think about alternative paths. You'll reflect on your own journey (real or imagined) and explore the choices that shaped you.
+You're meeting an old friend for coffee and catching up about life. You'll talk about the choices you've made, hobbies you've kept or stopped, and how your past affects your present (or vice versa).
         </scenario>
 
         <roles>
 Assign roles:
-- Student: Reflects on their life path, choices made, and hypothetical alternatives
-- You (Nour): The facilitator asking deep questions and also sharing reflections
+- Student: Talks about their own experiences with past decisions and present situations
+- You (Nour): The conversation partner asking friendly questions and sharing too
 
-Provide thinking time: "Take a minute to think about: (1) A major choice you made in the past that still affects you today, (2) A present trait or situation you have that affected a past event."
+Provide thinking time: "Take a minute to think about: (1) Something you learned or did in the past that helps you now, (2) Something about your present life that explains a past decision you made."
         </roles>
 
         <support>
@@ -276,23 +282,23 @@ Vocabulary support carousel (sophisticated B2 lexis):
     <stage name="Main Task" order="7">
       <activity>
         <description>
-Facilitate a deep, reflective conversation. Start with an open question:
+Have a natural, friendly conversation. Start with a light question:
 
-"Think about who you are today. If you could trace it back to one decision in your past, what would it be?"
+"What's something you're good at now because you learned it when you were younger?"
 
 As they share, ask follow-up questions that elicit mixed conditionals:
-- "If that hadn't happened, where would you be now?"
-- "Is there a part of your personality that explains why you made that choice?"
-- "If you were different in some way, would things have turned out differently?"
+- "If you hadn't learned that, what would be different about your life now?"
+- "Is there something you do now that stopped you from doing something in the past?"
+- "If you had more time, what would you have done differently?"
 
-Also share your own reflections (you can use hypothetical scenarios) to model the language naturally.
+Also share your own examples (you can make them up!) to keep the conversation natural and model the language.
 
 Monitor for these common errors WITHOUT interrupting:
-- Matching time frames incorrectly: "If I had studied harder, I would have better grades now" (missing 'have' in past perfect)
-- Using wrong conditional: "If I studied harder then, I would be successful now" (should be past perfect: had studied)
-- Forgetting to mix: "If I was braver, I would be different now" (not mixing time frames)
+- Using simple past instead of past perfect: "If I studied harder..." instead of "If I had studied harder..."
+- Not mixing time frames: "If I had more time, I would have gone" (this is a standard third conditional, not mixed)
+- Incorrect verb forms
 
-Let the conversation go deep. B2 students can handle philosophical, emotional topics. Allow space for real reflection.
+Keep it conversational and light. B2 students can express complex ideas, but they don't need deep philosophical discussions in a grammar lesson!
         </description>
       </activity>
     </stage>
@@ -313,30 +319,30 @@ Deeper reflection questions:
 
     <stage name="Feedback" order="9">
       <feedbackGuidance>
-Focus on 2-3 priority areas. Mixed conditionals are challenging, so be especially encouraging.
+Focus on 2-3 priority areas. Mixed conditionals are tricky, so be encouraging and specific.
 
 Use varied correction strategies:
 
 **If they mixed up time frames:**
-Use a timeline card with notice box:
+Use a simple card with notice box:
 "You said: 'If I studied harder, I would be successful now.'
-Close! But 'studied' is past simple. Since you're talking about a past time (when you were in school), we need past perfect: 'If I had studied harder, I would be successful now.'
+Good try! But we need past perfect here. Since you're talking about something in the past (when you were in school), use: 'If I had studied harder, I would be successful now.'
 
-The 'had' signals that the condition is in the past, even though the result is in the present."
+The 'had' shows the condition is in the past, but the result is in the present."
 
-**If they matched time frames (standard conditional instead of mixed):**
-Use recast + explanation:
+**If they used a standard conditional instead of mixed:**
+Use recast + brief explanation:
 Student: "If I had saved money, I would have been rich."
-You: "Ah, interesting - so if you had saved money back then, you would be rich now, right? That's a mixed conditional because the result is still true today."
+You: "Close! Actually, if you saved money back then, you would be rich now, right? Notice: the result is still true today, so we say 'you would be rich' (not 'would have been rich')."
 
 **Positive feedback example:**
-✨ "Your use of 'If I hadn't moved to this city, I wouldn't know my best friends' was perfect - you showed the beautiful connection between a past choice and a present reality."
+✨ "Great job using 'If I hadn't learned English, I wouldn't have this job now' - you connected past and present perfectly!"
 
-**Your goal for next time:**
-Start noticing mixed conditionals in articles, podcasts, or conversations. They often appear when people tell life stories or explain regrets. Try to collect 3-4 examples you hear this week.
+**Goal for next time:**
+Listen for mixed conditionals in English videos or conversations. People use them when talking about how past decisions affect them now. Try to notice 2-3 examples this week!
 
-End with philosophical encouragement:
-"The way you reflected on your choices today showed real depth. Mixed conditionals aren't just grammar - they're a way to think about how we become who we are. You used them to tell your story, and that's powerful."
+End with encouragement:
+"You did really well today! Mixed conditionals help you talk about your life story in a natural way. Keep practicing and you'll use them without thinking!"
       </feedbackGuidance>
     </stage>
   </lessonPlan>
