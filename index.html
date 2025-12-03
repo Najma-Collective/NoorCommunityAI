@@ -746,8 +746,9 @@
                     </div>
                 </div>
 
-                <div style="margin-top:auto; padding:1.5rem; text-align:center;">
-                    <button class="start-btn" id="download-btn" style="font-size:0.9rem; padding:12px;">📄 Download Session Report</button>
+                <div style="margin-top:auto; padding:1.5rem; text-align:center; display: flex; flex-direction: column; gap: 0.75rem;">
+                    <button class="start-btn" id="download-report-btn" style="font-size:0.9rem; padding:12px;">📄 Download Lesson Report</button>
+                    <button class="start-btn" id="download-progress-btn" style="font-size:0.9rem; padding:12px; background: var(--secondary-color);">💾 Download Progress JSON</button>
                 </div>
             </div>
 
@@ -956,13 +957,66 @@ Layer your questions to build critical thinking:
 At the start of every message, you MUST output a hidden tag indicating the current stage from this list: [${STAGES.join(', ')}].
 Format: \`[[STAGE: Pre task A (Activate)]]\`
 
-### CONVERSATION PRINCIPLES
+### CONVERSATION PRINCIPLES (CRITICAL)
 - Respond to what the student ACTUALLY says, not a script
 - Follow natural conversation flow while gently guiding toward learning goals
 - Be genuinely curious about their ideas
 - Balance warmth with rigor
-- Less is more - don't overwhelm with information
-- Trust the process - deep learning takes time
+
+### LANGUAGE & VERBOSITY (CRITICAL - READ CAREFULLY)
+1. **Match Student's Level**: Use B2-appropriate language. Avoid overly academic or complex teacher language. If the lesson is for B2 students, you should speak at a B1-B2 level yourself.
+   - GOOD (B2): "Let's look at how we use this in everyday situations."
+   - BAD (Too advanced): "Let's examine the pragmatic implications of this linguistic structure in various sociolinguistic contexts."
+
+2. **Keep Teacher Talk Low**:
+   - Your messages should be SHORT (2-4 sentences maximum for instructions)
+   - Ask ONE question at a time
+   - Let the student do most of the talking
+   - GOOD: "What do you think about working from home? Tell me more."
+   - BAD: "So, what are your thoughts on working from home? Do you think it's effective? How does it compare to office work? What challenges have you faced? Let me know all your thoughts."
+
+3. **NO REPETITION Between Text and Cards**:
+   - If you put information in a card, DO NOT repeat it in surrounding text
+   - Use cards FOR instructions/options, use text ONLY for dialogue/questions
+   - GOOD: [Shows cards with three questions] → "Pick one that interests you."
+   - BAD: "I'm going to ask you three questions. Question 1 is about X, Question 2 is about Y..." [then shows the same three questions in cards]
+
+4. **Be Dialogic, Not Monologic**:
+   - Have a CONVERSATION, don't give lectures
+   - After presenting something, immediately ask for the student's reaction
+   - Use back-and-forth exchanges, not long explanations
+   - Trust that students learn by doing, not by being told
+
+5. **Concrete Over Abstract**:
+   - Use real examples, not abstract descriptions
+   - Show, don't explain
+   - "Here's how someone might say it..." (then show example) rather than "This structure is used to..."
+
+### EXAMPLES OF GOOD vs BAD PRACTICE
+
+**BAD (Too verbose, repetitive, too much teacher talk):**
+"Now we're going to look at three different questions about work. The first question asks about your preferences, the second asks about challenges, and the third asks about the future. Take a look at these questions and choose one:
+[Cards with the 3 questions]
+So, which question would you like to answer? Think carefully about which topic interests you most."
+
+**GOOD (Concise, dialogic, no repetition):**
+"[Cards with 3 questions about work]
+Which one speaks to you?"
+
+**BAD (Too complex language for B2):**
+"Let's examine the utilization of conditional structures in hypothetical discourse to facilitate the articulation of counterfactual scenarios."
+
+**GOOD (B2-appropriate):**
+"Let's see how we talk about imaginary situations - things that didn't happen but we wish they did."
+
+**BAD (Lecture mode):**
+"This grammar structure is called the second conditional. We use it when we want to talk about unreal present situations. The form is: if + past simple, would + base verb. For example, 'If I had time, I would travel more.' Notice how we use past simple after 'if' even though we're talking about now. This is important because..."
+
+**GOOD (Dialogic, concise):**
+"Look at this: 'If I had time, I'd travel more.' What do you notice about the verb after 'if'?"
+
+### GOLDEN RULE
+**If in doubt, SAY LESS. Ask a question. Wait for the student to respond. Trust the process.**
 `;
 
         // ===================================================================
@@ -1403,6 +1457,50 @@ Performance: Fluency ${session.assessmentScores?.fluency || 0}/10, Accuracy ${se
 
         // Vocabulary Tracker
         let vocabularyWords = new Set();
+        let currentSessionData = null;
+        let sessionStartTime = null;
+
+        // Initialize current session tracking
+        function initializeSession() {
+            sessionStartTime = new Date();
+            currentSessionData = {
+                sessionId: `session_${Date.now()}`,
+                date: sessionStartTime.toISOString(),
+                lessonTitle: currentLesson ? currentLesson.metadata.title : "Default Lesson",
+                duration: 0,
+                stagesCompleted: [],
+                vocabularyLearned: [],
+                grammarPracticed: [],
+                assessmentScores: {
+                    fluency: 0,
+                    accuracy: 0,
+                    complexity: 0,
+                    pronunciation: 0
+                }
+            };
+        }
+
+        // Update progress when stage changes
+        function updateSessionProgress(stageName, performance = 'moderate') {
+            if (!currentSessionData) return;
+
+            // Check if stage already tracked
+            const existingStage = currentSessionData.stagesCompleted.find(s => s.name === stageName);
+            if (!existingStage) {
+                currentSessionData.stagesCompleted.push({
+                    name: stageName,
+                    completed: true,
+                    timeSpent: 0, // Will be calculated at end
+                    performance: performance
+                });
+            }
+
+            // Update duration
+            if (sessionStartTime) {
+                const now = new Date();
+                currentSessionData.duration = Math.round((now - sessionStartTime) / 60000); // minutes
+            }
+        }
 
         function updateVocabularyWallet(text) {
             // Extract vocabulary words from hl-vocab spans
@@ -1415,8 +1513,72 @@ Performance: Fluency ${session.assessmentScores?.fluency || 0}/10, Accuracy ${se
                 if (word && !vocabularyWords.has(word.toLowerCase())) {
                     vocabularyWords.add(word.toLowerCase());
                     addVocabToWallet(word);
+
+                    // Add to session progress
+                    if (currentSessionData) {
+                        currentSessionData.vocabularyLearned.push({
+                            word: word,
+                            context: "", // Could be enhanced
+                            mastery: 0.5,
+                            reviewCount: 1
+                        });
+                    }
                 }
             });
+        }
+
+        // Update student progress JSON with current session
+        function updateStudentProgressJSON() {
+            if (!studentProgress) {
+                // Create new progress structure
+                studentProgress = {
+                    studentId: `student_${Date.now()}`,
+                    profile: {
+                        name: "Anonymous Student",
+                        currentLevel: currentLesson ? currentLesson.metadata.level : "B1",
+                        nativeLanguage: "",
+                        learningGoals: []
+                    },
+                    sessions: [],
+                    cumulativeProgress: {
+                        totalSessions: 0,
+                        totalHours: 0,
+                        vocabularySize: 0,
+                        grammarPointsMastered: [],
+                        grammarPointsInProgress: [],
+                        currentWeaknesses: [],
+                        currentStrengths: []
+                    },
+                    personalizations: {
+                        preferredPace: "moderate",
+                        respondsWellTo: [],
+                        avoidsTriggersRelatedTo: [],
+                        culturalBackground: "",
+                        interests: [],
+                        learningStyle: {}
+                    }
+                };
+            }
+
+            if (currentSessionData) {
+                // Add current session to progress
+                studentProgress.sessions.push(currentSessionData);
+
+                // Update cumulative progress
+                studentProgress.cumulativeProgress.totalSessions = studentProgress.sessions.length;
+                studentProgress.cumulativeProgress.totalHours =
+                    studentProgress.sessions.reduce((sum, s) => sum + (s.duration / 60), 0);
+
+                // Count unique vocabulary
+                const allVocab = new Set();
+                studentProgress.sessions.forEach(s => {
+                    s.vocabularyLearned.forEach(v => allVocab.add(v.word.toLowerCase()));
+                });
+                studentProgress.cumulativeProgress.vocabularySize = allVocab.size;
+
+                // Save to localStorage
+                saveToLocalStorage();
+            }
         }
 
         function addVocabToWallet(word) {
@@ -1466,6 +1628,9 @@ Performance: Fluency ${session.assessmentScores?.fluency || 0}/10, Accuracy ${se
                 curr.classList.remove('done');
                 curr.classList.add('active');
                 curr.scrollIntoView({behavior: 'smooth', block: 'center'});
+
+                // Update session progress
+                updateSessionProgress(STAGES[idx]);
             }
         }
 
@@ -1794,6 +1959,9 @@ Performance: Fluency ${session.assessmentScores?.fluency || 0}/10, Accuracy ${se
                 // Load saved lesson and progress from localStorage
                 loadFromLocalStorage();
 
+                // Initialize session tracking
+                initializeSession();
+
                 // Auto-start conversation
                 document.getElementById('header-status').textContent = "Initializing...";
                 document.getElementById('avatar-wrapper').classList.add('listening');
@@ -1983,88 +2151,212 @@ Performance: Fluency ${session.assessmentScores?.fluency || 0}/10, Accuracy ${se
 
         initWaves();
 
-        // --- PDF GENERATION ---
-        document.getElementById('download-btn').addEventListener('click', () => {
+        // --- DOWNLOAD REPORT (PDF) ---
+        document.getElementById('download-report-btn').addEventListener('click', () => {
+            // Update progress before generating report
+            updateStudentProgressJSON();
+
             const { jsPDF } = window.jspdf;
             const doc = new jsPDF();
 
+            // Page margins
+            const leftMargin = 20;
+            const rightMargin = 190;
+            const pageWidth = rightMargin - leftMargin;
+
+            // Decorative header bar
+            doc.setFillColor(74, 89, 42); // sage-700
+            doc.rect(0, 0, 210, 35, 'F');
+
             // Title
-            doc.setFontSize(22);
-            doc.setTextColor(92, 107, 83);
-            doc.text('Nour Learning Session Report', 20, 20);
+            doc.setFontSize(24);
+            doc.setTextColor(255, 255, 255);
+            doc.text('Nour Learning Report', leftMargin, 18);
+
+            // Lesson title
+            if (currentLesson) {
+                doc.setFontSize(12);
+                doc.setTextColor(202, 204, 165); // light-green
+                doc.text(currentLesson.metadata.title, leftMargin, 26);
+            }
 
             // Date
-            doc.setFontSize(10);
-            doc.setTextColor(100);
+            doc.setFontSize(9);
+            doc.setTextColor(255, 255, 255);
             const today = new Date().toLocaleDateString('en-US', {
                 year: 'numeric', month: 'long', day: 'numeric'
             });
-            doc.text(today, 20, 28);
+            doc.text(today, leftMargin, 32);
 
-            // Vocabulary Learned
+            let y = 50;
+
+            // Session Summary Box
+            doc.setFillColor(245, 241, 230); // cream
+            doc.roundedRect(leftMargin, y, pageWidth, 25, 3, 3, 'F');
+            doc.setFontSize(11);
+            doc.setTextColor(74, 89, 42);
+            doc.setFont(undefined, 'bold');
+            doc.text('Session Summary', leftMargin + 5, y + 8);
+            doc.setFont(undefined, 'normal');
+            doc.setFontSize(9);
+            doc.setTextColor(50);
+            if (currentSessionData) {
+                doc.text(`Duration: ${currentSessionData.duration} minutes`, leftMargin + 5, y + 15);
+                doc.text(`Stages completed: ${currentSessionData.stagesCompleted.length}`, leftMargin + 5, y + 21);
+            }
+            y += 35;
+
+            // Vocabulary Section
             doc.setFontSize(14);
             doc.setTextColor(92, 107, 83);
-            doc.text('Vocabulary Learned', 20, 40);
+            doc.setFont(undefined, 'bold');
+            doc.text('📚 Vocabulary Learned', leftMargin, y);
+            doc.setFont(undefined, 'normal');
+            y += 8;
 
             doc.setFontSize(10);
             doc.setTextColor(50);
-            let y = 50;
 
             if (vocabularyWords.size > 0) {
                 const vocabArray = Array.from(vocabularyWords);
+                let col = 0;
+                const colWidth = 85;
+                const startY = y;
+
                 vocabArray.forEach((word, index) => {
                     if (y > 270) {
                         doc.addPage();
                         y = 20;
+                        col = 0;
                     }
-                    doc.text(`• ${word}`, 25, y);
-                    y += 6;
+
+                    const xPos = leftMargin + (col * colWidth);
+
+                    // Highlight box for each word
+                    doc.setFillColor(255, 232, 204); // vocab highlight color
+                    doc.roundedRect(xPos, y - 4, colWidth - 5, 7, 1, 1, 'F');
+                    doc.setTextColor(211, 84, 0);
+                    doc.setFont(undefined, 'bold');
+                    doc.text(word, xPos + 2, y + 1);
+                    doc.setFont(undefined, 'normal');
+                    doc.setTextColor(50);
+
+                    col++;
+                    if (col >= 2) {
+                        col = 0;
+                        y += 10;
+                    }
                 });
-                y += 10;
+
+                if (col > 0) y += 10;
+                y += 5;
             } else {
-                doc.text('No vocabulary words recorded in this session.', 25, y);
-                y += 15;
+                doc.text('No vocabulary words recorded in this session.', leftMargin, y);
+                y += 10;
             }
 
-            // Conversation Transcript
+            // Lesson Stages Section
+            if (currentSessionData && currentSessionData.stagesCompleted.length > 0) {
+                if (y > 240) {
+                    doc.addPage();
+                    y = 20;
+                }
+
+                doc.setFontSize(14);
+                doc.setTextColor(92, 107, 83);
+                doc.setFont(undefined, 'bold');
+                doc.text('✓ Stages Completed', leftMargin, y);
+                doc.setFont(undefined, 'normal');
+                y += 8;
+
+                doc.setFontSize(9);
+                currentSessionData.stagesCompleted.forEach(stage => {
+                    if (y > 270) {
+                        doc.addPage();
+                        y = 20;
+                    }
+
+                    doc.setDrawColor(122, 138, 104);
+                    doc.circle(leftMargin + 2, y - 1, 1.5, 'FD');
+                    doc.setTextColor(50);
+                    doc.text(stage.name, leftMargin + 7, y);
+                    y += 6;
+                });
+                y += 8;
+            }
+
+            // Conversation Highlights (shortened)
+            if (y > 200) {
+                doc.addPage();
+                y = 20;
+            }
+
             doc.setFontSize(14);
             doc.setTextColor(92, 107, 83);
-            doc.text('Conversation Highlights', 20, y);
-            y += 10;
+            doc.setFont(undefined, 'bold');
+            doc.text('💬 Key Moments', leftMargin, y);
+            doc.setFont(undefined, 'normal');
+            y += 8;
 
-            doc.setFontSize(10);
+            doc.setFontSize(9);
             doc.setTextColor(50);
 
-            // Extract clean text from chat
-            chatHistory.forEach((msg, i) => {
+            // Show first 5 exchanges only
+            const recentExchanges = chatHistory.slice(-10);
+            recentExchanges.forEach((msg, i) => {
                 if (y > 270) {
                     doc.addPage();
                     y = 20;
                 }
 
-                const role = msg.role === 'user' ? 'You' : 'Nour';
-                const text = msg.parts[0].text.replace(/<[^>]*>/g, '').replace(/\[\[STAGE:.*?\]\]/g, '').substring(0, 200);
+                const role = msg.role === 'user' ? '👤 You' : '🤖 Nour';
+                const text = msg.parts[0].text.replace(/<[^>]*>/g, '').replace(/\[\[STAGE:.*?\]\]/g, '').substring(0, 150);
 
                 doc.setFont(undefined, 'bold');
-                doc.text(`${role}:`, 20, y);
+                doc.setTextColor(92, 107, 83);
+                doc.text(role, leftMargin, y);
                 doc.setFont(undefined, 'normal');
+                doc.setTextColor(50);
 
-                const lines = doc.splitTextToSize(text, 170);
-                doc.text(lines.slice(0, 3), 20, y + 5);
-                y += 5 + (Math.min(lines.length, 3) * 5) + 5;
+                const lines = doc.splitTextToSize(text, pageWidth - 5);
+                doc.text(lines.slice(0, 2), leftMargin + 5, y + 5);
+                y += 5 + (Math.min(lines.length, 2) * 4) + 6;
             });
 
-            // Footer
-            if (y > 250) {
-                doc.addPage();
-                y = 20;
-            }
-            y = 280;
+            // Footer with decorative bar
+            const footerY = 285;
+            doc.setFillColor(122, 154, 122); // secondary-sage
+            doc.rect(0, footerY, 210, 12, 'F');
             doc.setFontSize(8);
-            doc.setTextColor(150);
-            doc.text('Generated by Nour AI Tutor | Keep practicing, keep growing! 🌱', 20, y);
+            doc.setTextColor(255, 255, 255);
+            doc.text('Generated by Nour AI Tutor | Keep practicing, keep growing!', leftMargin, footerY + 7);
 
-            doc.save(`nour-session-${Date.now()}.pdf`);
+            doc.save(`nour-lesson-report-${Date.now()}.pdf`);
+        });
+
+        // --- DOWNLOAD PROGRESS JSON ---
+        document.getElementById('download-progress-btn').addEventListener('click', () => {
+            // Update progress with current session
+            updateStudentProgressJSON();
+
+            if (!studentProgress) {
+                alert('No progress data to download. Complete a lesson first!');
+                return;
+            }
+
+            // Create JSON blob
+            const dataStr = JSON.stringify(studentProgress, null, 2);
+            const dataBlob = new Blob([dataStr], { type: 'application/json' });
+
+            // Create download link
+            const url = URL.createObjectURL(dataBlob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = `nour-progress-${Date.now()}.json`;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            URL.revokeObjectURL(url);
         });
 
     </script>
