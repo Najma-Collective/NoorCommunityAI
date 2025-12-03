@@ -1,0 +1,295 @@
+{
+  "studentId": "student_sample_001",
+  "profile": {
+    "name": "Anonymous Student",
+    "currentLevel": "B1",
+    "nativeLanguage": "Arabic",
+    "learningGoals": [
+      "Improve conversational fluency",
+      "Master intermediate grammar structures",
+      "Expand vocabulary for professional contexts"
+    ]
+  },
+  "sessions": [
+    {
+      "sessionId": "session_001",
+      "date": "2024-11-15T14:30:00Z",
+      "lessonTitle": "Present Simple vs Present Continuous",
+      "duration": 45,
+      "stagesCompleted": [
+        {
+          "name": "Lead-in",
+          "completed": true,
+          "timeSpent": 5,
+          "performance": "strong"
+        },
+        {
+          "name": "Pre task A (Activate)",
+          "completed": true,
+          "timeSpent": 8,
+          "performance": "moderate"
+        },
+        {
+          "name": "Pre task B (Model)",
+          "completed": true,
+          "timeSpent": 10,
+          "performance": "strong"
+        },
+        {
+          "name": "Pre task C (Lang Focus)",
+          "completed": true,
+          "timeSpent": 12,
+          "performance": "moderate"
+        },
+        {
+          "name": "Main Task",
+          "completed": true,
+          "timeSpent": 10,
+          "performance": "strong"
+        }
+      ],
+      "vocabularyLearned": [
+        {
+          "word": "routine",
+          "context": "I have a daily routine",
+          "mastery": 0.9,
+          "reviewCount": 3
+        },
+        {
+          "word": "currently",
+          "context": "I'm currently studying English",
+          "mastery": 0.8,
+          "reviewCount": 2
+        },
+        {
+          "word": "schedule",
+          "context": "My work schedule is flexible",
+          "mastery": 0.7,
+          "reviewCount": 1
+        }
+      ],
+      "grammarPracticed": [
+        {
+          "point": "present-simple-habits",
+          "accuracy": 0.85,
+          "errors": ["forgot 's' in third person"]
+        },
+        {
+          "point": "present-continuous-now",
+          "accuracy": 0.9,
+          "errors": []
+        }
+      ],
+      "assessmentScores": {
+        "fluency": 7,
+        "accuracy": 6,
+        "complexity": 6,
+        "pronunciation": 7
+      }
+    },
+    {
+      "sessionId": "session_002",
+      "date": "2024-11-18T15:00:00Z",
+      "lessonTitle": "Past Simple: Life Stories",
+      "duration": 50,
+      "stagesCompleted": [
+        {
+          "name": "Lead-in",
+          "completed": true,
+          "timeSpent": 6,
+          "performance": "strong"
+        },
+        {
+          "name": "Pre task A (Activate)",
+          "completed": true,
+          "timeSpent": 9,
+          "performance": "strong"
+        },
+        {
+          "name": "Pre task B (Model)",
+          "completed": true,
+          "timeSpent": 11,
+          "performance": "moderate"
+        },
+        {
+          "name": "Pre task C (Lang Focus)",
+          "completed": true,
+          "timeSpent": 14,
+          "performance": "challenging"
+        },
+        {
+          "name": "Main Task",
+          "completed": true,
+          "timeSpent": 10,
+          "performance": "moderate"
+        }
+      ],
+      "vocabularyLearned": [
+        {
+          "word": "memorable",
+          "context": "It was a memorable experience",
+          "mastery": 0.75,
+          "reviewCount": 2
+        },
+        {
+          "word": "journey",
+          "context": "The journey took three hours",
+          "mastery": 0.8,
+          "reviewCount": 2
+        },
+        {
+          "word": "childhood",
+          "context": "In my childhood, I lived in Cairo",
+          "mastery": 0.9,
+          "reviewCount": 3
+        }
+      ],
+      "grammarPracticed": [
+        {
+          "point": "past-simple-regular-verbs",
+          "accuracy": 0.8,
+          "errors": ["some pronunciation issues with -ed endings"]
+        },
+        {
+          "point": "past-simple-irregular-verbs",
+          "accuracy": 0.65,
+          "errors": ["confused 'went' and 'goed'", "used 'thinked' instead of 'thought'"]
+        }
+      ],
+      "assessmentScores": {
+        "fluency": 7,
+        "accuracy": 5,
+        "complexity": 6,
+        "pronunciation": 6
+      }
+    },
+    {
+      "sessionId": "session_003",
+      "date": "2024-11-22T16:00:00Z",
+      "lessonTitle": "Making Requests and Offers",
+      "duration": 40,
+      "stagesCompleted": [
+        {
+          "name": "Lead-in",
+          "completed": true,
+          "timeSpent": 4,
+          "performance": "strong"
+        },
+        {
+          "name": "Pre task A (Activate)",
+          "completed": true,
+          "timeSpent": 7,
+          "performance": "strong"
+        },
+        {
+          "name": "Pre task B (Model)",
+          "completed": true,
+          "timeSpent": 9,
+          "performance": "strong"
+        },
+        {
+          "name": "Main Task",
+          "completed": true,
+          "timeSpent": 12,
+          "performance": "strong"
+        },
+        {
+          "name": "Feedback",
+          "completed": true,
+          "timeSpent": 8,
+          "performance": "strong"
+        }
+      ],
+      "vocabularyLearned": [
+        {
+          "word": "polite",
+          "context": "That's a polite way to ask",
+          "mastery": 0.85,
+          "reviewCount": 2
+        },
+        {
+          "word": "favor",
+          "context": "Could you do me a favor?",
+          "mastery": 0.9,
+          "reviewCount": 3
+        },
+        {
+          "word": "appreciate",
+          "context": "I really appreciate your help",
+          "mastery": 0.75,
+          "reviewCount": 1
+        }
+      ],
+      "grammarPracticed": [
+        {
+          "point": "modal-verbs-requests",
+          "accuracy": 0.9,
+          "errors": []
+        },
+        {
+          "point": "would-you-mind",
+          "accuracy": 0.8,
+          "errors": ["sometimes forgot 'ing' form after 'mind'"]
+        }
+      ],
+      "assessmentScores": {
+        "fluency": 8,
+        "accuracy": 7,
+        "complexity": 7,
+        "pronunciation": 7
+      }
+    }
+  ],
+  "cumulativeProgress": {
+    "totalSessions": 3,
+    "totalHours": 2.25,
+    "vocabularySize": 125,
+    "grammarPointsMastered": [
+      "present-simple",
+      "present-continuous",
+      "past-simple-regular",
+      "modal-verbs-can-could"
+    ],
+    "grammarPointsInProgress": [
+      "past-simple-irregular",
+      "present-perfect",
+      "conditionals"
+    ],
+    "currentWeaknesses": [
+      "irregular past tense verbs",
+      "article usage (a/an/the)",
+      "pronunciation of -ed endings"
+    ],
+    "currentStrengths": [
+      "conversational fluency",
+      "willingness to engage",
+      "pronunciation of vowel sounds",
+      "asking clarifying questions"
+    ]
+  },
+  "personalizations": {
+    "preferredPace": "moderate",
+    "respondsWellTo": [
+      "real-life examples",
+      "visual prompts",
+      "storytelling activities",
+      "gentle error correction"
+    ],
+    "avoidsTriggersRelatedTo": [],
+    "culturalBackground": "Middle Eastern",
+    "interests": [
+      "technology",
+      "travel",
+      "food",
+      "family",
+      "reading"
+    ],
+    "learningStyle": {
+      "visualLearner": true,
+      "auditoryLearner": false,
+      "kinestheticLearner": false,
+      "needsExtraTime": false,
+      "prefersStructure": true
+    }
+  }
+}
