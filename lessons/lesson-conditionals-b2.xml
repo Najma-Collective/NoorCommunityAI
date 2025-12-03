@@ -18,72 +18,74 @@
   <lessonPlan>
     <stage name="Lead-in" order="1">
       <description>
-Ask a somatic grounding question: "Think about a choice you made in the past that still affects you today. Maybe it was choosing where to live, what to study, or a relationship you started. Where do you feel that choice in your body right now? Is it in your heart? Your stomach? Your shoulders? Just notice."
+Ask a simple grounding question: "Think about yesterday. Did everything go as planned, or did something unexpected happen? How do you feel about it today?"
 
-Then transition: "Today we're going to explore how to talk about the fascinating connections between past decisions and present realities - and how we might imagine different timelines. This is advanced thinking, and it requires advanced grammar: mixed conditionals."
+Then transition: "Today we're going to learn how to talk about connections between the past and the present - like when something that happened before still affects us now. We'll use some special grammar called mixed conditionals."
       </description>
     </stage>
 
     <stage name="Pre task A (Activate)" order="2">
       <description>
-Elicit prior knowledge about cause and effect across time using deep Socratic questions. Use carousel for philosophical options:
+Elicit prior knowledge about past events affecting the present. Use carousel for relatable options:
 
-Card 1: "If you had studied a different subject in school, how would your life be different now?"
+Card 1: "Think about a skill you wish you had learned as a child. How would your life be different now?"
 
-Card 2: "Think of someone successful you admire. If they hadn't taken a specific risk in their past, where would they be today?"
+Card 2: "What's something you bought (or didn't buy) in the past that affects you today?"
 
-Card 3: "If the internet didn't exist today, how would your life yesterday have been different?"
+Card 3: "Is there a place you visited that changed something about your life now?"
 
-These questions naturally elicit mixed conditional thinking (mixing past and present timeframes).
+These questions naturally elicit mixed conditional thinking (connecting past and present).
 
-Follow up with probing questions:
-- "What's the connection between that past choice and your present reality?"
-- "Do you think the outcome was inevitable, or could things have gone differently?"
-- "How do you feel about the path not taken?"
+Follow up with simple probing questions:
+- "So that past decision affects you now?"
+- "Would things be different today?"
 
-Listen for how they express these complex time relationships. They might struggle or use workarounds - this shows you where to focus.
+Listen for how they express these time connections. Keep it conversational and light.
       </description>
     </stage>
 
     <stage name="Pre task B (Model)" order="3">
       <dialogue>
-        <title>Reflections on Career Paths</title>
-        <context>Two former university classmates, Dr. Zainab and Karim, reconnect after 15 years at a conference.</context>
-        <speaker name="Zainab">
-Karim! I can't believe it's you! How have you been?
+        <title>Weekend Plans That Didn't Happen</title>
+        <context>Two friends, Sara and Ahmed, meet for coffee on Monday morning and talk about their weekend.</context>
+        <speaker name="Sara">
+Hey Ahmed! How was your weekend?
         </speaker>
-        <speaker name="Karim">
-Zainab! Wow, 15 years! I'm doing well. I'm a software engineer now - I work for a tech company in Dubai. What about you?
+        <speaker name="Ahmed">
+Not great, to be honest. I wanted to go to the beach, but I stayed home instead. If the weather had been better, I would be much more relaxed now!
         </speaker>
-        <speaker name="Zainab">
-I became a doctor, actually. I'm doing medical research. You know, I often think about our university days. If I hadn't met Professor Hassan in that first year, I wouldn't be in medicine now. He completely changed my direction.
+        <speaker name="Sara">
+Oh no! I know how you feel. I planned to visit my cousin, but I had too much work. If I weren't so busy with my job, I would have gone to see her on Saturday.
         </speaker>
-        <speaker name="Karim">
-That's amazing. I had a similar turning point. If I had listened to my parents, I would have studied business. But I followed my passion for technology, and here I am. Though sometimes I wonder... if I were more business-minded now, would I have started my own company back then?
+        <speaker name="Ahmed">
+That's tough. You know, I think about getting a car sometimes. If I had bought one last year, I wouldn't need to depend on buses now. I could go anywhere!
         </speaker>
-        <speaker name="Zainab">
-It's interesting how life works. If we had known then what we know now, we might have made completely different choices. But then we wouldn't be who we are today.
+        <speaker name="Sara">
+True! But cars are expensive. If I had more money saved, I would be driving now too. But I prefer to save for a vacation.
         </speaker>
-        <speaker name="Karim">
-Exactly. Actually, if I weren't so focused on coding all these years, I might have traveled more. I regret that sometimes. What about you - any regrets?
+        <speaker name="Ahmed">
+Good point. Actually, if I had started saving earlier, I would have enough for a trip to Egypt now. I really want to see the pyramids.
         </speaker>
-        <speaker name="Zainab">
-Sure. If I had taken that research position in London five years ago, I would be living abroad now. But I chose to stay close to family. It's a trade-off.
+        <speaker name="Sara">
+You should! You know, if we weren't both so busy, we could plan a trip together. Wouldn't that be fun?
+        </speaker>
+        <speaker name="Ahmed">
+Definitely! If I had more vacation days, I would have traveled more last year. But maybe next year will be better!
         </speaker>
       </dialogue>
 
       <conceptChecks>
 After presenting the dialogue, use concept check questions:
 
-- "Zainab says 'If I hadn't met Professor Hassan... I wouldn't be in medicine now.' When did she meet him?" (Past - first year)
-- "What's the result of that meeting?" (Present - she's in medicine now)
-- "Notice the time mix: past condition → present result. Why isn't she saying 'I wouldn't have been in medicine'?" (Because she's talking about her present state, not a past state)
+- "Ahmed says 'If the weather had been better, I would be much more relaxed now.' When was the weather bad?" (Past - on the weekend)
+- "What about now?" (Present - he's not relaxed now)
+- "Notice: past condition → present result. He's talking about how a past event affects him TODAY."
 
-- "Karim says 'If I were more business-minded now, would I have started my own company back then?' What's the condition?" (Present hypothetical - being business-minded)
-- "What's the result?" (Past hypothetical - starting a company then)
-- "This is reversed! Present condition → past result."
+- "Sara says 'If I weren't so busy with my job, I would have gone to see her.' Is she busy now or was she busy then?" (She's busy now - present)
+- "When would she have visited?" (Past - on Saturday)
+- "This is the opposite! Present condition → past result."
 
-Use notice boxes to draw attention to these time mixtures and how they create sophisticated meaning.
+Use notice boxes to draw attention to these time mixtures and how they connect past and present.
       </conceptChecks>
     </stage>
 
@@ -116,14 +118,14 @@ Form: If + past perfect, would + base verb
 Use when: A past action (or lack of action) has a result that is still true now.
 
 Examples:
-- "If I had studied medicine, I would be a doctor now."
-  (I didn't study medicine [past], so I'm not a doctor [present result])
+- "If I had learned to drive, I would be more independent now."
+  (I didn't learn [past], so I'm not independent [present result])
 
-- "If they had invested in that company, they would be rich today."
-  (They didn't invest [past], so they're not rich [present])
+- "If they had bought that apartment, they would be living near the beach today."
+  (They didn't buy it [past], so they're not at the beach [present])
 
-- "If she hadn't met her husband at university, she wouldn't be living in France now."
-  (She did meet him [past], so she is living in France [present result])
+- "If I hadn't started exercising last year, I wouldn't be so healthy now."
+  (I did start [past], so I am healthy [present result])
 
 Notice box: "Use this when you want to connect a past event to your present reality. It's about REGRET, REFLECTION, or GRATITUDE for how the past shaped the present."
 
@@ -134,14 +136,14 @@ Form: If + past simple, would have + past participle
 Use when: A present situation would have changed a past event.
 
 Examples:
-- "If I were more organized, I wouldn't have missed the deadline."
-  (I'm not organized [present characteristic], so I missed it [past result])
+- "If I were better with money, I wouldn't have spent everything last month."
+  (I'm not good with money [present], so I spent it all [past result])
 
-- "If he weren't so stubborn, he would have apologized yesterday."
-  (He is stubborn [present trait], so he didn't apologize [past])
+- "If she weren't so shy, she would have talked to him at the party."
+  (She is shy [present trait], so she didn't talk [past])
 
-- "If we didn't live so far away, we would have visited them last weekend."
-  (We do live far away [present fact], so we didn't visit [past])
+- "If we had more free time, we would have joined the gym last year."
+  (We don't have time [present fact], so we didn't join [past])
 
 Notice box: "Use this when a present characteristic or situation explains why something happened (or didn't happen) in the past."
 
@@ -187,15 +189,15 @@ Negatives (notice the double negative logic):
         <examples>
 Provide multiple nuanced examples using learning cards:
 
-**Real-life reflections:**
-- "If I had learned to code earlier, I would have better job opportunities now."
-- "If my grandparents hadn't emigrated, I wouldn't be living in this country today."
-- "If I were more spontaneous, I would have said yes to that adventure last year."
-- "If the pandemic hadn't happened, we would still be working in the office every day."
+**Everyday situations:**
+- "If I had saved more money, I could buy a new phone now."
+- "If my friend hadn't moved away, we would still see each other every week."
+- "If I were more confident, I would have applied for that job last month."
+- "If I had studied English as a child, I would speak more fluently now."
 
-**Philosophical thinking:**
-- "If humans hadn't invented smartphones, would we be happier now?"
-- "If I were more decisive, would I have regretted fewer choices in my life?"
+**Common regrets and wishes:**
+- "If I hadn't eaten so much yesterday, I would feel better today."
+- "If I were more patient, I wouldn't have argued with my sister yesterday."
         </examples>
       </grammarFocus>
     </stage>
