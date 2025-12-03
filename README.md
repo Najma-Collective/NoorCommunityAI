@@ -50,6 +50,53 @@ FINAL_PROMPT = BASE_PROMPT + LESSON_PROMPT + STUDENT_CONTEXT
 
 ---
 
+## Getting Started
+
+### Prerequisites
+
+**Google Gemini API Key Required**
+
+Noor AI Tutor uses Google's Gemini 2.5 Flash model for AI interactions and embeddings. You'll need a free API key to use the tutor.
+
+**How to Get a Free Gemini API Key:**
+
+1. Visit [Google AI Studio](https://aistudio.google.com/app/apikey)
+2. Sign in with your Google account
+3. Click "Create API Key"
+4. Copy your API key
+5. When you open Noor AI Tutor, paste your API key in the welcome modal
+
+**Note:** Google's free tier includes generous usage limits suitable for personal learning. Your API key is stored only in your browser's local storage and is never sent anywhere except Google's Gemini API.
+
+### Optional: Enable Safe Image Integration
+
+**Pexels API Key (Optional)**
+
+Noor can enhance lessons with relevant, educational images from Pexels. This feature is completely optional and includes built-in content safety filtering.
+
+**How to Enable Image Features:**
+
+1. Visit [Pexels API](https://www.pexels.com/api/)
+2. Sign up for a free API key
+3. Open `index.html` in a text editor
+4. Find the line `const PEXELS_API_KEY = '';` (around line 1020)
+5. Paste your API key between the quotes: `const PEXELS_API_KEY = 'your_key_here';`
+
+**Content Safety Features:**
+- Automatic filtering of inappropriate search terms
+- Blocklist prevents searches for personal/intimate content
+- Queries are automatically sanitized to add "professional" context
+- Only educational, workplace, and nature-focused images are used
+- If an unsafe query is detected, no image is shown
+
+**Image Usage Guidelines:**
+- Noor will only use images when they genuinely enhance learning
+- All images include proper attribution to photographers
+- Images are limited to 1-2 per lesson stage
+- Focus on objects, places, and activities rather than people
+
+---
+
 ##  How to Use
 
 ### Step 1: Load a Lesson (XML)
