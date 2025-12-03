@@ -746,8 +746,9 @@
                     </div>
                 </div>
 
-                <div style="margin-top:auto; padding:1.5rem; text-align:center;">
-                    <button class="start-btn" id="download-btn" style="font-size:0.9rem; padding:12px;">📄 Download Session Report</button>
+                <div style="margin-top:auto; padding:1.5rem; display:flex; flex-direction:column; gap:0.75rem;">
+                    <button class="start-btn" id="download-progress-btn" style="font-size:0.85rem; padding:10px; background:var(--secondary-color);">💾 Download Progress (JSON)</button>
+                    <button class="start-btn" id="download-report-btn" style="font-size:0.85rem; padding:10px;">📄 Download Lesson Report (PDF)</button>
                 </div>
             </div>
 
@@ -804,8 +805,26 @@
         // 3. STUDENT_CONTEXT (variable): Generated from JSON progress data via RAG
 
         const BASE_PROMPT = `
-You are Nour, AI tutor grounded in cognitive science and second language acquisition research. You are calm, patient, visual, and an expert in constructivist pedagogical techniques.
-Your goal is to guide the student through a TBL lesson using specific visual HTML layouts while applying advanced learning principles.
+You are Nour, an AI tutor. You are calm, patient, and supportive. Your goal is to guide the student through a TBL lesson using visual HTML layouts.
+
+### CRITICAL TEACHING PRINCIPLES
+
+**TEACHER TALK: KEEP IT LOW**
+- Less is more. Students learn by doing and speaking, not by reading walls of text.
+- Your responses should be SHORT (2-3 sentences max in most cases).
+- Ask more than you tell. Be dialogic, not monologic.
+- Give students space to think and respond.
+
+**LANGUAGE LEVEL**
+- ALWAYS match the student's language level in your instructions and explanations.
+- If the student is B1, use B1-level language. If A2, use A2-level language.
+- Simple, clear, natural language - not academic or overly formal.
+
+**DON'T REPEAT YOURSELF**
+- NEVER give instructions in text AND then again in cards.
+- Choose ONE format: either write it in prose OR put it in a card, not both.
+- Example of what NOT to do: "Here are three questions. [then showing the same 3 questions in cards]"
+- Instead, just show the cards directly with minimal introduction: "Let's start with a question:" [then one card]
 
 ### CRITICAL: FIRST MESSAGE REQUIREMENT
 Your very first message MUST begin with a privacy disclaimer using this exact format:
@@ -815,7 +834,7 @@ Your very first message MUST begin with a privacy disclaimer using this exact fo
 </div>
 \`\`\`
 
-After the privacy notice, warmly greet the student and begin the lesson naturally.
+After the privacy notice, warmly greet the student with ONE short sentence and begin naturally.
 
 ### VISUAL & FORMATTING RULES (STRICT)
 1.  **NO MARKDOWN LISTS**: When presenting options, steps, or choices, you MUST use the \`<div class="carousel">\` layout with cards inside:
@@ -871,86 +890,22 @@ After the privacy notice, warmly greet the student and begin the lesson naturall
     </div>
     \`\`\`
 
-### PEDAGOGICAL FRAMEWORK (SACRED PRINCIPLES)
+### TEACHING APPROACH
 
-#### 1. ZONE OF PROXIMAL DEVELOPMENT (ZPD)
-- Continuously assess student's current level through their responses
-- Provide scaffolding that is "i+1" (just beyond current ability)
-- If student struggles: simplify, model, provide sentence stems, break into smaller steps
-- If student excels: extend with deeper questions, add complexity, encourage elaboration
-- Use the carousel to offer differentiated difficulty options when appropriate
+**Scaffolding & Support**
+- If student struggles: simplify, give examples, or provide sentence stems
+- If student excels: ask follow-up questions or add complexity
+- Show before you ask (model first, then elicit)
 
-#### 2. SCAFFOLDING TECHNIQUES
-- **Modeling**: Show examples before asking students to produce
-- **Think-Alouds**: Verbalize your reasoning process in cards
-- **Sentence Stems**: Provide frames like "In my opinion, ___ because ___"
-- **Gradual Release**: I do → We do → You do with support → You do independently
-- **Multimodal Support**: Combine text, dialogue examples, and visual cards
+**Error Correction (be selective)**
+- Don't correct every error - focus on what matters for this lesson
+- Use gentle recasts: Student says "He go" → You say "Yes, he goes every day"
+- Only highlight persistent errors with \`<span class="hl-feedback">\`
 
-#### 3. ERROR CORRECTION STRATEGIES (VARY YOUR APPROACH)
-- **Recasts**: Subtly reformulate errors correctly without explicit correction
-  Example: Student: "He go to work" → You: "Ah yes, he goes to work every day, doesn't he?"
-- **Clarification Requests**: "I'm not sure I understood, could you say that again?"
-- **Metalinguistic Feedback**: Use \`<span class="hl-grammar">\` and explain the rule in a card
-- **Elicitation**: Pause before the error and let student self-correct: "He ___?"
-- **Explicit Correction**: Only for persistent errors. Use \`<span class="hl-feedback">\`
-- CRITICAL: Don't correct everything. Prioritize errors that impede communication or match lesson focus.
-
-#### 4. SOCRATIC QUESTIONING
-Layer your questions to build critical thinking:
-- **Clarifying**: "What do you mean by...?"
-- **Probing Assumptions**: "What are we assuming here?"
-- **Probing Reasons/Evidence**: "Why do you think that?"
-- **Viewpoints**: "What might someone who disagrees say?"
-- **Implications**: "If that's true, then what else must be true?"
-- **Meta-questions**: "Why do you think I asked that question?"
-
-#### 5. FORMATIVE ASSESSMENT (CONSTANT MONITORING)
-- Ask check-in questions: "Does this make sense so far?"
-- Use concept checks: "So if I say 'If I had time', am I talking about now or the past?"
-- Observe response time, complexity, accuracy, fluency
-- Adjust pacing based on student readiness signals
-- Provide immediate, specific, actionable feedback
-
-#### 6. RETRIEVAL PRACTICE
-- Regularly circle back to previous vocabulary/concepts without warning
-- Use the \`<div class="think-prompt">\` to ask: "Earlier we discussed X. What do you remember about...?"
-- Space repetitions across the session (not blocked practice)
-- Test before teaching to activate prior knowledge
-
-#### 7. METACOGNITION & SELF-REGULATION
-- Make thinking visible: "Let me show you how I would approach this..."
-- Ask reflective questions: "What strategy did you just use?" "What was challenging about that?"
-- Encourage self-assessment: Use carousel with options like "I'm confident / I need more practice / I'm unsure"
-- End segments with: "What's one thing you learned? One thing you're still wondering?"
-
-#### 8. ENGAGEMENT & AFFECT
-- Use warm, encouraging language with specific praise: "I love how you used 'whereas' to show contrast!"
-- Acknowledge difficulty: "This is a tricky structure - even native speakers mix it up"
-- Connect to student's life/interests from their responses
-- Maintain curiosity and enthusiasm in your tone
-- Use the success badge sparingly for genuine achievements
-
-#### 9. WAIT TIME
-- After asking a complex question, explicitly say: "Take your time to think..."
-- Don't rush to fill silence - students need processing time
-- For deep questions, use the think-prompt widget to signal thinking is valued
-
-#### 10. DUAL CODING
-- Always pair abstract grammar with concrete examples in dialogues
-- Use visual layout (cards, carousels) to complement verbal explanations
-- When teaching vocabulary, embed it in meaningful context (dialogue) not just definitions
-
-#### 11. INTERLEAVING & DISTRIBUTED PRACTICE
-- Don't block all vocabulary together, then all grammar - mix them
-- Return to earlier concepts while introducing new ones
-- Connect new language to previously learned structures
-
-#### 12. OUTPUT MAXIMIZATION
-- Keep YOUR turns concise to maximize STUDENT talk time
-- Use elicitation over explanation: "Can you give me an example?" rather than giving examples
-- Encourage elaboration: "Tell me more about that" "What else?"
-- Create genuine communication gaps that require language use
+**Maximize Student Talk**
+- Ask open questions: "What do you think?" "Can you tell me more?"
+- Wait for their responses - give them thinking time
+- Don't fill every silence with more teacher talk
 
 ### TRACKER CONTROL
 At the start of every message, you MUST output a hidden tag indicating the current stage from this list: [${STAGES.join(', ')}].
@@ -973,20 +928,45 @@ Format: \`[[STAGE: Pre task A (Activate)]]\`
         let lessonEmbeddings = [];       // Embeddings for lesson content
         let progressEmbeddings = [];     // Embeddings for progress data
 
+        // ===================================================================
+        // SESSION TRACKING VARIABLES
+        // ===================================================================
+        let currentSession = null;       // Current session data being tracked
+        let sessionStartTime = null;     // When the session started
+        let currentStage = null;         // Current stage name
+        let stagesCompletedInSession = []; // Stages completed in this session
+
         // Default lesson plan (fallback if no XML loaded)
         const DEFAULT_LESSON_PLAN = `
-### LESSON PLAN (DEFAULT - Software Project Management)
-1.  **Lead-in**: Ask a somatic grounding question. Connect body → mind → language.
-2.  **Pre task A (Activate)**: Elicit prior knowledge about software projects using Socratic questions. Use carousel for memory retrieval options.
-3.  **Pre task B (Model)**: Present a rich dialogue between Nadia and Omar about 'Dependencies'. After, use concept check questions.
-4.  **Pre task C (Lang Focus)**: Analyze 'Second Conditional' with CARD layout. Include notice boxes for pattern recognition. Provide multiple examples.
-5.  **Pre task D (Pron)**: Focus on weak forms, stress patterns. Use think prompts for noticing. Model then elicit.
-6.  **Task Prep**: Assign roles (Monolith vs Microservices). Provide thinking time, sentence stems, vocabulary support via carousel.
-7.  **Main Task**: Facilitate roleplay debate. Monitor and note errors WITHOUT interrupting. Encourage extended turns.
-8.  **Reporting**: Have student reflect on their performance. Ask what went well, what was challenging.
-9.  **Feedback**: Provide corrections using highlights. Focus on 2-3 priority areas. Use varied correction strategies. End with specific praise and one concrete goal.
+### LESSON PLAN (DEFAULT - B2: Travel Experiences)
 
-Start the conversation now with authentic presence.
+**Topic**: Memorable Travel Experiences
+**Level**: B2 (Upper Intermediate)
+**Focus**: Narrative past tenses, descriptive vocabulary
+
+1.  **Lead-in**: Quick question - "What's the last place you visited?"
+
+2.  **Pre task A (Activate)**: ONE question in a card: "Think of a memorable trip. What made it special?"
+
+3.  **Pre task B (Model)**: Short dialogue (5-6 lines) between two friends talking about a trip gone wrong/right.
+    Example context: Sarah tells Marco about her surprising experience in Morocco.
+
+4.  **Pre task C (Lang Focus)**: Highlight 2-3 useful expressions from the dialogue (e.g., "It turned out...", "I wasn't expecting...").
+    Show pattern in a notice box. Give ONE example.
+
+5.  **Pre task D (Pron)**: Focus on ONE pronunciation point (e.g., past tense endings -ed, or word stress).
+    Model, then ask student to repeat 2-3 words.
+
+6.  **Task Prep**: Brief prompt: "You're going to tell me about a trip - real or imaginary. Take a moment to think."
+    Offer ONE sentence stem in a card if needed: "One time, I went to... and..."
+
+7.  **Main Task**: Student shares their story. Listen actively. Ask 1-2 follow-up questions. Don't interrupt.
+
+8.  **Reporting**: "How did that feel?" or "What was easy/hard about telling that story?"
+
+9.  **Feedback**: Pick 1-2 specific things they did well. Recast 1-2 errors gently. End with encouragement.
+
+REMEMBER: Keep your instructions short. One question at a time. Let the student talk more than you do.
 `;
 
         // ===================================================================
@@ -1294,6 +1274,154 @@ Performance: Fluency ${session.assessmentScores?.fluency || 0}/10, Accuracy ${se
             return finalPrompt;
         }
 
+        // ===================================================================
+        // SESSION TRACKING FUNCTIONS
+        // ===================================================================
+
+        // Initialize a new session
+        function initializeSession() {
+            sessionStartTime = new Date();
+            const sessionId = `session_${Date.now()}`;
+
+            currentSession = {
+                sessionId: sessionId,
+                date: sessionStartTime.toISOString(),
+                lessonTitle: currentLesson ? currentLesson.metadata.title : "Default Lesson - Travel Experiences",
+                duration: 0,
+                stagesCompleted: [],
+                vocabularyLearned: [],
+                grammarPracticed: [],
+                assessmentScores: {
+                    fluency: 0,
+                    accuracy: 0,
+                    complexity: 0,
+                    pronunciation: 0
+                }
+            };
+
+            stagesCompletedInSession = [];
+        }
+
+        // Track stage completion
+        function trackStageCompletion(stageName) {
+            if (currentStage !== stageName) {
+                currentStage = stageName;
+
+                // Add to session if not already tracked
+                if (!stagesCompletedInSession.includes(stageName)) {
+                    stagesCompletedInSession.push(stageName);
+
+                    if (currentSession) {
+                        currentSession.stagesCompleted.push({
+                            name: stageName,
+                            completed: true,
+                            timeSpent: 0, // Could be calculated if needed
+                            performance: "moderate"
+                        });
+                    }
+                }
+            }
+        }
+
+        // Track vocabulary from the vocabulary wallet
+        function trackSessionVocabulary() {
+            if (currentSession && vocabularyWords.size > 0) {
+                currentSession.vocabularyLearned = Array.from(vocabularyWords).map(word => ({
+                    word: word,
+                    context: "",
+                    mastery: 0.7,
+                    reviewCount: 1
+                }));
+            }
+        }
+
+        // Update progress JSON with current session
+        function updateProgressWithSession() {
+            if (!currentSession) return null;
+
+            // Calculate session duration
+            const endTime = new Date();
+            currentSession.duration = Math.round((endTime - sessionStartTime) / 60000); // minutes
+
+            // Track vocabulary one more time before saving
+            trackSessionVocabulary();
+
+            // Initialize student progress if it doesn't exist
+            if (!studentProgress) {
+                studentProgress = {
+                    studentId: "student_" + Date.now(),
+                    profile: {
+                        name: "Anonymous Student",
+                        currentLevel: "B2",
+                        nativeLanguage: "Unknown",
+                        learningGoals: ["Improve conversational fluency"]
+                    },
+                    sessions: [],
+                    cumulativeProgress: {
+                        totalSessions: 0,
+                        totalHours: 0,
+                        vocabularySize: 0,
+                        grammarPointsMastered: [],
+                        grammarPointsInProgress: [],
+                        currentWeaknesses: [],
+                        currentStrengths: []
+                    },
+                    personalizations: {
+                        preferredPace: "moderate",
+                        respondsWellTo: [],
+                        avoidsTriggersRelatedTo: [],
+                        culturalBackground: "",
+                        interests: [],
+                        learningStyle: {
+                            visualLearner: true,
+                            auditoryLearner: false,
+                            kinestheticLearner: false,
+                            needsExtraTime: false,
+                            prefersStructure: true
+                        }
+                    }
+                };
+            }
+
+            // Add current session to sessions array
+            studentProgress.sessions.push(currentSession);
+
+            // Update cumulative progress
+            studentProgress.cumulativeProgress.totalSessions = studentProgress.sessions.length;
+            studentProgress.cumulativeProgress.totalHours = Math.round(
+                (studentProgress.cumulativeProgress.totalHours || 0) + (currentSession.duration / 60) * 10
+            ) / 10;
+
+            // Update vocabulary size
+            const allVocab = new Set();
+            studentProgress.sessions.forEach(session => {
+                session.vocabularyLearned?.forEach(v => allVocab.add(v.word.toLowerCase()));
+            });
+            studentProgress.cumulativeProgress.vocabularySize = allVocab.size;
+
+            return studentProgress;
+        }
+
+        // Download updated progress JSON
+        function downloadProgressJSON() {
+            const updatedProgress = updateProgressWithSession();
+            if (!updatedProgress) {
+                alert('No session data to save. Complete a lesson first!');
+                return;
+            }
+
+            const jsonString = JSON.stringify(updatedProgress, null, 2);
+            const blob = new Blob([jsonString], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `student-progress-${Date.now()}.json`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+
         // --- LOCALSTORAGE PERSISTENCE ---
         function saveToLocalStorage() {
             try {
@@ -1502,7 +1630,9 @@ Performance: Fluency ${session.assessmentScores?.fluency || 0}/10, Accuracy ${se
             // Extract Stage
             const stageMatch = rawText.match(/\[\[STAGE:\s*(.*?)\]\]/);
             if (stageMatch) {
-                updateTracker(stageMatch[1]);
+                const stageName = stageMatch[1];
+                updateTracker(stageName);
+                trackStageCompletion(stageName); // Track in session
             }
 
             // Update vocabulary wallet with new words
@@ -1791,6 +1921,9 @@ Performance: Fluency ${session.assessmentScores?.fluency || 0}/10, Accuracy ${se
                 document.getElementById('api-modal').style.display = 'none';
                 initTracker();
 
+                // Initialize session tracking
+                initializeSession();
+
                 // Load saved lesson and progress from localStorage
                 loadFromLocalStorage();
 
@@ -1983,89 +2116,202 @@ Performance: Fluency ${session.assessmentScores?.fluency || 0}/10, Accuracy ${se
 
         initWaves();
 
-        // --- PDF GENERATION ---
-        document.getElementById('download-btn').addEventListener('click', () => {
+        // --- PDF GENERATION (IMPROVED) ---
+        document.getElementById('download-report-btn').addEventListener('click', () => {
             const { jsPDF } = window.jspdf;
             const doc = new jsPDF();
 
+            // Color scheme from css.html
+            const sageGreen = [74, 89, 42];    // --dark-olive
+            const accentOrange = [235, 160, 60]; // --marigold
+            const textDark = [42, 51, 40];     // --ink
+
+            // Header with gradient effect
+            doc.setFillColor(...sageGreen);
+            doc.rect(0, 0, 210, 35, 'F');
+
             // Title
-            doc.setFontSize(22);
-            doc.setTextColor(92, 107, 83);
-            doc.text('Nour Learning Session Report', 20, 20);
+            doc.setFontSize(24);
+            doc.setTextColor(255, 255, 255);
+            doc.setFont(undefined, 'bold');
+            doc.text('Nour Learning Report', 105, 18, { align: 'center' });
 
             // Date
-            doc.setFontSize(10);
-            doc.setTextColor(100);
+            doc.setFontSize(11);
+            doc.setFont(undefined, 'normal');
             const today = new Date().toLocaleDateString('en-US', {
                 year: 'numeric', month: 'long', day: 'numeric'
             });
-            doc.text(today, 20, 28);
+            doc.text(today, 105, 27, { align: 'center' });
 
-            // Vocabulary Learned
-            doc.setFontSize(14);
-            doc.setTextColor(92, 107, 83);
-            doc.text('Vocabulary Learned', 20, 40);
+            let y = 50;
+
+            // Session Summary Box
+            if (currentSession) {
+                doc.setFillColor(245, 241, 230); // --cream
+                doc.roundedRect(15, y - 5, 180, 25, 3, 3, 'F');
+
+                doc.setFontSize(10);
+                doc.setTextColor(...textDark);
+                doc.setFont(undefined, 'bold');
+                doc.text('Lesson: ', 20, y);
+                doc.setFont(undefined, 'normal');
+                doc.text(currentSession.lessonTitle, 45, y);
+
+                doc.setFont(undefined, 'bold');
+                doc.text('Duration: ', 20, y + 7);
+                doc.setFont(undefined, 'normal');
+                doc.text(`${currentSession.duration} minutes`, 45, y + 7);
+
+                doc.setFont(undefined, 'bold');
+                doc.text('Stages Completed: ', 20, y + 14);
+                doc.setFont(undefined, 'normal');
+                doc.text(`${stagesCompletedInSession.length} of ${STAGES.length}`, 60, y + 14);
+
+                y += 35;
+            }
+
+            // Section: Vocabulary Learned
+            doc.setFontSize(16);
+            doc.setTextColor(...sageGreen);
+            doc.setFont(undefined, 'bold');
+            doc.text('📚 Vocabulary Learned', 20, y);
+
+            // Decorative line under heading
+            doc.setDrawColor(...accentOrange);
+            doc.setLineWidth(2);
+            doc.line(20, y + 2, 50, y + 2);
+
+            y += 12;
 
             doc.setFontSize(10);
-            doc.setTextColor(50);
-            let y = 50;
+            doc.setTextColor(...textDark);
+            doc.setFont(undefined, 'normal');
 
             if (vocabularyWords.size > 0) {
                 const vocabArray = Array.from(vocabularyWords);
+
+                // Display vocabulary in a nice grid
+                let col = 0;
                 vocabArray.forEach((word, index) => {
+                    if (y > 265) {
+                        doc.addPage();
+                        y = 20;
+                    }
+
+                    const xPos = 25 + (col * 85);
+
+                    // Vocabulary badge
+                    doc.setFillColor(255, 232, 204); // Light orange
+                    doc.roundedRect(xPos - 3, y - 5, 75, 9, 2, 2, 'F');
+                    doc.setTextColor(...accentOrange);
+                    doc.setFont(undefined, 'bold');
+                    doc.text(word, xPos, y);
+
+                    col++;
+                    if (col > 1) {
+                        col = 0;
+                        y += 12;
+                    }
+                });
+
+                if (col !== 0) y += 12;
+                y += 10;
+            } else {
+                doc.text('No vocabulary words recorded in this session.', 25, y);
+                y += 20;
+            }
+
+            // Section: Key Stages
+            if (stagesCompletedInSession.length > 0) {
+                doc.setFontSize(16);
+                doc.setTextColor(...sageGreen);
+                doc.setFont(undefined, 'bold');
+                doc.text('✓ Completed Stages', 20, y);
+
+                doc.setDrawColor(...accentOrange);
+                doc.setLineWidth(2);
+                doc.line(20, y + 2, 60, y + 2);
+
+                y += 12;
+
+                doc.setFontSize(10);
+                doc.setTextColor(...textDark);
+                doc.setFont(undefined, 'normal');
+
+                stagesCompletedInSession.forEach(stage => {
                     if (y > 270) {
                         doc.addPage();
                         y = 20;
                     }
-                    doc.text(`• ${word}`, 25, y);
-                    y += 6;
+                    doc.text(`✓ ${stage}`, 25, y);
+                    y += 7;
                 });
+
                 y += 10;
-            } else {
-                doc.text('No vocabulary words recorded in this session.', 25, y);
-                y += 15;
             }
 
-            // Conversation Transcript
-            doc.setFontSize(14);
-            doc.setTextColor(92, 107, 83);
-            doc.text('Conversation Highlights', 20, y);
-            y += 10;
+            // Conversation Highlights
+            doc.setFontSize(16);
+            doc.setTextColor(...sageGreen);
+            doc.setFont(undefined, 'bold');
+            doc.text('💬 Conversation Highlights', 20, y);
 
-            doc.setFontSize(10);
-            doc.setTextColor(50);
+            doc.setDrawColor(...accentOrange);
+            doc.setLineWidth(2);
+            doc.line(20, y + 2, 75, y + 2);
 
-            // Extract clean text from chat
-            chatHistory.forEach((msg, i) => {
-                if (y > 270) {
+            y += 12;
+
+            doc.setFontSize(9);
+            doc.setTextColor(...textDark);
+
+            // Extract clean text from chat (limit to key messages)
+            const keyMessages = chatHistory.slice(-10); // Last 10 messages
+            keyMessages.forEach((msg, i) => {
+                if (y > 265) {
                     doc.addPage();
                     y = 20;
                 }
 
                 const role = msg.role === 'user' ? 'You' : 'Nour';
-                const text = msg.parts[0].text.replace(/<[^>]*>/g, '').replace(/\[\[STAGE:.*?\]\]/g, '').substring(0, 200);
+                const text = msg.parts[0].text
+                    .replace(/<[^>]*>/g, '')
+                    .replace(/\[\[STAGE:.*?\]\]/g, '')
+                    .substring(0, 150);
 
                 doc.setFont(undefined, 'bold');
+                doc.setTextColor(...(msg.role === 'user' ? accentOrange : sageGreen));
                 doc.text(`${role}:`, 20, y);
-                doc.setFont(undefined, 'normal');
 
-                const lines = doc.splitTextToSize(text, 170);
-                doc.text(lines.slice(0, 3), 20, y + 5);
-                y += 5 + (Math.min(lines.length, 3) * 5) + 5;
+                doc.setFont(undefined, 'normal');
+                doc.setTextColor(...textDark);
+                const lines = doc.splitTextToSize(text, 165);
+                doc.text(lines.slice(0, 2), 20, y + 5);
+
+                y += 5 + (Math.min(lines.length, 2) * 5) + 5;
             });
 
             // Footer
-            if (y > 250) {
-                doc.addPage();
-                y = 20;
+            const pageCount = doc.internal.getNumberOfPages();
+            for (let i = 1; i <= pageCount; i++) {
+                doc.setPage(i);
+                doc.setFontSize(8);
+                doc.setTextColor(150);
+                doc.text(
+                    'Generated by Nour AI Tutor | Keep practicing, keep growing! 🌱',
+                    105,
+                    285,
+                    { align: 'center' }
+                );
+                doc.text(`Page ${i} of ${pageCount}`, 105, 290, { align: 'center' });
             }
-            y = 280;
-            doc.setFontSize(8);
-            doc.setTextColor(150);
-            doc.text('Generated by Nour AI Tutor | Keep practicing, keep growing! 🌱', 20, y);
 
-            doc.save(`nour-session-${Date.now()}.pdf`);
+            doc.save(`nour-lesson-report-${Date.now()}.pdf`);
         });
+
+        // --- PROGRESS JSON DOWNLOAD ---
+        document.getElementById('download-progress-btn').addEventListener('click', downloadProgressJSON);
 
     </script>
 </body>
