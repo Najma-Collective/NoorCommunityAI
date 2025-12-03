@@ -9,7 +9,10 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Questrial&family=Marcellus&display=swap" rel="stylesheet">
-    
+
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
     <!-- Markdown Library -->
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <!-- PDF Library -->
@@ -268,7 +271,9 @@
             gap: 0.5rem;
         }
         .dialogue-speaker::before {
-            content: '💬';
+            content: '\f086';
+            font-family: 'Font Awesome 6 Free';
+            font-weight: 400;
             font-size: 1.2rem;
         }
         .dialogue-content {
@@ -675,6 +680,213 @@
             to { transform: rotate(360deg); }
         }
 
+        /* Celebration Screen - Full Screen Immersive Experience */
+        #celebration-screen {
+            position: fixed;
+            inset: 0;
+            z-index: 9999;
+            background: linear-gradient(135deg,
+                rgba(102, 126, 234, 0.95) 0%,
+                rgba(118, 75, 162, 0.95) 25%,
+                rgba(246, 147, 251, 0.95) 50%,
+                rgba(79, 172, 254, 0.95) 75%,
+                rgba(0, 242, 254, 0.95) 100%);
+            background-size: 400% 400%;
+            animation: gradientShift 8s ease infinite;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(20px);
+        }
+
+        #celebration-screen.active {
+            display: flex;
+        }
+
+        .celebration-content {
+            text-align: center;
+            color: white;
+            animation: celebrationPopIn 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+
+        .celebration-avatar {
+            width: 200px;
+            height: 200px;
+            margin: 0 auto 2rem;
+            border-radius: 50%;
+            background: linear-gradient(45deg, #667eea 0%, #764ba2 25%, #f093fb 50%, #4facfe 75%, #00f2fe 100%);
+            background-size: 400% 400%;
+            animation: orbFloat 3s ease-in-out infinite, gradientShift 8s ease infinite;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3),
+                        inset 0 4px 12px rgba(255,255,255,0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 5rem;
+            position: relative;
+        }
+
+        .celebration-avatar::before {
+            content: '';
+            position: absolute;
+            inset: -20px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.4) 0%, transparent 70%);
+            animation: breathe 2s ease-in-out infinite;
+            filter: blur(20px);
+        }
+
+        .celebration-title {
+            font-family: var(--font-display);
+            font-size: 4rem;
+            font-weight: 800;
+            margin: 0 0 1rem 0;
+            text-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            animation: titleBounce 1s ease-out 0.3s;
+        }
+
+        .celebration-message {
+            font-family: var(--font-body);
+            font-size: 1.8rem;
+            margin: 0 0 2rem 0;
+            opacity: 0;
+            animation: fadeInUp 0.8s ease-out 0.6s forwards;
+        }
+
+        .celebration-stars {
+            font-size: 3rem;
+            margin: 1rem 0;
+            opacity: 0;
+            animation: fadeInUp 0.8s ease-out 0.9s forwards;
+        }
+
+        @keyframes celebrationPopIn {
+            0% {
+                transform: scale(0.3);
+                opacity: 0;
+            }
+            50% {
+                transform: scale(1.1);
+            }
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        @keyframes titleBounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Confetti Effect */
+        .confetti {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background: white;
+            opacity: 0.8;
+            animation: confettiFall 3s linear infinite;
+        }
+
+        @keyframes confettiFall {
+            0% {
+                transform: translateY(-100vh) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        /* Learning Plan Preview Box */
+        .learning-plan-box {
+            background: linear-gradient(135deg, rgba(122, 155, 122, 0.15) 0%, rgba(61, 90, 61, 0.15) 100%);
+            border-left: 4px solid var(--primary-color);
+            border-radius: 16px;
+            padding: 2rem;
+            margin: 2rem 0;
+            box-shadow: 0 8px 32px rgba(92, 107, 83, 0.12);
+        }
+
+        .learning-plan-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            font-family: var(--font-display);
+            font-size: 1.3rem;
+            color: var(--primary-color);
+            font-weight: 700;
+        }
+
+        .learning-plan-header i {
+            font-size: 1.8rem;
+            color: var(--accent-color);
+        }
+
+        .learning-plan-section {
+            margin: 1.5rem 0;
+        }
+
+        .learning-plan-section h4 {
+            font-family: var(--font-display);
+            color: var(--secondary-color);
+            margin: 0 0 0.75rem 0;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .learning-plan-section h4 i {
+            color: var(--accent-color);
+        }
+
+        .learning-plan-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .learning-plan-list li {
+            padding: 0.5rem 0 0.5rem 2rem;
+            position: relative;
+            line-height: 1.6;
+        }
+
+        .learning-plan-list li::before {
+            content: '\f00c';
+            font-family: 'Font Awesome 6 Free';
+            font-weight: 900;
+            position: absolute;
+            left: 0;
+            color: var(--accent-color);
+        }
+
+        /* Enhanced aesthetic elements */
+        .icon-text {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .icon-text i {
+            color: var(--accent-color);
+        }
+
     </style>
 </head>
 <body class="theme-sage">
@@ -717,7 +929,7 @@
 
                 <!-- RAG Upload Section -->
                 <div style="padding: 1.5rem; border-top: 1px solid rgba(0,0,0,0.05);">
-                    <div style="font-family: var(--font-display); font-size: 0.9rem; color: var(--primary-color); margin-bottom: 1rem; font-weight: 700;">📚 Lesson & Progress</div>
+                    <div style="font-family: var(--font-display); font-size: 0.9rem; color: var(--primary-color); margin-bottom: 1rem; font-weight: 700;"><i class="fas fa-book-open" style="color: var(--accent-color); margin-right: 0.5rem;"></i>Lesson & Progress</div>
 
                     <!-- Lesson Upload -->
                     <div style="margin-bottom: 1rem;">
@@ -738,7 +950,7 @@
 
                 <!-- Vocabulary Wallet -->
                 <div style="padding: 1.5rem; border-top: 1px solid rgba(0,0,0,0.05); flex: 1; overflow-y: auto;">
-                    <div style="font-family: var(--font-display); font-size: 0.9rem; color: var(--primary-color); margin-bottom: 1rem; font-weight: 700;">📚 Vocabulary Wallet</div>
+                    <div style="font-family: var(--font-display); font-size: 0.9rem; color: var(--primary-color); margin-bottom: 1rem; font-weight: 700;"><i class="fas fa-wallet" style="color: var(--accent-color); margin-right: 0.5rem;"></i>Vocabulary Wallet</div>
                     <div id="vocab-wallet" style="display: flex; flex-direction: column; gap: 0.75rem;">
                         <div style="font-size: 0.85rem; color: #999; font-style: italic; text-align: center; padding: 2rem 1rem;">
                             Vocabulary words will appear here as you learn them...
@@ -747,8 +959,8 @@
                 </div>
 
                 <div style="margin-top:auto; padding:1.5rem; text-align:center; display: flex; flex-direction: column; gap: 0.75rem;">
-                    <button class="start-btn" id="download-report-btn" style="font-size:0.9rem; padding:12px;">📄 Download Lesson Report</button>
-                    <button class="start-btn" id="download-progress-btn" style="font-size:0.9rem; padding:12px; background: var(--secondary-color);">💾 Download Progress JSON</button>
+                    <button class="start-btn" id="download-report-btn" style="font-size:0.9rem; padding:12px;"><i class="fas fa-file-pdf" style="margin-right: 0.5rem;"></i>Download Lesson Report</button>
+                    <button class="start-btn" id="download-progress-btn" style="font-size:0.9rem; padding:12px; background: var(--secondary-color);"><i class="fas fa-download" style="margin-right: 0.5rem;"></i>Download Progress JSON</button>
                 </div>
             </div>
 
@@ -774,6 +986,22 @@
             <p>Please enter your Gemini API Key to begin.</p>
             <input type="password" id="api-key-input" class="api-input" placeholder="Paste API Key here...">
             <button class="start-btn" id="start-session-btn">Start Session</button>
+        </div>
+    </div>
+
+    <!-- CELEBRATION SCREEN -->
+    <div id="celebration-screen">
+        <div class="celebration-content">
+            <div class="celebration-avatar">
+                <i class="fas fa-star"></i>
+            </div>
+            <h1 class="celebration-title" id="celebration-title">Amazing Work!</h1>
+            <p class="celebration-message" id="celebration-message">You've made incredible progress!</p>
+            <div class="celebration-stars">
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+            </div>
         </div>
     </div>
 
@@ -812,7 +1040,7 @@ Your goal is to guide the student through a TBL lesson using specific visual HTM
 Your very first message MUST begin with a privacy disclaimer using this exact format:
 \`\`\`html
 <div class="notice-box">
-<strong>🔒 Privacy First:</strong> Please do not share any personal information, sensitive data, or private details during our session. Keep our conversation focused on learning.
+<strong><i class="fas fa-lock"></i> Privacy First:</strong> Please do not share any personal information, sensitive data, or private details during our session. Keep our conversation focused on learning.
 </div>
 \`\`\`
 
@@ -853,13 +1081,13 @@ After the privacy notice, warmly greet the student and begin the lesson naturall
     \`\`\`
     This shows the speaker's name ONCE at the top, followed by all their dialogue content. Perfect for monologues or continuous speech.
 4.  **CARDS**: Concepts must be in \`<div class="learning-card"><h3>Title</h3><p>Content</p></div>\`.
-5.  **THINK PROMPTS**: For reflection moments, use \`<div class="think-prompt"><strong>🤔 Pause & Reflect:</strong> [question]</div>\`
-6.  **NOTICE BOXES**: For language awareness, use \`<div class="notice-box"><strong>👁️ Notice:</strong> [pattern]</div>\`
-7.  **SUCCESS INDICATORS**: Use \`<div class="success-badge">✨ [achievement]</div>\` for positive reinforcement
+5.  **THINK PROMPTS**: For reflection moments, use \`<div class="think-prompt"><strong><i class="fas fa-brain"></i> Pause & Reflect:</strong> [question]</div>\`
+6.  **NOTICE BOXES**: For language awareness, use \`<div class="notice-box"><strong><i class="fas fa-eye"></i> Notice:</strong> [pattern]</div>\`
+7.  **SUCCESS INDICATORS**: Use \`<div class="success-badge"><i class="fas fa-star"></i> [achievement]</div>\` for positive reinforcement
 8.  **SENTENCE STEMS**: When providing scaffolding, use:
     \`\`\`html
     <div class="sentence-stems">
-        <h4>💬 Use these sentence starters:</h4>
+        <h4><i class="fas fa-comments"></i> Use these sentence starters:</h4>
         <div class="stem-option">In my opinion, ___ because ___</div>
         <div class="stem-option">I believe that ___, whereas ___</div>
     </div>
@@ -1017,7 +1245,61 @@ Which one speaks to you?"
 
 ### GOLDEN RULE
 **If in doubt, SAY LESS. Ask a question. Wait for the student to respond. Trust the process.**
+
+### LEARNING PLAN PREVIEW & AI TRANSPARENCY (CRITICAL)
+At the START of your very first message (after the privacy disclaimer), you MUST provide a learning plan preview that shows the student:
+1. What topics will be covered today based on analysis of their history
+2. Persistent errors you've identified from their progress data (if available)
+3. Strengths you've noticed that you'll build upon
+
+Use this format:
+\`\`\`html
+<div class="learning-plan-box">
+    <div class="learning-plan-header">
+        <i class="fas fa-route"></i>
+        <span>Today's Learning Journey</span>
+    </div>
+    <div class="learning-plan-section">
+        <h4><i class="fas fa-bullseye"></i> Our Focus Areas</h4>
+        <ul class="learning-plan-list">
+            <li>[Topic 1 from lesson or identified need]</li>
+            <li>[Topic 2 from lesson or identified need]</li>
+            <li>[Topic 3 from lesson or identified need]</li>
+        </ul>
+    </div>
+    <div class="learning-plan-section">
+        <h4><i class="fas fa-chart-line"></i> Building on Your Strengths</h4>
+        <p>[Mention 1-2 specific strengths from their history, or general encouragement if no history]</p>
+    </div>
+    <div class="learning-plan-section">
+        <h4><i class="fas fa-tools"></i> Areas We'll Work On</h4>
+        <p>[Mention 1-2 persistent errors or challenges from their history, or "We'll discover together" if no history]</p>
+    </div>
+</div>
+\`\`\`
+
+### PERSISTENT ERROR DETECTION & INTERVENTION
+Throughout the session:
+1. **Track Recurring Patterns**: If a student makes the same type of error 2+ times (e.g., third conditional, article usage, subject-verb agreement), flag it mentally
+2. **Targeted Intervention**: After identifying a persistent error:
+   - Don't correct immediately every time
+   - After 2-3 occurrences, use a targeted mini-lesson with a card showing the pattern
+   - Use metalinguistic feedback: "I notice we've seen this pattern a few times..."
+   - Provide focused practice opportunities
+3. **Celebration of Progress**: When a student successfully uses a structure they previously struggled with, acknowledge it with a success badge or brief celebration
+
+### MILESTONE DETECTION & CELEBRATION TRIGGERS
+Watch for these achievement moments and trigger celebrations by including \`[[CELEBRATE: reason]]\` in your response:
+- Student completes a full stage successfully (Main Task, Reporting, Feedback)
+- Student uses a difficult structure correctly after previous errors
+- Student demonstrates significant improvement in fluency or complexity
+- Student reaches the end of the lesson (Feedback stage completed)
+- Student successfully uses 5+ new vocabulary words in context
+
+When you detect a milestone, include this marker: \`[[CELEBRATE: Completed Main Task with excellent reasoning]]\`
+The system will show a full-screen celebration with Noor's avatar.
 `;
+
 
         // ===================================================================
         // RAG SYSTEM: STATE VARIABLES
@@ -1388,7 +1670,7 @@ Performance: Fluency ${session.assessmentScores?.fluency || 0}/10, Accuracy ${se
         function updateLessonStatus() {
             const statusEl = document.getElementById('lesson-status');
             if (currentLesson) {
-                statusEl.textContent = `✓ ${currentLesson.metadata.title} (${currentLesson.metadata.level})`;
+                statusEl.innerHTML = `<i class="fas fa-check-circle" style="color: var(--accent-color); margin-right: 0.3rem;"></i>${currentLesson.metadata.title} (${currentLesson.metadata.level})`;
                 statusEl.style.color = 'var(--primary-color)';
                 statusEl.style.fontStyle = 'normal';
             } else {
@@ -1403,7 +1685,7 @@ Performance: Fluency ${session.assessmentScores?.fluency || 0}/10, Accuracy ${se
             if (studentProgress) {
                 const sessions = studentProgress.sessions?.length || 0;
                 const vocab = studentProgress.cumulativeProgress?.vocabularySize || 0;
-                statusEl.textContent = `✓ ${sessions} sessions, ${vocab} words`;
+                statusEl.innerHTML = `<i class="fas fa-check-circle" style="color: var(--accent-color); margin-right: 0.3rem;"></i>${sessions} sessions, ${vocab} words`;
                 statusEl.style.color = 'var(--primary-color)';
                 statusEl.style.fontStyle = 'normal';
             } else {
@@ -1639,10 +1921,10 @@ Performance: Fluency ${session.assessmentScores?.fluency || 0}/10, Accuracy ${se
         async function appendMessage(role, text) {
             const div = document.createElement('div');
             div.className = `message ${role}`;
-            
-            // Clean tags for display
-            let displayHtml = text.replace(/\[\[STAGE:.*?\]\]/g, '');
-            
+
+            // Clean tags for display - remove STAGE and CELEBRATE markers
+            let displayHtml = text.replace(/\[\[STAGE:.*?\]\]/g, '').replace(/\[\[CELEBRATE:.*?\]\]/g, '');
+
             // Render Markdown/HTML
             try {
                 // If marked isn't loaded for some reason, fallback to text
@@ -1670,10 +1952,95 @@ Performance: Fluency ${session.assessmentScores?.fluency || 0}/10, Accuracy ${se
                 updateTracker(stageMatch[1]);
             }
 
+            // Extract Celebration marker
+            const celebrateMatch = rawText.match(/\[\[CELEBRATE:\s*(.*?)\]\]/);
+            if (celebrateMatch) {
+                const reason = celebrateMatch[1];
+                setTimeout(() => showCelebration(reason), 1000); // Show after message is displayed
+            }
+
             // Update vocabulary wallet with new words
             updateVocabularyWallet(rawText);
 
             return rawText;
+        }
+
+        // Celebration Screen Function
+        function showCelebration(reason) {
+            const celebrationScreen = document.getElementById('celebration-screen');
+            const titleEl = document.getElementById('celebration-title');
+            const messageEl = document.getElementById('celebration-message');
+
+            // Customize messages based on reason
+            const celebrations = {
+                'task': {
+                    title: 'Outstanding!',
+                    message: 'You completed that task brilliantly!'
+                },
+                'lesson': {
+                    title: 'Lesson Complete!',
+                    message: 'You\'ve finished the entire lesson with excellence!'
+                },
+                'breakthrough': {
+                    title: 'Amazing Progress!',
+                    message: 'You just made a breakthrough in your learning!'
+                },
+                'vocabulary': {
+                    title: 'Vocabulary Master!',
+                    message: 'You\'ve mastered so many new words today!'
+                },
+                'default': {
+                    title: 'Well Done!',
+                    message: reason || 'You\'re making incredible progress!'
+                }
+            };
+
+            // Determine celebration type
+            let celebType = 'default';
+            if (reason.toLowerCase().includes('task')) celebType = 'task';
+            else if (reason.toLowerCase().includes('lesson') || reason.toLowerCase().includes('feedback')) celebType = 'lesson';
+            else if (reason.toLowerCase().includes('breakthrough') || reason.toLowerCase().includes('improvement')) celebType = 'breakthrough';
+            else if (reason.toLowerCase().includes('vocabulary') || reason.toLowerCase().includes('words')) celebType = 'vocabulary';
+
+            const celeb = celebrations[celebType];
+            titleEl.textContent = celeb.title;
+            messageEl.textContent = celeb.message;
+
+            // Show celebration
+            celebrationScreen.classList.add('active');
+
+            // Create confetti
+            createConfetti();
+
+            // Auto-hide after 4 seconds
+            setTimeout(() => {
+                celebrationScreen.classList.remove('active');
+            }, 4000);
+
+            // Click to dismiss
+            celebrationScreen.onclick = () => {
+                celebrationScreen.classList.remove('active');
+            };
+        }
+
+        function createConfetti() {
+            const celebrationScreen = document.getElementById('celebration-screen');
+            const colors = ['#667eea', '#764ba2', '#f093fb', '#4facfe', '#00f2fe', '#ffffff'];
+
+            for (let i = 0; i < 50; i++) {
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti';
+                confetti.style.left = Math.random() * 100 + '%';
+                confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                confetti.style.animationDelay = Math.random() * 3 + 's';
+                confetti.style.animationDuration = (Math.random() * 2 + 2) + 's';
+                celebrationScreen.appendChild(confetti);
+
+                // Remove after animation
+                setTimeout(() => {
+                    confetti.remove();
+                }, 5000);
+            }
         }
 
         // --- API CALL WITH RETRY LOGIC ---
@@ -2210,7 +2577,7 @@ Performance: Fluency ${session.assessmentScores?.fluency || 0}/10, Accuracy ${se
             doc.setFontSize(14);
             doc.setTextColor(92, 107, 83);
             doc.setFont(undefined, 'bold');
-            doc.text('📚 Vocabulary Learned', leftMargin, y);
+            doc.text('Vocabulary Learned', leftMargin, y);
             doc.setFont(undefined, 'normal');
             y += 8;
 
@@ -2265,7 +2632,7 @@ Performance: Fluency ${session.assessmentScores?.fluency || 0}/10, Accuracy ${se
                 doc.setFontSize(14);
                 doc.setTextColor(92, 107, 83);
                 doc.setFont(undefined, 'bold');
-                doc.text('✓ Stages Completed', leftMargin, y);
+                doc.text('Stages Completed', leftMargin, y);
                 doc.setFont(undefined, 'normal');
                 y += 8;
 
@@ -2294,7 +2661,7 @@ Performance: Fluency ${session.assessmentScores?.fluency || 0}/10, Accuracy ${se
             doc.setFontSize(14);
             doc.setTextColor(92, 107, 83);
             doc.setFont(undefined, 'bold');
-            doc.text('💬 Key Moments', leftMargin, y);
+            doc.text('Key Moments', leftMargin, y);
             doc.setFont(undefined, 'normal');
             y += 8;
 
