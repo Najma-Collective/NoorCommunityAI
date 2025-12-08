@@ -1,0 +1,1119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>LARP Chatbot – GLM-4.6V-Flash</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    :root {
+      --bg: #050608;
+      --bg-elevated: #11131a;
+      --bg-softer: #181b25;
+      --accent: #7ce7c8;
+      --accent-soft: rgba(124, 231, 200, 0.15);
+      --text-main: #f5f5f7;
+      --text-muted: #a5a7b8;
+      --border-subtle: #2b2f3c;
+      --danger: #ff6b81;
+      --shadow-soft: 0 18px 45px rgba(0, 0, 0, 0.6);
+      --radius-lg: 18px;
+      --radius-xl: 24px;
+      --radius-full: 999px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: radial-gradient(circle at top, #141624, #050608 55%);
+      color: var(--text-main);
+      display: flex;
+      align-items: stretch;
+      justify-content: center;
+      min-height: 100vh;
+    }
+
+    .app {
+      max-width: 1180px;
+      width: 100%;
+      margin: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    header {
+      padding: 16px 20px;
+      border-radius: var(--radius-xl);
+      background: linear-gradient(120deg, rgba(124, 231, 200, 0.12), rgba(40, 42, 63, 0.9));
+      box-shadow: var(--shadow-soft);
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    header .title-block {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .orb {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 30% 20%, #ffffff, #7ce7c8 45%, #141624 70%);
+      box-shadow: 0 0 18px rgba(124, 231, 200, 0.65);
+      animation: pulse 3s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); box-shadow: 0 0 16px rgba(124, 231, 200, 0.5); }
+      50% { transform: scale(1.04); box-shadow: 0 0 24px rgba(124, 231, 200, 0.8); }
+    }
+
+    header h1 {
+      font-size: 1.25rem;
+      margin: 0;
+      letter-spacing: 0.03em;
+    }
+
+    header p {
+      margin: 0;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+
+    .tagline {
+      font-size: 0.8rem;
+      padding: 6px 10px;
+      border-radius: var(--radius-full);
+      border: 1px solid rgba(245, 245, 247, 0.2);
+      background: rgba(5, 6, 8, 0.4);
+      color: var(--text-muted);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .tagline span.emoji {
+      font-size: 0.9rem;
+    }
+
+    main {
+      display: grid;
+      grid-template-columns: minmax(0, 2.2fr) minmax(280px, 1.2fr);
+      gap: 16px;
+      align-items: stretch;
+    }
+
+    @media (max-width: 900px) {
+      main {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .panel {
+      background: radial-gradient(circle at top left, rgba(124, 231, 200, 0.12), rgba(9, 10, 14, 0.9));
+      border-radius: var(--radius-xl);
+      border: 1px solid var(--border-subtle);
+      box-shadow: var(--shadow-soft);
+      padding: 14px 16px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      min-height: 0;
+    }
+
+    .panel-title {
+      font-size: 0.95rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .panel-title span.small {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      font-weight: 400;
+    }
+
+    .panel + .panel {
+      margin-top: 0;
+    }
+
+    .config-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 8px;
+    }
+
+    @media (max-width: 900px) {
+      .config-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .field label {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.09em;
+      color: var(--text-muted);
+    }
+
+    .field input,
+    .field select,
+    .field textarea {
+      background: rgba(5, 6, 8, 0.8);
+      border-radius: 10px;
+      border: 1px solid rgba(88, 94, 118, 0.9);
+      padding: 6px 9px;
+      font-size: 0.8rem;
+      color: var(--text-main);
+      outline: none;
+      transition: border-color 0.16s ease, box-shadow 0.16s ease, background-color 0.16s ease;
+    }
+
+    .field input:focus,
+    .field select:focus,
+    .field textarea:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 1px rgba(124, 231, 200, 0.7);
+      background: rgba(10, 12, 17, 0.95);
+    }
+
+    .field input::placeholder,
+    .field textarea::placeholder {
+      color: rgba(165, 167, 184, 0.75);
+    }
+
+    .field textarea {
+      resize: vertical;
+      min-height: 64px;
+      max-height: 140px;
+    }
+
+    .field.inline {
+      flex-direction: row;
+      align-items: center;
+    }
+
+    .field.inline label {
+      text-transform: none;
+      letter-spacing: 0;
+      font-size: 0.75rem;
+      margin-right: 6px;
+    }
+
+    .field.inline input[type="number"] {
+      width: 64px;
+    }
+
+    .subgrid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 6px;
+    }
+
+    .stat-label {
+      font-size: 0.7rem;
+      color: var(--text-muted);
+    }
+
+    .stat-value {
+      font-weight: 600;
+    }
+
+    .stat-input {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+
+    .small-row {
+      display: flex;
+      gap: 6px;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .small-row .field {
+      flex: 1;
+    }
+
+    button {
+      border-radius: var(--radius-full);
+      border: 1px solid rgba(124, 231, 200, 0.6);
+      background: radial-gradient(circle at top, var(--accent), #0c1613);
+      color: #02110b;
+      padding: 7px 14px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      box-shadow: 0 10px 24px rgba(124, 231, 200, 0.4);
+      transition: transform 0.1s ease, box-shadow 0.1s ease, background 0.16s ease, border-color 0.16s ease;
+      white-space: nowrap;
+    }
+
+    button.secondary {
+      background: rgba(9, 10, 14, 0.9);
+      color: var(--text-main);
+      border-color: rgba(88, 94, 118, 0.9);
+      box-shadow: 0 8px 18px rgba(0, 0, 0, 0.6);
+    }
+
+    button.danger {
+      background: radial-gradient(circle at top, var(--danger), #2b0710);
+      border-color: rgba(255, 107, 129, 0.9);
+      color: #230206;
+    }
+
+    button:disabled {
+      opacity: 0.55;
+      cursor: default;
+      box-shadow: none;
+    }
+
+    button:hover:enabled {
+      transform: translateY(-1px);
+      box-shadow: 0 14px 30px rgba(124, 231, 200, 0.65);
+    }
+
+    button.secondary:hover:enabled {
+      box-shadow: 0 12px 26px rgba(0, 0, 0, 0.8);
+      border-color: rgba(124, 231, 200, 0.55);
+    }
+
+    button.danger:hover:enabled {
+      box-shadow: 0 12px 28px rgba(255, 107, 129, 0.55);
+    }
+
+    button:active:enabled {
+      transform: translateY(0);
+      box-shadow: 0 8px 18px rgba(0, 0, 0, 0.6);
+    }
+
+    .button-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+      justify-content: flex-end;
+      margin-top: 4px;
+    }
+
+    .button-row.left {
+      justify-content: flex-start;
+    }
+
+    .button-row.space-between {
+      justify-content: space-between;
+    }
+
+    .hint {
+      font-size: 0.7rem;
+      color: var(--text-muted);
+    }
+
+    .hint strong {
+      color: var(--accent);
+      font-weight: 500;
+    }
+
+    .chat-shell {
+      flex: 1;
+      min-height: 0;
+      display: flex;
+      flex-direction: column;
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      background: radial-gradient(circle at top, rgba(20, 23, 36, 0.9), rgba(5, 6, 8, 0.98));
+      border: 1px solid rgba(50, 54, 73, 0.95);
+    }
+
+    .chat-log {
+      flex: 1;
+      min-height: 0;
+      padding: 14px 14px 10px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      scroll-behavior: smooth;
+    }
+
+    .chat-message {
+      display: flex;
+      gap: 8px;
+      align-items: flex-start;
+      max-width: 100%;
+    }
+
+    .bubble {
+      max-width: 100%;
+      padding: 8px 10px;
+      border-radius: 14px;
+      font-size: 0.8rem;
+      line-height: 1.4;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      word-break: break-word;
+    }
+
+    .role-user .bubble {
+      margin-left: auto;
+      border-bottom-right-radius: 4px;
+      background: linear-gradient(135deg, rgba(124, 231, 200, 0.18), rgba(9, 10, 14, 0.95));
+      border: 1px solid rgba(124, 231, 200, 0.8);
+    }
+
+    .role-assistant .bubble {
+      margin-right: auto;
+      border-bottom-left-radius: 4px;
+      background: rgba(14, 16, 24, 0.96);
+      border: 1px solid rgba(57, 61, 82, 0.95);
+    }
+
+    .role-system .bubble {
+      margin: 0 auto;
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      background: rgba(8, 10, 16, 0.97);
+      border-radius: var(--radius-full);
+      border: 1px dashed rgba(88, 94, 118, 0.9);
+      padding-inline: 12px;
+    }
+
+    .role-user .avatar,
+    .role-assistant .avatar {
+      flex-shrink: 0;
+      width: 24px;
+      height: 24px;
+      border-radius: 999px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.7rem;
+      font-weight: 600;
+    }
+
+    .role-user .avatar {
+      background: radial-gradient(circle at 30% 20%, #ffffff, #7ce7c8 45%, #12141f 70%);
+      color: #02110b;
+    }
+
+    .role-assistant .avatar {
+      background: radial-gradient(circle at 20% 20%, #ffffff, #9fa4ff 45%, #1a1d2b 70%);
+      color: #050608;
+    }
+
+    .input-area {
+      border-top: 1px solid rgba(54, 58, 79, 0.9);
+      padding: 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .input-row {
+      display: flex;
+      gap: 8px;
+      align-items: flex-end;
+    }
+
+    .input-row textarea {
+      flex: 1;
+      min-height: 52px;
+      max-height: 120px;
+      border-radius: 12px;
+      padding: 8px 10px;
+      font-size: 0.8rem;
+      border: 1px solid rgba(88, 94, 118, 0.9);
+      background: rgba(5, 6, 8, 0.9);
+      color: var(--text-main);
+      outline: none;
+      resize: vertical;
+    }
+
+    .input-row textarea:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 1px rgba(124, 231, 200, 0.7);
+      background: rgba(10, 12, 17, 0.96);
+    }
+
+    .input-row button {
+      height: 36px;
+      padding-inline: 12px;
+    }
+
+    .mini-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.7rem;
+      color: var(--text-muted);
+    }
+
+    .mini-row .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--accent);
+      box-shadow: 0 0 10px rgba(124, 231, 200, 0.9);
+      margin-right: 4px;
+    }
+
+    .mini-row .status-dot.idle {
+      background: var(--text-muted);
+      box-shadow: none;
+    }
+
+    .pill {
+      padding: 4px 8px;
+      border-radius: 999px;
+      border: 1px solid rgba(88, 94, 118, 0.9);
+      background: rgba(5, 6, 8, 0.95);
+    }
+
+    .pill code {
+      font-size: 0.7rem;
+      color: var(--accent);
+    }
+
+    .sidebar-section {
+      border-radius: var(--radius-lg);
+      background: rgba(9, 10, 15, 0.96);
+      border: 1px solid rgba(46, 50, 69, 0.9);
+      padding: 10px 11px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .sidebar-section h3 {
+      margin: 0;
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--text-muted);
+    }
+
+    .sidebar-section h3 span {
+      color: var(--accent);
+    }
+
+    .side-row {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+
+    .side-row strong {
+      color: var(--text-main);
+      font-weight: 600;
+    }
+
+    .pill-soft {
+      padding: 3px 8px;
+      border-radius: 999px;
+      background: var(--accent-soft);
+      border: 1px solid rgba(124, 231, 200, 0.65);
+      color: var(--accent);
+      font-size: 0.7rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .pill-soft span.die {
+      font-weight: 700;
+      font-size: 0.8rem;
+    }
+
+    .note {
+      font-size: 0.7rem;
+      color: var(--text-muted);
+      line-height: 1.3;
+    }
+
+    .note span.heart {
+      color: var(--accent);
+    }
+
+    .grow {
+      flex: 1;
+    }
+
+    .small-input {
+      width: 60px;
+    }
+
+    .slider-row {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.7rem;
+      color: var(--text-muted);
+    }
+
+    .slider-row input[type="range"] {
+      flex: 1;
+      accent-color: var(--accent);
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <header>
+      <div class="title-block">
+        <div class="orb"></div>
+        <div>
+          <h1>LARP Engine • GLM-4.6V-Flash</h1>
+          <p>Single player story engine with dice, stats, and GLM narration</p>
+        </div>
+      </div>
+      <div class="tagline">
+        <span class="emoji">🎭</span>
+        <span>Type your action, let the model direct the world</span>
+      </div>
+    </header>
+
+    <main>
+      <!-- Left: Chat and runtime -->
+      <section class="panel">
+        <div class="panel-title">
+          <span>Session Timeline</span>
+          <span class="small">Shift+Enter keeps line, Enter sends</span>
+        </div>
+        <div class="chat-shell">
+          <div id="chat-log" class="chat-log"></div>
+          <div class="input-area">
+            <div class="input-row">
+              <textarea id="user-input" placeholder="Speak in-character, give an action, or describe your intention..."></textarea>
+              <div class="button-column">
+                <button id="roll-btn" class="secondary" type="button">
+                  🎲 d20
+                </button>
+                <button id="send-btn" type="button">
+                  ➤ Send
+                </button>
+              </div>
+            </div>
+            <div class="mini-row">
+              <div>
+                <span id="status-dot" class="status-dot idle"></span>
+                <span id="status-text">Idle</span>
+              </div>
+              <div class="pill">
+                <code>Model: GLM-4.6V-Flash</code>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Right: Config and character -->
+      <section class="panel">
+        <div class="panel-title">
+          <span>World Setup & Character Sheet</span>
+          <span class="small">Fill this once, then press Begin LARP</span>
+        </div>
+
+        <!-- API & high-level config -->
+        <div class="sidebar-section">
+          <h3><span>Connection</span> & Mode</h3>
+          <div class="config-grid">
+            <div class="field">
+              <label for="api-key">API key</label>
+              <input id="api-key" type="password" autocomplete="off"
+                     placeholder="Paste GLM-4.6V-Flash key here" />
+            </div>
+            <div class="field">
+              <label for="setting-select">Setting</label>
+              <select id="setting-select">
+                <option value="A rain-slicked, neon-lit city filled with masked factions and secret rites.">
+                  Neon ritual city
+                </option>
+                <option value="A resistance cell beneath an occupied sky, moving through tunnels, checkpoints, and safe houses.">
+                  Underground resistance
+                </option>
+                <option value="A wandering caravan across shifting desert, where relics and spirits shape every encounter.">
+                  Desert caravan
+                </option>
+                <option value="A half-ruined cathedral-city built on the bones of empires, filled with scholars, heretics, and quiet miracles.">
+                  Cathedral city
+                </option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="char-name">Character name</label>
+              <input id="char-name" type="text" placeholder="E.g. Layla, Idris, Corin..." />
+            </div>
+            <div class="field">
+              <label for="char-archetype">Archetype</label>
+              <input id="char-archetype" type="text" placeholder="E.g. Scout, Mystic, Agitator..." />
+            </div>
+          </div>
+
+          <div class="slider-row">
+            <span>Temperature</span>
+            <input id="temp-slider" type="range" min="0.2" max="1.4" step="0.05" value="0.95" />
+            <span id="temp-label">0.95</span>
+          </div>
+
+          <div class="button-row space-between">
+            <span class="hint">
+              Save file as <strong>larp.html</strong>, open in a browser, paste key, then begin.
+            </span>
+            <div class="button-row">
+              <button id="randomize-stats-btn" class="secondary" type="button">🎲 Stats</button>
+              <button id="start-btn" type="button">▶ Begin LARP</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Character sheet -->
+        <div class="sidebar-section">
+          <h3><span>Character</span> Sheet</h3>
+          <div class="subgrid">
+            <div class="stat-input">
+              <span class="stat-label">Might</span>
+              <input id="stat-might" type="number" class="small-input" value="10" />
+            </div>
+            <div class="stat-input">
+              <span class="stat-label">Insight</span>
+              <input id="stat-insight" type="number" class="small-input" value="10" />
+            </div>
+            <div class="stat-input">
+              <span class="stat-label">Charm</span>
+              <input id="stat-charm" type="number" class="small-input" value="10" />
+            </div>
+            <div class="stat-input">
+              <span class="stat-label">Resolve</span>
+              <input id="stat-resolve" type="number" class="small-input" value="10" />
+            </div>
+          </div>
+          <div class="small-row">
+            <div class="field inline">
+              <label for="char-hp">HP</label>
+              <input id="char-hp" type="number" value="10" />
+            </div>
+            <div class="field inline">
+              <label for="char-stress">Stress</label>
+              <input id="char-stress" type="number" value="0" />
+            </div>
+            <div class="button-row left">
+              <button id="rest-btn" class="secondary" type="button">🌙 Rest</button>
+            </div>
+          </div>
+          <div class="field">
+            <label for="inventory">Inventory</label>
+            <textarea id="inventory" placeholder="Simple clothes, small blade, worn satchel, one treasured item..."></textarea>
+          </div>
+        </div>
+
+        <!-- Mechanics & session tools -->
+        <div class="sidebar-section grow">
+          <h3><span>Mechanics</span> & Log Tools</h3>
+          <div class="side-row">
+            <span>
+              <strong>d20 binding</strong><br />
+              <span class="note">
+                When you press the d20 button, the client sends a structured roll line for the next risky action.
+              </span>
+            </span>
+          </div>
+          <div class="side-row">
+            <span class="pill-soft">
+              <span class="die">🎲</span>
+              <span>d20: 1–5 crisis, 6–10 setback, 11–15 mixed, 16–19 strong, 20 glorious</span>
+            </span>
+          </div>
+          <div class="side-row">
+            <span class="note">
+              The model receives your sheet, setting, inventory, and dice lines inside a dense system message, then steers scenes, choices, and consequences from there.
+            </span>
+          </div>
+          <div class="button-row space-between">
+            <div class="button-row left">
+              <button id="export-btn" class="secondary" type="button">📄 Export log</button>
+            </div>
+            <div class="button-row">
+              <button id="clear-btn" class="danger" type="button">⟲ Clear session</button>
+            </div>
+          </div>
+          <div class="note">
+            <span class="heart">❤</span> The engine aims for story-first play: vivid scenes, grounded stakes, and respect for your limits. You can always type out-of-character guidance such as "slow the intensity" or "stay cosy this scene".
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    const chatLogEl = document.getElementById("chat-log");
+    const userInputEl = document.getElementById("user-input");
+    const sendBtn = document.getElementById("send-btn");
+    const rollBtn = document.getElementById("roll-btn");
+    const startBtn = document.getElementById("start-btn");
+    const exportBtn = document.getElementById("export-btn");
+    const clearBtn = document.getElementById("clear-btn");
+    const randomizeStatsBtn = document.getElementById("randomize-stats-btn");
+    const restBtn = document.getElementById("rest-btn");
+    const tempSlider = document.getElementById("temp-slider");
+    const tempLabel = document.getElementById("temp-label");
+    const statusDot = document.getElementById("status-dot");
+    const statusText = document.getElementById("status-text");
+
+    const apiKeyInput = document.getElementById("api-key");
+    const settingSelect = document.getElementById("setting-select");
+    const charNameInput = document.getElementById("char-name");
+    const charArchetypeInput = document.getElementById("char-archetype");
+
+    const statMightInput = document.getElementById("stat-might");
+    const statInsightInput = document.getElementById("stat-insight");
+    const statCharmInput = document.getElementById("stat-charm");
+    const statResolveInput = document.getElementById("stat-resolve");
+    const charHpInput = document.getElementById("char-hp");
+    const charStressInput = document.getElementById("char-stress");
+    const inventoryInput = document.getElementById("inventory");
+
+    const state = {
+      messages: [],
+      systemPrompt: "",
+      sessionActive: false,
+    };
+
+    function setLoading(loading) {
+      if (loading) {
+        statusDot.classList.remove("idle");
+        statusText.innerText = "GLM thinking...";
+        sendBtn.disabled = true;
+        rollBtn.disabled = true;
+        startBtn.disabled = true;
+      } else {
+        statusDot.classList.add("idle");
+        statusText.innerText = "Idle";
+        sendBtn.disabled = false;
+        rollBtn.disabled = false;
+        startBtn.disabled = false;
+      }
+    }
+
+    function scrollChatToEnd() {
+      chatLogEl.scrollTop = chatLogEl.scrollHeight;
+    }
+
+    function addMessage(role, text) {
+      const wrapper = document.createElement("div");
+      wrapper.classList.add("chat-message", `role-${role}`);
+
+      if (role === "user" || role === "assistant") {
+        const avatar = document.createElement("div");
+        avatar.classList.add("avatar");
+        avatar.textContent = role === "user" ? "You" : "GM";
+        wrapper.appendChild(avatar);
+      }
+
+      const bubble = document.createElement("div");
+      bubble.classList.add("bubble");
+      bubble.innerText = text;
+
+      if (role === "user") wrapper.classList.add("role-user");
+      if (role === "assistant") wrapper.classList.add("role-assistant");
+      if (role === "system") wrapper.classList.add("role-system");
+
+      wrapper.appendChild(bubble);
+      chatLogEl.appendChild(wrapper);
+      scrollChatToEnd();
+    }
+
+    function readCharacterSheet() {
+      const name = charNameInput.value.trim() || "Unnamed traveler";
+      const archetype = charArchetypeInput.value.trim() || "Wanderer";
+      const settingText = settingSelect.value;
+
+      const stats = {
+        might: Number(statMightInput.value) || 10,
+        insight: Number(statInsightInput.value) || 10,
+        charm: Number(statCharmInput.value) || 10,
+        resolve: Number(statResolveInput.value) || 10,
+        hp: Number(charHpInput.value) || 10,
+        stress: Number(charStressInput.value) || 0,
+        inventory: inventoryInput.value.trim() || "Plain clothes, worn satchel, simple blade, one treasured token",
+      };
+
+      return { name, archetype, settingText, stats };
+    }
+
+    function buildSystemPrompt() {
+      const { name, archetype, settingText, stats } = readCharacterSheet();
+
+      const sheetSummary = `
+Character name: ${name}
+Archetype or role: ${archetype}
+
+Core stats:
+- Might: ${stats.might}
+- Insight: ${stats.insight}
+- Charm: ${stats.charm}
+- Resolve: ${stats.resolve}
+
+Vital track:
+- Hit points: ${stats.hp}
+- Stress: ${stats.stress}
+
+Inventory: ${stats.inventory}
+
+Setting:
+${settingText}
+`;
+
+      const rules = `
+You act as a live action story guide for a single player in a reactive world.
+
+Goals:
+- Keep immersion vivid and grounded.
+- Drive story through scenes, choices, and consequences.
+- Respect player limits and emotional safety cues.
+
+Player and sheet:
+${sheetSummary}
+
+Style rules:
+1. Use second person for the player: "you".
+2. Keep replies within 4–8 short paragraphs.
+3. After each scene, present two to four numbered options and also invite freeform actions.
+4. Track hidden values for hit points, stress, resources, and reputation across the session.
+5. At the end of each reply, show mechanical changes under a short heading "Status" with bullet points.
+6. When the client sends a line such as [ROLL d20 = 14], treat that value as the outcome for the next risky action.
+
+Dice guidance:
+- Very low result: severe trouble, harm, or serious twist.
+- Low result: setback with meaningful price.
+- Middle result: mixed outcome, both gain and cost.
+- High result: strong success with vivid advantage.
+- Top result: glorious success, big advantage, potential shift in the wider situation.
+
+Story tone:
+- Lean toward grounded realism with flashes of the uncanny.
+- Keep sensory detail rich and focused on what the player perceives.
+- Honour past events, items, and NPCs with consistent memory.
+
+Session flow:
+- Begin with a strong opening scene that expresses setting and character together.
+- Always end with clear choices and open invitation for free action.
+`;
+
+      return rules.trim();
+    }
+
+    function rebuildSystemPrompt() {
+      state.systemPrompt = buildSystemPrompt();
+    }
+
+    function clearSession() {
+      state.messages = [];
+      state.sessionActive = false;
+      chatLogEl.innerHTML = "";
+      addMessage("system", "Session cleared. Configure sheet and press Begin LARP for a fresh run.");
+    }
+
+    async function callGLM(apiKey, messages, temperature) {
+      const url = "https://api.z.ai/api/paas/v4/chat/completions";
+
+      const payload = {
+        model: "GLM-4.6V-Flash",
+        messages,
+        temperature: temperature,
+        max_tokens: 800,
+      };
+
+      const response = await fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer " + apiKey,
+        },
+        body: JSON.stringify(payload),
+      });
+
+      if (!response.ok) {
+        const text = await response.text();
+        throw new Error("HTTP " + response.status + ": " + text);
+      }
+
+      const data = await response.json();
+      const choice = data.choices && data.choices[0];
+      const content = choice && choice.message && choice.message.content;
+      return content || "[Empty reply from model]";
+    }
+
+    async function sendToModel(userText) {
+      const apiKey = apiKeyInput.value.trim();
+      if (!apiKey) {
+        alert("Please paste your GLM-4.6V-Flash key first.");
+        return;
+      }
+
+      if (!state.systemPrompt) {
+        rebuildSystemPrompt();
+      }
+
+      if (!state.sessionActive) {
+        state.sessionActive = true;
+        addMessage("system", "Session started. The world comes into view...");
+      }
+
+      const userMsg = { role: "user", content: userText };
+      state.messages.push(userMsg);
+      addMessage("user", userText);
+
+      setLoading(true);
+      try {
+        const temperature = Number(tempSlider.value) || 0.95;
+        const messagesForApi = [
+          { role: "system", content: state.systemPrompt },
+          ...state.messages,
+        ];
+
+        const reply = await callGLM(apiKey, messagesForApi, temperature);
+        const assistantMsg = { role: "assistant", content: reply };
+        state.messages.push(assistantMsg);
+        addMessage("assistant", reply);
+      } catch (err) {
+        console.error(err);
+        addMessage("system", "API call failed. Check console output and key, then try again.");
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    function handleSend() {
+      const text = userInputEl.value.trim();
+      if (!text) return;
+      userInputEl.value = "";
+      sendToModel(text);
+    }
+
+    function handleKeydown(event) {
+      if (event.key === "Enter" && !event.shiftKey) {
+        event.preventDefault();
+        handleSend();
+      }
+    }
+
+    function rollD20() {
+      const roll = Math.floor(Math.random() * 20) + 1;
+      const lineForModel = `[ROLL d20 = ${roll}]`;
+      const displayLine = `Client roll: d20 ➝ ${roll}`;
+
+      addMessage("system", displayLine);
+      state.messages.push({ role: "user", content: lineForModel });
+    }
+
+    function randomizeStats() {
+      function rollStat() {
+        const rolls = [];
+        for (let i = 0; i < 3; i++) {
+          rolls.push(Math.floor(Math.random() * 6) + 1);
+        }
+        rolls.sort((a, b) => b - a);
+        return rolls[0] + rolls[1] + 2; // slightly heroic curve
+      }
+
+      statMightInput.value = rollStat();
+      statInsightInput.value = rollStat();
+      statCharmInput.value = rollStat();
+      statResolveInput.value = rollStat();
+
+      charHpInput.value = 10 + Math.floor(Math.random() * 6);
+      charStressInput.value = 0;
+
+      addMessage("system", "Character stats refreshed with a quick dice spread.");
+      rebuildSystemPrompt();
+    }
+
+    function takeRest() {
+      const currentHp = Number(charHpInput.value) || 0;
+      const currentStress = Number(charStressInput.value) || 0;
+      charHpInput.value = currentHp + 2;
+      charStressInput.value = Math.max(0, currentStress - 2);
+      addMessage("system", "You take a quiet rest. HP rises a little and stress eases.");
+      rebuildSystemPrompt();
+    }
+
+    function startSession() {
+      rebuildSystemPrompt();
+      state.messages = [];
+      state.sessionActive = true;
+      chatLogEl.innerHTML = "";
+      addMessage("system", "Session created. Say how your character enters the scene, or ask for an opening framing.");
+    }
+
+    function exportLog() {
+      const lines = [];
+      for (const msg of state.messages) {
+        const role = msg.role.toUpperCase();
+        lines.push(`=== ${role} ===`);
+        lines.push(msg.content);
+        lines.push("");
+      }
+      const blob = new Blob([lines.join("\n")], { type: "text/plain;charset=utf-8" });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = "larp_session_log.txt";
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+    }
+
+    // Event wiring
+    sendBtn.addEventListener("click", handleSend);
+    userInputEl.addEventListener("keydown", handleKeydown);
+    rollBtn.addEventListener("click", rollD20);
+    startBtn.addEventListener("click", startSession);
+    exportBtn.addEventListener("click", exportLog);
+    clearBtn.addEventListener("click", clearSession);
+    randomizeStatsBtn.addEventListener("click", randomizeStats);
+    restBtn.addEventListener("click", takeRest);
+
+    tempSlider.addEventListener("input", () => {
+      tempLabel.innerText = tempSlider.value;
+    });
+
+    // Initial gentle system line
+    addMessage(
+      "system",
+      "Welcome to the LARP engine. Fill in your character and setting, paste your GLM-4.6V-Flash key, then press Begin LARP."
+    );
+  </script>
+</body>
+</html>
+```
