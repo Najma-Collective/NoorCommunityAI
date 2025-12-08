@@ -1,13 +1,3 @@
-Here is the modified code.
-
-**Key Changes Made:**
-1.  **Welcome Modal:** Updated to ask for a **Groq API Key** and linked to the Groq console.
-2.  **Model Configuration:** Switched the default model to `llama-3.3-70b-versatile` (excellent speed/performance balance).
-3.  **API Endpoint:** Changed from Google's endpoint to `https://api.groq.com/openai/v1/chat/completions`.
-4.  **Message Formatting:** Converted the message history format from Google's style (`user`/`model`) to the standard OpenAI/Groq style (`user`/`assistant`) and moved the System Prompt into the messages array.
-5.  **Context Handling:** Since we removed the Google Embedding API, I modified the context system to feed the full lesson plan into the system prompt (Groq models have large context windows, so this works better than complex vector search for this specific use case).
-
-```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
