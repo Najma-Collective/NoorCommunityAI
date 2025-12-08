@@ -1,1119 +1,2937 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>LARP Chatbot – GLM-4.6V-Flash</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <style>
-    :root {
-      --bg: #050608;
-      --bg-elevated: #11131a;
-      --bg-softer: #181b25;
-      --accent: #7ce7c8;
-      --accent-soft: rgba(124, 231, 200, 0.15);
-      --text-main: #f5f5f7;
-      --text-muted: #a5a7b8;
-      --border-subtle: #2b2f3c;
-      --danger: #ff6b81;
-      --shadow-soft: 0 18px 45px rgba(0, 0, 0, 0.6);
-      --radius-lg: 18px;
-      --radius-xl: 24px;
-      --radius-full: 999px;
-    }
-
-    * {
-      box-sizing: border-box;
-    }
-
-    body {
-      margin: 0;
-      padding: 0;
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      background: radial-gradient(circle at top, #141624, #050608 55%);
-      color: var(--text-main);
-      display: flex;
-      align-items: stretch;
-      justify-content: center;
-      min-height: 100vh;
-    }
-
-    .app {
-      max-width: 1180px;
-      width: 100%;
-      margin: 24px;
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
-    }
-
-    header {
-      padding: 16px 20px;
-      border-radius: var(--radius-xl);
-      background: linear-gradient(120deg, rgba(124, 231, 200, 0.12), rgba(40, 42, 63, 0.9));
-      box-shadow: var(--shadow-soft);
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-    }
-
-    header .title-block {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-
-    .orb {
-      width: 32px;
-      height: 32px;
-      border-radius: 50%;
-      background: radial-gradient(circle at 30% 20%, #ffffff, #7ce7c8 45%, #141624 70%);
-      box-shadow: 0 0 18px rgba(124, 231, 200, 0.65);
-      animation: pulse 3s ease-in-out infinite;
-    }
-
-    @keyframes pulse {
-      0%, 100% { transform: scale(1); box-shadow: 0 0 16px rgba(124, 231, 200, 0.5); }
-      50% { transform: scale(1.04); box-shadow: 0 0 24px rgba(124, 231, 200, 0.8); }
-    }
-
-    header h1 {
-      font-size: 1.25rem;
-      margin: 0;
-      letter-spacing: 0.03em;
-    }
-
-    header p {
-      margin: 0;
-      font-size: 0.85rem;
-      color: var(--text-muted);
-    }
-
-    .tagline {
-      font-size: 0.8rem;
-      padding: 6px 10px;
-      border-radius: var(--radius-full);
-      border: 1px solid rgba(245, 245, 247, 0.2);
-      background: rgba(5, 6, 8, 0.4);
-      color: var(--text-muted);
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-    }
-
-    .tagline span.emoji {
-      font-size: 0.9rem;
-    }
-
-    main {
-      display: grid;
-      grid-template-columns: minmax(0, 2.2fr) minmax(280px, 1.2fr);
-      gap: 16px;
-      align-items: stretch;
-    }
-
-    @media (max-width: 900px) {
-      main {
-        grid-template-columns: 1fr;
-      }
-    }
-
-    .panel {
-      background: radial-gradient(circle at top left, rgba(124, 231, 200, 0.12), rgba(9, 10, 14, 0.9));
-      border-radius: var(--radius-xl);
-      border: 1px solid var(--border-subtle);
-      box-shadow: var(--shadow-soft);
-      padding: 14px 16px 16px;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      min-height: 0;
-    }
-
-    .panel-title {
-      font-size: 0.95rem;
-      font-weight: 600;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 8px;
-    }
-
-    .panel-title span.small {
-      font-size: 0.75rem;
-      color: var(--text-muted);
-      font-weight: 400;
-    }
-
-    .panel + .panel {
-      margin-top: 0;
-    }
-
-    .config-grid {
-      display: grid;
-      grid-template-columns: repeat(4, minmax(0, 1fr));
-      gap: 8px;
-    }
-
-    @media (max-width: 900px) {
-      .config-grid {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-      }
-    }
-
-    .field {
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-    }
-
-    .field label {
-      font-size: 0.7rem;
-      text-transform: uppercase;
-      letter-spacing: 0.09em;
-      color: var(--text-muted);
-    }
-
-    .field input,
-    .field select,
-    .field textarea {
-      background: rgba(5, 6, 8, 0.8);
-      border-radius: 10px;
-      border: 1px solid rgba(88, 94, 118, 0.9);
-      padding: 6px 9px;
-      font-size: 0.8rem;
-      color: var(--text-main);
-      outline: none;
-      transition: border-color 0.16s ease, box-shadow 0.16s ease, background-color 0.16s ease;
-    }
-
-    .field input:focus,
-    .field select:focus,
-    .field textarea:focus {
-      border-color: var(--accent);
-      box-shadow: 0 0 0 1px rgba(124, 231, 200, 0.7);
-      background: rgba(10, 12, 17, 0.95);
-    }
-
-    .field input::placeholder,
-    .field textarea::placeholder {
-      color: rgba(165, 167, 184, 0.75);
-    }
-
-    .field textarea {
-      resize: vertical;
-      min-height: 64px;
-      max-height: 140px;
-    }
-
-    .field.inline {
-      flex-direction: row;
-      align-items: center;
-    }
-
-    .field.inline label {
-      text-transform: none;
-      letter-spacing: 0;
-      font-size: 0.75rem;
-      margin-right: 6px;
-    }
-
-    .field.inline input[type="number"] {
-      width: 64px;
-    }
-
-    .subgrid {
-      display: grid;
-      grid-template-columns: repeat(4, minmax(0, 1fr));
-      gap: 6px;
-    }
-
-    .stat-label {
-      font-size: 0.7rem;
-      color: var(--text-muted);
-    }
-
-    .stat-value {
-      font-weight: 600;
-    }
-
-    .stat-input {
-      display: flex;
-      flex-direction: column;
-      gap: 3px;
-    }
-
-    .small-row {
-      display: flex;
-      gap: 6px;
-      align-items: center;
-      justify-content: space-between;
-    }
-
-    .small-row .field {
-      flex: 1;
-    }
-
-    button {
-      border-radius: var(--radius-full);
-      border: 1px solid rgba(124, 231, 200, 0.6);
-      background: radial-gradient(circle at top, var(--accent), #0c1613);
-      color: #02110b;
-      padding: 7px 14px;
-      font-size: 0.8rem;
-      font-weight: 600;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 6px;
-      box-shadow: 0 10px 24px rgba(124, 231, 200, 0.4);
-      transition: transform 0.1s ease, box-shadow 0.1s ease, background 0.16s ease, border-color 0.16s ease;
-      white-space: nowrap;
-    }
-
-    button.secondary {
-      background: rgba(9, 10, 14, 0.9);
-      color: var(--text-main);
-      border-color: rgba(88, 94, 118, 0.9);
-      box-shadow: 0 8px 18px rgba(0, 0, 0, 0.6);
-    }
-
-    button.danger {
-      background: radial-gradient(circle at top, var(--danger), #2b0710);
-      border-color: rgba(255, 107, 129, 0.9);
-      color: #230206;
-    }
-
-    button:disabled {
-      opacity: 0.55;
-      cursor: default;
-      box-shadow: none;
-    }
-
-    button:hover:enabled {
-      transform: translateY(-1px);
-      box-shadow: 0 14px 30px rgba(124, 231, 200, 0.65);
-    }
-
-    button.secondary:hover:enabled {
-      box-shadow: 0 12px 26px rgba(0, 0, 0, 0.8);
-      border-color: rgba(124, 231, 200, 0.55);
-    }
-
-    button.danger:hover:enabled {
-      box-shadow: 0 12px 28px rgba(255, 107, 129, 0.55);
-    }
-
-    button:active:enabled {
-      transform: translateY(0);
-      box-shadow: 0 8px 18px rgba(0, 0, 0, 0.6);
-    }
-
-    .button-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      align-items: center;
-      justify-content: flex-end;
-      margin-top: 4px;
-    }
-
-    .button-row.left {
-      justify-content: flex-start;
-    }
-
-    .button-row.space-between {
-      justify-content: space-between;
-    }
-
-    .hint {
-      font-size: 0.7rem;
-      color: var(--text-muted);
-    }
-
-    .hint strong {
-      color: var(--accent);
-      font-weight: 500;
-    }
-
-    .chat-shell {
-      flex: 1;
-      min-height: 0;
-      display: flex;
-      flex-direction: column;
-      border-radius: var(--radius-lg);
-      overflow: hidden;
-      background: radial-gradient(circle at top, rgba(20, 23, 36, 0.9), rgba(5, 6, 8, 0.98));
-      border: 1px solid rgba(50, 54, 73, 0.95);
-    }
-
-    .chat-log {
-      flex: 1;
-      min-height: 0;
-      padding: 14px 14px 10px;
-      overflow-y: auto;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      scroll-behavior: smooth;
-    }
-
-    .chat-message {
-      display: flex;
-      gap: 8px;
-      align-items: flex-start;
-      max-width: 100%;
-    }
-
-    .bubble {
-      max-width: 100%;
-      padding: 8px 10px;
-      border-radius: 14px;
-      font-size: 0.8rem;
-      line-height: 1.4;
-      white-space: pre-wrap;
-      word-wrap: break-word;
-      word-break: break-word;
-    }
-
-    .role-user .bubble {
-      margin-left: auto;
-      border-bottom-right-radius: 4px;
-      background: linear-gradient(135deg, rgba(124, 231, 200, 0.18), rgba(9, 10, 14, 0.95));
-      border: 1px solid rgba(124, 231, 200, 0.8);
-    }
-
-    .role-assistant .bubble {
-      margin-right: auto;
-      border-bottom-left-radius: 4px;
-      background: rgba(14, 16, 24, 0.96);
-      border: 1px solid rgba(57, 61, 82, 0.95);
-    }
-
-    .role-system .bubble {
-      margin: 0 auto;
-      font-size: 0.72rem;
-      color: var(--text-muted);
-      background: rgba(8, 10, 16, 0.97);
-      border-radius: var(--radius-full);
-      border: 1px dashed rgba(88, 94, 118, 0.9);
-      padding-inline: 12px;
-    }
-
-    .role-user .avatar,
-    .role-assistant .avatar {
-      flex-shrink: 0;
-      width: 24px;
-      height: 24px;
-      border-radius: 999px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 0.7rem;
-      font-weight: 600;
-    }
-
-    .role-user .avatar {
-      background: radial-gradient(circle at 30% 20%, #ffffff, #7ce7c8 45%, #12141f 70%);
-      color: #02110b;
-    }
-
-    .role-assistant .avatar {
-      background: radial-gradient(circle at 20% 20%, #ffffff, #9fa4ff 45%, #1a1d2b 70%);
-      color: #050608;
-    }
-
-    .input-area {
-      border-top: 1px solid rgba(54, 58, 79, 0.9);
-      padding: 10px;
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-    }
-
-    .input-row {
-      display: flex;
-      gap: 8px;
-      align-items: flex-end;
-    }
-
-    .input-row textarea {
-      flex: 1;
-      min-height: 52px;
-      max-height: 120px;
-      border-radius: 12px;
-      padding: 8px 10px;
-      font-size: 0.8rem;
-      border: 1px solid rgba(88, 94, 118, 0.9);
-      background: rgba(5, 6, 8, 0.9);
-      color: var(--text-main);
-      outline: none;
-      resize: vertical;
-    }
-
-    .input-row textarea:focus {
-      border-color: var(--accent);
-      box-shadow: 0 0 0 1px rgba(124, 231, 200, 0.7);
-      background: rgba(10, 12, 17, 0.96);
-    }
-
-    .input-row button {
-      height: 36px;
-      padding-inline: 12px;
-    }
-
-    .mini-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 8px;
-      font-size: 0.7rem;
-      color: var(--text-muted);
-    }
-
-    .mini-row .status-dot {
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      background: var(--accent);
-      box-shadow: 0 0 10px rgba(124, 231, 200, 0.9);
-      margin-right: 4px;
-    }
-
-    .mini-row .status-dot.idle {
-      background: var(--text-muted);
-      box-shadow: none;
-    }
-
-    .pill {
-      padding: 4px 8px;
-      border-radius: 999px;
-      border: 1px solid rgba(88, 94, 118, 0.9);
-      background: rgba(5, 6, 8, 0.95);
-    }
-
-    .pill code {
-      font-size: 0.7rem;
-      color: var(--accent);
-    }
-
-    .sidebar-section {
-      border-radius: var(--radius-lg);
-      background: rgba(9, 10, 15, 0.96);
-      border: 1px solid rgba(46, 50, 69, 0.9);
-      padding: 10px 11px;
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
-
-    .sidebar-section h3 {
-      margin: 0;
-      font-size: 0.8rem;
-      text-transform: uppercase;
-      letter-spacing: 0.12em;
-      color: var(--text-muted);
-    }
-
-    .sidebar-section h3 span {
-      color: var(--accent);
-    }
-
-    .side-row {
-      display: flex;
-      gap: 8px;
-      align-items: center;
-      justify-content: space-between;
-      font-size: 0.75rem;
-      color: var(--text-muted);
-    }
-
-    .side-row strong {
-      color: var(--text-main);
-      font-weight: 600;
-    }
-
-    .pill-soft {
-      padding: 3px 8px;
-      border-radius: 999px;
-      background: var(--accent-soft);
-      border: 1px solid rgba(124, 231, 200, 0.65);
-      color: var(--accent);
-      font-size: 0.7rem;
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
-    }
-
-    .pill-soft span.die {
-      font-weight: 700;
-      font-size: 0.8rem;
-    }
-
-    .note {
-      font-size: 0.7rem;
-      color: var(--text-muted);
-      line-height: 1.3;
-    }
-
-    .note span.heart {
-      color: var(--accent);
-    }
-
-    .grow {
-      flex: 1;
-    }
-
-    .small-input {
-      width: 60px;
-    }
-
-    .slider-row {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      font-size: 0.7rem;
-      color: var(--text-muted);
-    }
-
-    .slider-row input[type="range"] {
-      flex: 1;
-      accent-color: var(--accent);
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Noor - AI Tutor</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Questrial&family=Marcellus&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <!-- Markdown Library -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <!-- PDF Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+    <style>
+        /* =====================================================================
+           DESIGN SYSTEM
+           ===================================================================== */
+        :root {
+            /* Palette - Sage Theme (Default) */
+            --primary-color: #3d5a3d;       /* Deep forest green */
+            --secondary-color: #7a9b7a;     /* Sage green */
+            --accent-color: #e67e22;        /* Warm orange */
+            --bg-color: #f5f1e8;            /* Cream */
+            --glass-bg: rgba(255, 255, 255, 0.9);
+            --glass-border: rgba(255, 255, 255, 0.9);
+            --text-dark: #2a3328;
+
+            /* Text Highlights (The Key) */
+            --hl-vocab-bg: #ffe8cc;         /* Light orange for Vocab */
+            --hl-vocab-text: #d35400;       /* Dark orange */
+            --hl-grammar-bg: #d4e8d4;       /* Light sage for Grammar */
+            --hl-grammar-text: #3d5a3d;     /* Deep green */
+            --hl-alert-bg: #fce8e8;         /* Soft Rose for Correction */
+            --hl-alert-text: #8b3a3a;       /* Dark red */   
+
+            /* Fonts */
+            --font-display: "Marcellus", serif; 
+            --font-body: "Nunito", sans-serif;
+            --font-ui: "Questrial", sans-serif;
+        }
+
+        /* Ocean Theme */
+        body.theme-ocean {
+            --primary-color: #0d4d4d;       /* Dark teal */
+            --secondary-color: #2a7676;     /* Teal */
+            --accent-color: #e67e22;        /* Warm orange */
+            --hl-vocab-bg: #ffe8cc;
+            --hl-vocab-text: #d35400;       /* Dark orange */
+            --hl-grammar-bg: #d4f1f1;       /* Light teal */
+            --hl-grammar-text: #0d4d4d;     /* Dark teal */
+            --hl-alert-text: #8b3a3a;       /* Dark red */
+            --bg-color: #f0f5f5;            /* Light teal cream */
+        }
+        
+        *, *::before, *::after { box-sizing: border-box; }
+
+        body {
+            margin: 0; height: 100dvh; font-family: var(--font-body);
+            color: var(--text-dark); font-size: 16px;
+            overflow: hidden; background: var(--bg-color); transition: background 0.8s ease;
+        }
+
+        /* Animation Canvas */
+        #wave-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; opacity: 0.5; }
+
+        #app-wrapper {
+            position: relative; z-index: 1; display: flex; align-items: center; justify-content: center;
+            height: 100%; padding: 2vh;
+        }
+
+        #activity-container {
+            width: 100%; max-width: 1400px; height: 96vh;
+            display: grid; grid-template-columns: 1fr 340px; grid-template-rows: auto 1fr auto;
+            background: var(--glass-bg); backdrop-filter: blur(40px); -webkit-backdrop-filter: blur(40px);
+            border-radius: 32px; border: 1px solid var(--glass-border);
+            box-shadow: 0 30px 90px -20px rgba(42, 51, 40, 0.15); overflow: hidden;
+        }
+
+        /* --- HEADER --- */
+        .chat-header {
+            grid-column: 1 / -1; padding: 1.2rem 2.5rem;
+            background: rgba(255,255,255,0.4); border-bottom: 1px solid rgba(0,0,0,0.03);
+            display: flex; align-items: center; justify-content: space-between;
+        }
+        
+        .header-left { display: flex; align-items: center; gap: 1.2rem; }
+        .header-info h1 { font-family: var(--font-display); margin: 0; font-size: 1.4rem; color: var(--primary-color); }
+        .header-status { font-family: var(--font-ui); font-size: 0.8rem; color: var(--secondary-color); font-weight: 700; text-transform: uppercase; letter-spacing: 1px; }
+
+        .avatar-wrapper {
+            position: relative; width: 60px; height: 60px;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .avatar-circle {
+            width: 100%; height: 100%; border-radius: 50%;
+            background: linear-gradient(45deg, #667eea 0%, #764ba2 25%, #f093fb 50%, #4facfe 75%, #00f2fe 100%);
+            background-size: 400% 400%;
+            position: relative; z-index: 2;
+            box-shadow: 0 8px 32px rgba(102, 126, 234, 0.4),
+                        0 4px 16px rgba(246, 147, 251, 0.3),
+                        inset 0 2px 6px rgba(255,255,255,0.4),
+                        inset 0 -2px 6px rgba(0,0,0,0.1);
+            animation: orbFloat 6s ease-in-out infinite, gradientShift 12s ease infinite;
+            transition: all 0.3s ease;
+        }
+        .avatar-circle::before {
+            content: '';
+            position: absolute;
+            inset: 4px;
+            border-radius: 50%;
+            background: radial-gradient(circle at 35% 35%, rgba(255,255,255,0.5), transparent 50%);
+            pointer-events: none;
+            animation: shimmer 3s ease-in-out infinite;
+        }
+        .avatar-circle::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: 50%;
+            background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, transparent 50%, rgba(0,0,0,0.05) 100%);
+            pointer-events: none;
+        }
+        .avatar-aura {
+            position: absolute; inset: -8px; border-radius: 50%;
+            background: radial-gradient(circle, rgba(102, 126, 234, 0.6) 0%, rgba(246, 147, 251, 0.4) 50%, rgba(79, 172, 254, 0.2) 100%);
+            opacity: 0.5; z-index: 1;
+            animation: breathe 5s ease-in-out infinite;
+            filter: blur(12px);
+        }
+
+        /* Avatar Animations */
+        .avatar-wrapper.listening .avatar-aura {
+            animation: pulseFast 0.8s infinite;
+            background: radial-gradient(circle, rgba(212, 163, 115, 0.8) 0%, rgba(141, 163, 134, 0.6) 100%);
+            opacity: 0.8;
+            filter: blur(16px);
+        }
+        .avatar-wrapper.listening .avatar-circle {
+            animation: orbFloat 6s ease-in-out infinite, gradientShift 3s ease infinite, inputPulse 1.5s ease-in-out infinite;
+        }
+        .avatar-wrapper.speaking .avatar-circle {
+            animation: speakPulse 0.6s ease-in-out infinite, gradientShift 8s ease infinite;
+            box-shadow: 0 8px 40px rgba(102, 126, 234, 0.6),
+                        0 4px 20px rgba(246, 147, 251, 0.5),
+                        inset 0 2px 6px rgba(255,255,255,0.4);
+        }
+        .avatar-wrapper.typing .avatar-circle {
+            animation: orbFloat 6s ease-in-out infinite, gradientShift 6s ease infinite, typingGlow 2s ease-in-out infinite;
+        }
+
+        @keyframes orbFloat {
+            0%, 100% { transform: translateY(0px) scale(1); }
+            50% { transform: translateY(-4px) scale(1.03); }
+        }
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        @keyframes shimmer {
+            0%, 100% { opacity: 0.5; transform: rotate(0deg); }
+            50% { opacity: 0.8; transform: rotate(10deg); }
+        }
+        @keyframes inputPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.08); }
+        }
+        @keyframes typingGlow {
+            0%, 100% {
+                box-shadow: 0 8px 32px rgba(102, 126, 234, 0.4),
+                            0 4px 16px rgba(246, 147, 251, 0.3);
+            }
+            50% {
+                box-shadow: 0 8px 40px rgba(102, 126, 234, 0.6),
+                            0 4px 24px rgba(246, 147, 251, 0.5);
+            }
+        }
+
+        /* --- CHAT AREA --- */
+        #chat-history {
+            grid-column: 1 / 2; grid-row: 2 / 3;
+            overflow-y: auto; padding: 3rem;
+            display: flex; flex-direction: column; gap: 2rem; scroll-behavior: smooth;
+        }
+
+        .message {
+            max-width: 85%; opacity: 0; 
+            animation: floatIn 0.5s forwards; line-height: 1.7;
+        }
+
+        .message.ai {
+            align-self: flex-start; width: 100%; max-width: 90%;
+            font-size: 1.05rem; color: var(--text-dark);
+        }
+        
+        .message.user {
+            align-self: flex-end; padding: 1rem 1.5rem;
+            color: white; border-radius: 20px 20px 4px 20px;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            box-shadow: 0 8px 20px -5px rgba(92, 107, 83, 0.3);
+        }
+
+        .message.error {
+            align-self: center; background: #ffebee; color: #c62828;
+            padding: 0.5rem 1rem; border-radius: 8px; font-size: 0.9rem;
+        }
+
+        /* --- AI VISUAL COMPONENTS (CARDS & CAROUSELS) --- */
+        
+        /* Carousel Container */
+        .carousel {
+            display: flex; gap: 1.5rem; overflow-x: auto; 
+            padding: 1.5rem 0.5rem; margin: 1rem 0;
+            scroll-snap-type: x mandatory;
+        }
+        .carousel::-webkit-scrollbar { height: 6px; }
+        .carousel::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.1); border-radius: 10px; }
+
+        /* Learning Card */
+        .learning-card {
+            flex: 0 0 260px; scroll-snap-align: center;
+            background: #fff; border-radius: 20px;
+            padding: 1.5rem; position: relative;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            border: 1px solid rgba(255,255,255,0.8);
+            transition: transform 0.3s ease;
+            display: flex; flex-direction: column;
+        }
+        .learning-card:hover { transform: translateY(-5px); }
+        .learning-card h3 { 
+            font-family: var(--font-display); color: var(--primary-color); 
+            margin-top: 0; border-bottom: 2px solid var(--accent-color); padding-bottom: 8px;
+        }
+
+        /* Dialogue Box - Organic Speech Bubble */
+        .dialogue-box {
+            background: linear-gradient(135deg, rgba(255,255,255,0.9) 0%, rgba(248,250,247,0.8) 100%);
+            border-radius: 24px 24px 24px 4px;
+            padding: 1.8rem 2.2rem;
+            margin: 2rem 0;
+            box-shadow: 0 8px 32px rgba(92, 107, 83, 0.12),
+                        inset 0 1px 0 rgba(255,255,255,0.9);
+            position: relative;
+            border: 1px solid rgba(92, 107, 83, 0.08);
+        }
+        .dialogue-box::before {
+            content: '';
+            position: absolute;
+            left: -8px;
+            top: 20px;
+            width: 0;
+            height: 0;
+            border-top: 8px solid transparent;
+            border-bottom: 8px solid transparent;
+            border-right: 8px solid rgba(255,255,255,0.9);
+        }
+        .dialogue-speaker {
+            font-family: var(--font-display);
+            font-size: 1.1rem;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .dialogue-speaker::before {
+            content: '\f086';
+            font-family: 'Font Awesome 6 Free';
+            font-weight: 400;
+            font-size: 1.2rem;
+        }
+        .dialogue-content {
+            line-height: 1.8;
+            color: var(--text-dark);
+        }
+        .dialogue-content p {
+            margin: 0.8rem 0;
+        }
+        .dialogue-content p:first-child {
+            margin-top: 0;
+        }
+        .dialogue-content p:last-child {
+            margin-bottom: 0;
+        }
+        /* Legacy support for old format */
+        .d-line { margin-bottom: 1rem; display: flex; gap: 1rem; }
+        .d-name { font-weight: 800; min-width: 80px; color: var(--primary-color); font-family: var(--font-display); }
+
+        /* Highlights */
+        .hl-vocab { background: var(--hl-vocab-bg); color: var(--hl-vocab-text); padding: 2px 6px; border-radius: 4px; font-weight: 700; border-bottom: 2px solid rgba(0,0,0,0.1); }
+        .hl-grammar { background: var(--hl-grammar-bg); color: var(--hl-grammar-text); padding: 2px 6px; border-radius: 4px; font-weight: 700; border: 1px dashed var(--secondary-color); }
+        .hl-feedback { background: var(--hl-alert-bg); color: var(--hl-alert-text); padding: 2px 6px; border-radius: 4px; text-decoration: underline wavy; }
+
+        /* Metacognitive Widgets */
+        .think-prompt {
+            background: linear-gradient(135deg, #f8f4ff 0%, #ede7f6 100%);
+            border-left: 4px solid #9575cd;
+            padding: 1.5rem;
+            border-radius: 12px;
+            margin: 1.5rem 0;
+            font-style: italic;
+            color: #4a148c;
+            box-shadow: 0 4px 12px rgba(149, 117, 205, 0.1);
+        }
+        .think-prompt strong {
+            font-style: normal;
+            display: block;
+            margin-bottom: 0.5rem;
+            font-family: var(--font-display);
+        }
+
+        .notice-box {
+            background: linear-gradient(135deg, #fff8e1 0%, #ffecb3 100%);
+            border: 2px solid #ffa726;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            color: #e65100;
+            position: relative;
+            box-shadow: 0 4px 12px rgba(255, 167, 38, 0.15);
+        }
+        .notice-box strong {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-family: var(--font-display);
+            font-size: 1.1rem;
+        }
+
+        .success-badge {
+            background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+            border: 2px solid #66bb6a;
+            border-radius: 20px;
+            padding: 0.75rem 1.5rem;
+            margin: 1rem 0;
+            color: #2e7d32;
+            font-weight: 700;
+            display: inline-block;
+            box-shadow: 0 4px 12px rgba(102, 187, 106, 0.2);
+            animation: successPop 0.5s ease-out;
+        }
+
+        @keyframes successPop {
+            0% { transform: scale(0.8); opacity: 0; }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        /* Self-Assessment Widget */
+        .self-check {
+            background: rgba(255, 255, 255, 0.7);
+            border-radius: 16px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            border: 2px solid var(--secondary-color);
+        }
+        .self-check h4 {
+            font-family: var(--font-display);
+            color: var(--primary-color);
+            margin-top: 0;
+        }
+        .confidence-scale {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 1rem;
+            justify-content: space-between;
+        }
+        .confidence-option {
+            flex: 1;
+            padding: 0.75rem;
+            background: #fff;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 0.9rem;
+        }
+        .confidence-option:hover {
+            border-color: var(--accent-color);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        /* Sentence Stems Helper */
+        .sentence-stems {
+            background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+            border-radius: 16px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            border-left: 4px solid #2196f3;
+        }
+        .sentence-stems h4 {
+            font-family: var(--font-display);
+            color: #0d47a1;
+            margin-top: 0;
+            font-size: 1rem;
+        }
+        .stem-option {
+            background: white;
+            padding: 0.75rem 1rem;
+            margin: 0.5rem 0;
+            border-radius: 8px;
+            color: #1565c0;
+            font-style: italic;
+            border-left: 3px solid #42a5f5;
+        }
+
+        /* Progress Indicator Enhancement */
+        .mini-progress {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1rem;
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 12px;
+            margin: 1rem 0;
+            font-size: 0.85rem;
+        }
+        .progress-bar {
+            flex: 1;
+            height: 6px;
+            background: #e0e0e0;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+            transition: width 0.5s ease;
+        }
+
+        /* --- SIDEBAR (NAVIGATOR) --- */
+        #side-panel {
+            grid-column: 2 / 3; grid-row: 2 / 4;
+            background: rgba(255,255,255,0.5); border-left: 1px solid rgba(255,255,255,0.5);
+            display: flex; flex-direction: column; overflow: hidden;
+            backdrop-filter: blur(10px);
+        }
+        
+        .panel-header {
+            padding: 1.5rem; font-family: var(--font-display); font-weight: 700; 
+            color: var(--primary-color); background: rgba(255,255,255,0.3);
+        }
+
+        #tracker-container {
+            flex: 1; overflow-y: auto; padding: 0 1.5rem 1.5rem 1.5rem;
+        }
+        
+        .step-item {
+            position: relative; padding: 0 0 1.5rem 1.5rem;
+            border-left: 2px solid #e0e0e0;
+        }
+        .step-item:last-child { border-left: 2px solid transparent; }
+        .step-dot {
+            position: absolute; left: -7px; top: 0; width: 12px; height: 12px; 
+            border-radius: 50%; background: #e0e0e0; border: 2px solid #fff; transition: all 0.3s;
+        }
+        .step-title { font-size: 0.8rem; color: #999; font-weight: 700; }
+
+        .step-item.active .step-dot { background: var(--accent-color); transform: scale(1.3); }
+        .step-item.active .step-title { color: var(--accent-color); }
+        .step-item.done .step-dot { background: var(--primary-color); }
+        .step-item.done { border-left-color: var(--primary-color); }
+
+        /* Vocabulary Wallet Items */
+        .vocab-item {
+            background: linear-gradient(135deg, rgba(255, 232, 204, 0.3), rgba(255, 245, 230, 0.5));
+            border-left: 3px solid var(--accent-color);
+            border-radius: 8px;
+            padding: 0.75rem;
+            font-size: 0.85rem;
+            transition: all 0.3s ease;
+            animation: vocabSlideIn 0.4s ease-out;
+        }
+        .vocab-item:hover {
+            transform: translateX(4px);
+            box-shadow: 0 4px 12px rgba(230, 126, 34, 0.15);
+        }
+        .vocab-word {
+            font-weight: 700;
+            color: var(--hl-vocab-text);
+            font-size: 0.95rem;
+            display: block;
+            margin-bottom: 0.25rem;
+        }
+        .vocab-context {
+            font-size: 0.75rem;
+            color: #666;
+            font-style: italic;
+            line-height: 1.4;
+        }
+        @keyframes vocabSlideIn {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        /* --- INPUT --- */
+        .input-area {
+            grid-column: 1 / 2; grid-row: 3 / 4;
+            padding: 2rem 3rem; display: flex; gap: 1rem; align-items: flex-end;
+        }
+        
+        .input-wrapper {
+            flex: 1; background: #fff; border-radius: 28px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+            display: flex; align-items: center; padding: 6px 6px 6px 20px;
+        }
+        
+        textarea {
+            width: 100%; border: none; background: transparent;
+            font-family: var(--font-body); font-size: 1rem; outline: none; resize: none; max-height: 120px;
+        }
+
+        button.icon-btn {
+            width: 44px; height: 44px; border-radius: 50%; border: none; background: transparent; 
+            cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s;
+            color: #aaa;
+        }
+        button.icon-btn:hover { background: #f5f5f5; color: var(--primary-color); }
+        
+        #mic-btn.listening { background: var(--hl-alert-text); color: white; animation: pulseRed 1.5s infinite; }
+        #send-btn { width: 48px; height: 48px; background: var(--primary-color); color: white; border-radius: 20px; opacity: 0.9; }
+        #send-btn:hover { opacity: 1; transform: scale(1.05); }
+
+        /* Animations */
+        @keyframes breathe { 0%, 100% { transform: scale(1); opacity: 0.3; } 50% { transform: scale(1.1); opacity: 0.15; } }
+        @keyframes floatIn { from { opacity:0; transform: translateY(10px); } to { opacity:1; transform: translateY(0); } }
+        @keyframes pulseFast { 0% { transform: scale(1); opacity: 0.6; } 100% { transform: scale(1.2); opacity: 0.0; } }
+        @keyframes pulseRed { 0% { box-shadow: 0 0 0 0 rgba(196, 90, 90, 0.7); } 70% { box-shadow: 0 0 0 10px rgba(196, 90, 90, 0); } 100% { box-shadow: 0 0 0 0 rgba(196, 90, 90, 0); } }
+        @keyframes speakPulse { 0% { transform: scale(1); } 100% { transform: scale(1.1); } }
+
+        /* API Modal */
+        #api-modal { position: fixed; inset: 0; background: rgba(240, 242, 239, 0.95); z-index: 999; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(5px); }
+        .modal-box { background: white; padding: 3rem; border-radius: 32px; width: 90%; max-width: 450px; text-align: center; box-shadow: 0 20px 60px rgba(0,0,0,0.1); }
+        .api-input { width: 100%; padding: 14px; margin: 1.5rem 0; border: 2px solid #eee; border-radius: 12px; outline: none; }
+        .start-btn { width: 100%; padding: 16px; background: var(--primary-color); color: white; border: none; border-radius: 99px; font-weight: 700; cursor: pointer; }
+        .upload-trigger-btn { width: 100%; padding: 10px; background: var(--secondary-color); color: white; border: none; border-radius: 12px; font-size: 0.85rem; font-weight: 600; cursor: pointer; transition: all 0.2s ease; }
+        .upload-trigger-btn:hover { background: var(--primary-color); transform: translateY(-1px); }
+
+        /* Mobile Responsive Design */
+        @media (max-width: 1024px) {
+            #activity-container {
+                grid-template-columns: 1fr;
+                grid-template-rows: auto 1fr auto auto;
+                max-width: 100%;
+                height: 100vh;
+                border-radius: 0;
+            }
+
+            #side-panel {
+                grid-column: 1 / -1;
+                grid-row: 4 / 5;
+                max-height: 200px;
+                border-left: none;
+                border-top: 1px solid rgba(255,255,255,0.5);
+            }
+
+            #chat-history {
+                padding: 1.5rem;
+                grid-column: 1 / -1;
+            }
+
+            .input-area {
+                grid-column: 1 / -1;
+                padding: 1rem 1.5rem;
+            }
+
+            .chat-header {
+                padding: 1rem 1.5rem;
+            }
+
+            .avatar-wrapper {
+                width: 50px;
+                height: 50px;
+            }
+
+            .header-info h1 {
+                font-size: 1.2rem;
+            }
+
+            .learning-card {
+                flex: 0 0 220px;
+            }
+
+            .modal-box {
+                padding: 2rem;
+            }
+        }
+
+        @media (max-width: 640px) {
+            #app-wrapper {
+                padding: 0;
+            }
+
+            #activity-container {
+                height: 100vh;
+                border-radius: 0;
+            }
+
+            .chat-header {
+                padding: 0.75rem 1rem;
+            }
+
+            .avatar-wrapper {
+                width: 44px;
+                height: 44px;
+            }
+
+            #chat-history {
+                padding: 1rem;
+                gap: 1.5rem;
+            }
+
+            .input-area {
+                padding: 0.75rem 1rem;
+            }
+
+            .message.ai {
+                font-size: 0.95rem;
+            }
+
+            .learning-card {
+                flex: 0 0 200px;
+                padding: 1rem;
+            }
+
+            .dialogue-box {
+                padding: 1.2rem 1.5rem;
+            }
+
+            #side-panel {
+                max-height: 180px;
+            }
+
+            .panel-header {
+                padding: 1rem;
+                font-size: 0.8rem;
+            }
+
+            .modal-box {
+                padding: 1.5rem;
+                width: 95%;
+            }
+        }
+
+        /* Performance & Stability */
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+
+        /* Loading State */
+        .loading-indicator {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border: 2px solid rgba(0,0,0,0.1);
+            border-top-color: var(--primary-color);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Celebration Screen - Full Screen Immersive Experience */
+        #celebration-screen {
+            position: fixed;
+            inset: 0;
+            z-index: 9999;
+            background: linear-gradient(135deg,
+                rgba(102, 126, 234, 0.95) 0%,
+                rgba(118, 75, 162, 0.95) 25%,
+                rgba(246, 147, 251, 0.95) 50%,
+                rgba(79, 172, 254, 0.95) 75%,
+                rgba(0, 242, 254, 0.95) 100%);
+            background-size: 400% 400%;
+            animation: gradientShift 8s ease infinite;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(20px);
+        }
+
+        #celebration-screen.active {
+            display: flex;
+        }
+
+        .celebration-content {
+            text-align: center;
+            color: white;
+            animation: celebrationPopIn 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+
+        .celebration-avatar {
+            width: 200px;
+            height: 200px;
+            margin: 0 auto 2rem;
+            border-radius: 50%;
+            background: linear-gradient(45deg, #667eea 0%, #764ba2 25%, #f093fb 50%, #4facfe 75%, #00f2fe 100%);
+            background-size: 400% 400%;
+            animation: orbFloat 3s ease-in-out infinite, gradientShift 8s ease infinite;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3),
+                        inset 0 4px 12px rgba(255,255,255,0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 5rem;
+            position: relative;
+        }
+
+        .celebration-avatar::before {
+            content: '';
+            position: absolute;
+            inset: -20px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.4) 0%, transparent 70%);
+            animation: breathe 2s ease-in-out infinite;
+            filter: blur(20px);
+        }
+
+        .celebration-title {
+            font-family: var(--font-display);
+            font-size: 4rem;
+            font-weight: 800;
+            margin: 0 0 1rem 0;
+            text-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            animation: titleBounce 1s ease-out 0.3s;
+        }
+
+        .celebration-message {
+            font-family: var(--font-body);
+            font-size: 1.8rem;
+            margin: 0 0 2rem 0;
+            opacity: 0;
+            animation: fadeInUp 0.8s ease-out 0.6s forwards;
+        }
+
+        .celebration-stars {
+            font-size: 3rem;
+            margin: 1rem 0;
+            opacity: 0;
+            animation: fadeInUp 0.8s ease-out 0.9s forwards;
+        }
+
+        @keyframes celebrationPopIn {
+            0% {
+                transform: scale(0.3);
+                opacity: 0;
+            }
+            50% {
+                transform: scale(1.1);
+            }
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        @keyframes titleBounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Confetti Effect */
+        .confetti {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background: white;
+            opacity: 0.8;
+            animation: confettiFall 3s linear infinite;
+        }
+
+        @keyframes confettiFall {
+            0% {
+                transform: translateY(-100vh) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        /* Learning Plan Preview Box */
+        .learning-plan-box {
+            background: linear-gradient(135deg, rgba(122, 155, 122, 0.15) 0%, rgba(61, 90, 61, 0.15) 100%);
+            border-left: 4px solid var(--primary-color);
+            border-radius: 16px;
+            padding: 2rem;
+            margin: 2rem 0;
+            box-shadow: 0 8px 32px rgba(92, 107, 83, 0.12);
+        }
+
+        .learning-plan-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            font-family: var(--font-display);
+            font-size: 1.3rem;
+            color: var(--primary-color);
+            font-weight: 700;
+        }
+
+        .learning-plan-header i {
+            font-size: 1.8rem;
+            color: var(--accent-color);
+        }
+
+        .learning-plan-section {
+            margin: 1.5rem 0;
+        }
+
+        .learning-plan-section h4 {
+            font-family: var(--font-display);
+            color: var(--secondary-color);
+            margin: 0 0 0.75rem 0;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .learning-plan-section h4 i {
+            color: var(--accent-color);
+        }
+
+        .learning-plan-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .learning-plan-list li {
+            padding: 0.5rem 0 0.5rem 2rem;
+            position: relative;
+            line-height: 1.6;
+        }
+
+        .learning-plan-list li::before {
+            content: '\f00c';
+            font-family: 'Font Awesome 6 Free';
+            font-weight: 900;
+            position: absolute;
+            left: 0;
+            color: var(--accent-color);
+        }
+
+        /* Enhanced aesthetic elements */
+        .icon-text {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .icon-text i {
+            color: var(--accent-color);
+        }
+
+    </style>
 </head>
-<body>
-  <div class="app">
-    <header>
-      <div class="title-block">
-        <div class="orb"></div>
-        <div>
-          <h1>LARP Engine • GLM-4.6V-Flash</h1>
-          <p>Single player story engine with dice, stats, and GLM narration</p>
-        </div>
-      </div>
-      <div class="tagline">
-        <span class="emoji">🎭</span>
-        <span>Type your action, let the model direct the world</span>
-      </div>
-    </header>
+<body class="theme-sage">
 
-    <main>
-      <!-- Left: Chat and runtime -->
-      <section class="panel">
-        <div class="panel-title">
-          <span>Session Timeline</span>
-          <span class="small">Shift+Enter keeps line, Enter sends</span>
-        </div>
-        <div class="chat-shell">
-          <div id="chat-log" class="chat-log"></div>
-          <div class="input-area">
-            <div class="input-row">
-              <textarea id="user-input" placeholder="Speak in-character, give an action, or describe your intention..."></textarea>
-              <div class="button-column">
-                <button id="roll-btn" class="secondary" type="button">
-                  🎲 d20
+    <canvas id="wave-canvas"></canvas>
+
+    <div id="app-wrapper">
+        <div id="activity-container">
+            
+            <!-- HEADER -->
+            <div class="chat-header">
+                <div class="header-left">
+                    <div class="avatar-wrapper" id="avatar-wrapper">
+                        <div class="avatar-aura"></div>
+                        <div class="avatar-circle"></div>
+                    </div>
+                    <div class="header-info">
+                        <h1>Noor</h1>
+                        <div class="header-status" id="header-status">Waiting</div>
+                    </div>
+                </div>
+
+                <div style="display:flex; gap:10px;">
+                    <button class="icon-btn" id="sound-btn" title="Toggle Sound">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg>
+                    </button>
+                    <button class="icon-btn" id="theme-btn" title="Switch Theme">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+                    </button>
+                </div>
+            </div>
+
+            <!-- CHAT -->
+            <div id="chat-history"></div>
+
+            <!-- SIDEBAR -->
+            <div id="side-panel">
+                <div class="panel-header">Session Map</div>
+                <div id="tracker-container"></div>
+
+                <!-- RAG Upload Section -->
+                <div style="padding: 1.5rem; border-top: 1px solid rgba(0,0,0,0.05);">
+                    <div style="font-family: var(--font-display); font-size: 0.9rem; color: var(--primary-color); margin-bottom: 1rem; font-weight: 700;"><i class="fas fa-book-open" style="color: var(--accent-color); margin-right: 0.5rem;"></i>Lesson & Progress</div>
+
+                    <!-- Lesson Upload -->
+                    <div style="margin-bottom: 1rem;">
+                        <label for="lesson-upload" style="display: block; font-size: 0.75rem; color: var(--secondary-color); margin-bottom: 0.5rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;">Load Lesson (XML)</label>
+                        <input type="file" id="lesson-upload" accept=".xml" style="display: none;">
+                        <button id="lesson-upload-btn" class="upload-trigger-btn">Choose Lesson File</button>
+                        <div id="lesson-status" style="font-size: 0.8rem; margin-top: 0.5rem; color: #999; font-style: italic;">No lesson loaded</div>
+                    </div>
+
+                    <!-- Progress Upload -->
+                    <div>
+                        <label for="progress-upload" style="display: block; font-size: 0.75rem; color: var(--secondary-color); margin-bottom: 0.5rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;">Load Progress (JSON)</label>
+                        <input type="file" id="progress-upload" accept=".json" style="display: none;">
+                        <button id="progress-upload-btn" class="upload-trigger-btn">Choose Progress File</button>
+                        <div id="progress-status" style="font-size: 0.8rem; margin-top: 0.5rem; color: #999; font-style: italic;">No progress data</div>
+                    </div>
+                </div>
+
+                <!-- Vocabulary Wallet -->
+                <div style="padding: 1.5rem; border-top: 1px solid rgba(0,0,0,0.05); flex: 1; overflow-y: auto;">
+                    <div style="font-family: var(--font-display); font-size: 0.9rem; color: var(--primary-color); margin-bottom: 1rem; font-weight: 700;"><i class="fas fa-wallet" style="color: var(--accent-color); margin-right: 0.5rem;"></i>Vocabulary Wallet</div>
+                    <div id="vocab-wallet" style="display: flex; flex-direction: column; gap: 0.75rem;">
+                        <div style="font-size: 0.85rem; color: #999; font-style: italic; text-align: center; padding: 2rem 1rem;">
+                            Vocabulary words will appear here as you learn them...
+                        </div>
+                    </div>
+                </div>
+
+                <div style="margin-top:auto; padding:1.5rem; text-align:center; display: flex; flex-direction: column; gap: 0.75rem;">
+                    <button class="start-btn" id="download-report-btn" style="font-size:0.9rem; padding:12px;"><i class="fas fa-file-pdf" style="margin-right: 0.5rem;"></i>Download Lesson Report</button>
+                    <button class="start-btn" id="download-progress-btn" style="font-size:0.9rem; padding:12px; background: var(--secondary-color);"><i class="fas fa-download" style="margin-right: 0.5rem;"></i>Download Progress JSON</button>
+                </div>
+            </div>
+
+            <!-- INPUT -->
+            <div class="input-area">
+                <div class="input-wrapper">
+                    <textarea id="user-input" placeholder="Type or tap microphone..." rows="1"></textarea>
+                    <button class="icon-btn" id="mic-btn">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" y1="19" x2="12" y2="23"></line><line x1="8" y1="23" x2="16" y2="23"></line></svg>
+                    </button>
+                </div>
+                <button class="icon-btn" id="send-btn" style="color:white;">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
                 </button>
-                <button id="send-btn" type="button">
-                  ➤ Send
-                </button>
-              </div>
             </div>
-            <div class="mini-row">
-              <div>
-                <span id="status-dot" class="status-dot idle"></span>
-                <span id="status-text">Idle</span>
-              </div>
-              <div class="pill">
-                <code>Model: GLM-4.6V-Flash</code>
-              </div>
-            </div>
-          </div>
         </div>
-      </section>
+    </div>
 
-      <!-- Right: Config and character -->
-      <section class="panel">
-        <div class="panel-title">
-          <span>World Setup & Character Sheet</span>
-          <span class="small">Fill this once, then press Begin LARP</span>
+    <!-- MODAL -->
+    <div id="api-modal">
+        <div class="modal-box">
+            <h1 style="font-family:var(--font-display); color:var(--primary-color);">Welcome</h1>
+            <p>Please enter your Gemini API Key to begin.</p>
+            <div style="background: #f0f5f5; padding: 0.75rem; border-radius: 8px; margin: 1rem 0; font-size: 0.9rem;">
+                <strong><i class="fas fa-info-circle"></i> Don't have an API key?</strong><br>
+                Get a free key at <a href="https://aistudio.google.com/app/apikey" target="_blank" style="color: var(--accent-color); text-decoration: underline;">Google AI Studio</a>
+                <br><small style="opacity: 0.8;">Your key is stored locally and only sent to Google's Gemini API.</small>
+            </div>
+            <input type="password" id="api-key-input" class="api-input" placeholder="Paste API Key here...">
+            <button class="start-btn" id="start-session-btn">Start Session</button>
         </div>
+    </div>
 
-        <!-- API & high-level config -->
-        <div class="sidebar-section">
-          <h3><span>Connection</span> & Mode</h3>
-          <div class="config-grid">
-            <div class="field">
-              <label for="api-key">API key</label>
-              <input id="api-key" type="password" autocomplete="off"
-                     placeholder="Paste GLM-4.6V-Flash key here" />
+    <!-- CELEBRATION SCREEN -->
+    <div id="celebration-screen">
+        <div class="celebration-content">
+            <div class="celebration-avatar">
+                <i class="fas fa-star"></i>
             </div>
-            <div class="field">
-              <label for="setting-select">Setting</label>
-              <select id="setting-select">
-                <option value="A rain-slicked, neon-lit city filled with masked factions and secret rites.">
-                  Neon ritual city
-                </option>
-                <option value="A resistance cell beneath an occupied sky, moving through tunnels, checkpoints, and safe houses.">
-                  Underground resistance
-                </option>
-                <option value="A wandering caravan across shifting desert, where relics and spirits shape every encounter.">
-                  Desert caravan
-                </option>
-                <option value="A half-ruined cathedral-city built on the bones of empires, filled with scholars, heretics, and quiet miracles.">
-                  Cathedral city
-                </option>
-              </select>
+            <h1 class="celebration-title" id="celebration-title">Amazing Work!</h1>
+            <p class="celebration-message" id="celebration-message">You've made incredible progress!</p>
+            <div class="celebration-stars">
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
             </div>
-            <div class="field">
-              <label for="char-name">Character name</label>
-              <input id="char-name" type="text" placeholder="E.g. Layla, Idris, Corin..." />
-            </div>
-            <div class="field">
-              <label for="char-archetype">Archetype</label>
-              <input id="char-archetype" type="text" placeholder="E.g. Scout, Mystic, Agitator..." />
-            </div>
-          </div>
-
-          <div class="slider-row">
-            <span>Temperature</span>
-            <input id="temp-slider" type="range" min="0.2" max="1.4" step="0.05" value="0.95" />
-            <span id="temp-label">0.95</span>
-          </div>
-
-          <div class="button-row space-between">
-            <span class="hint">
-              Save file as <strong>larp.html</strong>, open in a browser, paste key, then begin.
-            </span>
-            <div class="button-row">
-              <button id="randomize-stats-btn" class="secondary" type="button">🎲 Stats</button>
-              <button id="start-btn" type="button">▶ Begin LARP</button>
-            </div>
-          </div>
         </div>
+    </div>
 
-        <!-- Character sheet -->
-        <div class="sidebar-section">
-          <h3><span>Character</span> Sheet</h3>
-          <div class="subgrid">
-            <div class="stat-input">
-              <span class="stat-label">Might</span>
-              <input id="stat-might" type="number" class="small-input" value="10" />
-            </div>
-            <div class="stat-input">
-              <span class="stat-label">Insight</span>
-              <input id="stat-insight" type="number" class="small-input" value="10" />
-            </div>
-            <div class="stat-input">
-              <span class="stat-label">Charm</span>
-              <input id="stat-charm" type="number" class="small-input" value="10" />
-            </div>
-            <div class="stat-input">
-              <span class="stat-label">Resolve</span>
-              <input id="stat-resolve" type="number" class="small-input" value="10" />
-            </div>
-          </div>
-          <div class="small-row">
-            <div class="field inline">
-              <label for="char-hp">HP</label>
-              <input id="char-hp" type="number" value="10" />
-            </div>
-            <div class="field inline">
-              <label for="char-stress">Stress</label>
-              <input id="char-stress" type="number" value="0" />
-            </div>
-            <div class="button-row left">
-              <button id="rest-btn" class="secondary" type="button">🌙 Rest</button>
-            </div>
-          </div>
-          <div class="field">
-            <label for="inventory">Inventory</label>
-            <textarea id="inventory" placeholder="Simple clothes, small blade, worn satchel, one treasured item..."></textarea>
-          </div>
-        </div>
+    <script>
+        // --- CONFIGURATION ---
+        const MODEL_NAME = 'gemini-2.5-flash';
+        let GEMINI_API_KEY = '';
 
-        <!-- Mechanics & session tools -->
-        <div class="sidebar-section grow">
-          <h3><span>Mechanics</span> & Log Tools</h3>
-          <div class="side-row">
-            <span>
-              <strong>d20 binding</strong><br />
-              <span class="note">
-                When you press the d20 button, the client sends a structured roll line for the next risky action.
-              </span>
-            </span>
-          </div>
-          <div class="side-row">
-            <span class="pill-soft">
-              <span class="die">🎲</span>
-              <span>d20: 1–5 crisis, 6–10 setback, 11–15 mixed, 16–19 strong, 20 glorious</span>
-            </span>
-          </div>
-          <div class="side-row">
-            <span class="note">
-              The model receives your sheet, setting, inventory, and dice lines inside a dense system message, then steers scenes, choices, and consequences from there.
-            </span>
-          </div>
-          <div class="button-row space-between">
-            <div class="button-row left">
-              <button id="export-btn" class="secondary" type="button">📄 Export log</button>
-            </div>
-            <div class="button-row">
-              <button id="clear-btn" class="danger" type="button">⟲ Clear session</button>
-            </div>
-          </div>
-          <div class="note">
-            <span class="heart">❤</span> The engine aims for story-first play: vivid scenes, grounded stakes, and respect for your limits. You can always type out-of-character guidance such as "slow the intensity" or "stay cosy this scene".
-          </div>
-        </div>
-      </section>
-    </main>
-  </div>
+        // --- PEXELS CONFIGURATION ---
+        // To enable safe image integration, get a free API key from https://www.pexels.com/api/
+        const PEXELS_API_KEY = ''; // Leave empty to disable image features
 
-  <script>
-    const chatLogEl = document.getElementById("chat-log");
-    const userInputEl = document.getElementById("user-input");
-    const sendBtn = document.getElementById("send-btn");
-    const rollBtn = document.getElementById("roll-btn");
-    const startBtn = document.getElementById("start-btn");
-    const exportBtn = document.getElementById("export-btn");
-    const clearBtn = document.getElementById("clear-btn");
-    const randomizeStatsBtn = document.getElementById("randomize-stats-btn");
-    const restBtn = document.getElementById("rest-btn");
-    const tempSlider = document.getElementById("temp-slider");
-    const tempLabel = document.getElementById("temp-label");
-    const statusDot = document.getElementById("status-dot");
-    const statusText = document.getElementById("status-text");
-
-    const apiKeyInput = document.getElementById("api-key");
-    const settingSelect = document.getElementById("setting-select");
-    const charNameInput = document.getElementById("char-name");
-    const charArchetypeInput = document.getElementById("char-archetype");
-
-    const statMightInput = document.getElementById("stat-might");
-    const statInsightInput = document.getElementById("stat-insight");
-    const statCharmInput = document.getElementById("stat-charm");
-    const statResolveInput = document.getElementById("stat-resolve");
-    const charHpInput = document.getElementById("char-hp");
-    const charStressInput = document.getElementById("char-stress");
-    const inventoryInput = document.getElementById("inventory");
-
-    const state = {
-      messages: [],
-      systemPrompt: "",
-      sessionActive: false,
-    };
-
-    function setLoading(loading) {
-      if (loading) {
-        statusDot.classList.remove("idle");
-        statusText.innerText = "GLM thinking...";
-        sendBtn.disabled = true;
-        rollBtn.disabled = true;
-        startBtn.disabled = true;
-      } else {
-        statusDot.classList.add("idle");
-        statusText.innerText = "Idle";
-        sendBtn.disabled = false;
-        rollBtn.disabled = false;
-        startBtn.disabled = false;
-      }
-    }
-
-    function scrollChatToEnd() {
-      chatLogEl.scrollTop = chatLogEl.scrollHeight;
-    }
-
-    function addMessage(role, text) {
-      const wrapper = document.createElement("div");
-      wrapper.classList.add("chat-message", `role-${role}`);
-
-      if (role === "user" || role === "assistant") {
-        const avatar = document.createElement("div");
-        avatar.classList.add("avatar");
-        avatar.textContent = role === "user" ? "You" : "GM";
-        wrapper.appendChild(avatar);
-      }
-
-      const bubble = document.createElement("div");
-      bubble.classList.add("bubble");
-      bubble.innerText = text;
-
-      if (role === "user") wrapper.classList.add("role-user");
-      if (role === "assistant") wrapper.classList.add("role-assistant");
-      if (role === "system") wrapper.classList.add("role-system");
-
-      wrapper.appendChild(bubble);
-      chatLogEl.appendChild(wrapper);
-      scrollChatToEnd();
-    }
-
-    function readCharacterSheet() {
-      const name = charNameInput.value.trim() || "Unnamed traveler";
-      const archetype = charArchetypeInput.value.trim() || "Wanderer";
-      const settingText = settingSelect.value;
-
-      const stats = {
-        might: Number(statMightInput.value) || 10,
-        insight: Number(statInsightInput.value) || 10,
-        charm: Number(statCharmInput.value) || 10,
-        resolve: Number(statResolveInput.value) || 10,
-        hp: Number(charHpInput.value) || 10,
-        stress: Number(charStressInput.value) || 0,
-        inventory: inventoryInput.value.trim() || "Plain clothes, worn satchel, simple blade, one treasured token",
-      };
-
-      return { name, archetype, settingText, stats };
-    }
-
-    function buildSystemPrompt() {
-      const { name, archetype, settingText, stats } = readCharacterSheet();
-
-      const sheetSummary = `
-Character name: ${name}
-Archetype or role: ${archetype}
-
-Core stats:
-- Might: ${stats.might}
-- Insight: ${stats.insight}
-- Charm: ${stats.charm}
-- Resolve: ${stats.resolve}
-
-Vital track:
-- Hit points: ${stats.hp}
-- Stress: ${stats.stress}
-
-Inventory: ${stats.inventory}
-
-Setting:
-${settingText}
-`;
-
-      const rules = `
-You act as a live action story guide for a single player in a reactive world.
-
-Goals:
-- Keep immersion vivid and grounded.
-- Drive story through scenes, choices, and consequences.
-- Respect player limits and emotional safety cues.
-
-Player and sheet:
-${sheetSummary}
-
-Style rules:
-1. Use second person for the player: "you".
-2. Keep replies within 4–8 short paragraphs.
-3. After each scene, present two to four numbered options and also invite freeform actions.
-4. Track hidden values for hit points, stress, resources, and reputation across the session.
-5. At the end of each reply, show mechanical changes under a short heading "Status" with bullet points.
-6. When the client sends a line such as [ROLL d20 = 14], treat that value as the outcome for the next risky action.
-
-Dice guidance:
-- Very low result: severe trouble, harm, or serious twist.
-- Low result: setback with meaningful price.
-- Middle result: mixed outcome, both gain and cost.
-- High result: strong success with vivid advantage.
-- Top result: glorious success, big advantage, potential shift in the wider situation.
-
-Story tone:
-- Lean toward grounded realism with flashes of the uncanny.
-- Keep sensory detail rich and focused on what the player perceives.
-- Honour past events, items, and NPCs with consistent memory.
-
-Session flow:
-- Begin with a strong opening scene that expresses setting and character together.
-- Always end with clear choices and open invitation for free action.
-`;
-
-      return rules.trim();
-    }
-
-    function rebuildSystemPrompt() {
-      state.systemPrompt = buildSystemPrompt();
-    }
-
-    function clearSession() {
-      state.messages = [];
-      state.sessionActive = false;
-      chatLogEl.innerHTML = "";
-      addMessage("system", "Session cleared. Configure sheet and press Begin LARP for a fresh run.");
-    }
-
-    async function callGLM(apiKey, messages, temperature) {
-      const url = "https://api.z.ai/api/paas/v4/chat/completions";
-
-      const payload = {
-        model: "GLM-4.6V-Flash",
-        messages,
-        temperature: temperature,
-        max_tokens: 800,
-      };
-
-      const response = await fetch(url, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": "Bearer " + apiKey,
-        },
-        body: JSON.stringify(payload),
-      });
-
-      if (!response.ok) {
-        const text = await response.text();
-        throw new Error("HTTP " + response.status + ": " + text);
-      }
-
-      const data = await response.json();
-      const choice = data.choices && data.choices[0];
-      const content = choice && choice.message && choice.message.content;
-      return content || "[Empty reply from model]";
-    }
-
-    async function sendToModel(userText) {
-      const apiKey = apiKeyInput.value.trim();
-      if (!apiKey) {
-        alert("Please paste your GLM-4.6V-Flash key first.");
-        return;
-      }
-
-      if (!state.systemPrompt) {
-        rebuildSystemPrompt();
-      }
-
-      if (!state.sessionActive) {
-        state.sessionActive = true;
-        addMessage("system", "Session started. The world comes into view...");
-      }
-
-      const userMsg = { role: "user", content: userText };
-      state.messages.push(userMsg);
-      addMessage("user", userText);
-
-      setLoading(true);
-      try {
-        const temperature = Number(tempSlider.value) || 0.95;
-        const messagesForApi = [
-          { role: "system", content: state.systemPrompt },
-          ...state.messages,
+        // Content Safety: Blocklist of terms that should never be used in image searches
+        const IMAGE_SEARCH_BLOCKLIST = [
+            'sexy', 'nude', 'naked', 'bikini', 'lingerie', 'provocative',
+            'seductive', 'intimate', 'sensual', 'revealing', 'scantily',
+            'clad', 'underwear', 'swimsuit', 'beach wear', 'nightwear',
+            'bedroom', 'dating', 'romantic', 'kiss', 'embrace'
         ];
 
-        const reply = await callGLM(apiKey, messagesForApi, temperature);
-        const assistantMsg = { role: "assistant", content: reply };
-        state.messages.push(assistantMsg);
-        addMessage("assistant", reply);
-      } catch (err) {
-        console.error(err);
-        addMessage("system", "API call failed. Check console output and key, then try again.");
-      } finally {
-        setLoading(false);
-      }
-    }
+        // Safe search categories for educational content
+        const SAFE_SEARCH_CATEGORIES = [
+            'nature', 'landscape', 'city', 'technology', 'business',
+            'education', 'workspace', 'architecture', 'food', 'culture',
+            'transportation', 'sports', 'hobby', 'art', 'science'
+        ];
 
-    function handleSend() {
-      const text = userInputEl.value.trim();
-      if (!text) return;
-      userInputEl.value = "";
-      sendToModel(text);
-    }
+        // --- STAGES FOR TRACKER ---
+        const STAGES = [
+            "Lead-in",
+            "Pre task A (Activate)",
+            "Pre task B (Model)",
+            "Pre task C (Lang Focus)",
+            "Pre task D (Pron)",
+            "Task Prep",
+            "Main Task",
+            "Reporting",
+            "Feedback"
+        ];
 
-    function handleKeydown(event) {
-      if (event.key === "Enter" && !event.shiftKey) {
-        event.preventDefault();
-        handleSend();
-      }
-    }
+        // --- SYSTEM PROMPT (Pedagogically Enhanced) ---
+        // ===================================================================
+        // RAG SYSTEM: MODULAR PROMPT ARCHITECTURE
+        // ===================================================================
+        // The prompt is now split into three parts:
+        // 1. BASE_PROMPT (constant): Core identity, pedagogy, formatting rules
+        // 2. LESSON_PROMPT (variable): Loaded from XML lesson files
+        // 3. STUDENT_CONTEXT (variable): Generated from JSON progress data via RAG
 
-    function rollD20() {
-      const roll = Math.floor(Math.random() * 20) + 1;
-      const lineForModel = `[ROLL d20 = ${roll}]`;
-      const displayLine = `Client roll: d20 ➝ ${roll}`;
+        const BASE_PROMPT = `
+You are Noor, AI tutor grounded in cognitive science and second language acquisition research. You are calm, patient, visual, and an expert in constructivist pedagogical techniques.
+Your goal is to guide the student through a TBL lesson using specific visual HTML layouts while applying advanced learning principles.
 
-      addMessage("system", displayLine);
-      state.messages.push({ role: "user", content: lineForModel });
-    }
+### CRITICAL: FIRST MESSAGE REQUIREMENT
+Your very first message MUST begin with a privacy disclaimer using this exact format:
+\`\`\`html
+<div class="notice-box">
+<strong><i class="fas fa-lock"></i> Privacy First:</strong> Please do not share any personal information, sensitive data, or private details during our session. Keep our conversation focused on learning.
+</div>
+\`\`\`
 
-    function randomizeStats() {
-      function rollStat() {
-        const rolls = [];
-        for (let i = 0; i < 3; i++) {
-          rolls.push(Math.floor(Math.random() * 6) + 1);
+After the privacy notice, warmly greet the student and begin the lesson naturally.
+
+### VISUAL & FORMATTING RULES (STRICT)
+1.  **NO MARKDOWN LISTS**: When presenting options, steps, or choices, you MUST use the \`<div class="carousel">\` layout with cards inside:
+    \`\`\`html
+    <div class="carousel">
+        <div class="learning-card">
+            <h3>Question 1</h3>
+            <p>What's the first thing that comes to mind when you hear "software project"?</p>
+        </div>
+        <div class="learning-card">
+            <h3>Question 2</h3>
+            <p>Can you recall any challenges teams might face when developing software?</p>
+        </div>
+        <div class="learning-card">
+            <h3>Question 3</h3>
+            <p>What makes a software project successful, in your opinion?</p>
+        </div>
+    </div>
+    \`\`\`
+2.  **HIGHLIGHTS** (USE SPARINGLY - ONLY FOR SPECIFIC PURPOSES):
+    -   Vocabulary: \`<span class="hl-vocab">term</span>\` - ONLY use when the student explicitly asks "What does [word] mean?" or requests a definition. DO NOT use for emphasis or words you think are important. The student must specifically request the definition.
+    -   Grammar: \`<span class="hl-grammar">structure</span>\` - ONLY use when teaching a specific grammar point during the Language Focus stage or when providing metalinguistic feedback on an error.
+    -   Correction/Feedback: \`<span class="hl-feedback">correction</span>\` - ONLY use when explicitly correcting a student's error. NEVER use for emphasis or to highlight important words.
+    -   **CRITICAL**: DO NOT use any of these highlights for general emphasis or to make words stand out. For emphasis, use bold (**text**) or italics (*text*) instead. These highlights have specific pedagogical purposes and trigger tracking systems.
+3.  **DIALOGUES**: When showing conversations or monologues, use this NEW format:
+    \`\`\`html
+    <div class="dialogue-box">
+        <div class="dialogue-speaker">Noor</div>
+        <div class="dialogue-content">
+            <p>First paragraph of continuous speech...</p>
+            <p>Second paragraph if needed...</p>
+            <p>Third paragraph...</p>
+        </div>
+    </div>
+    \`\`\`
+    This shows the speaker's name ONCE at the top, followed by all their dialogue content. Perfect for monologues or continuous speech.
+4.  **CARDS**: Concepts must be in \`<div class="learning-card"><h3>Title</h3><p>Content</p></div>\`.
+5.  **THINK PROMPTS**: For reflection moments, use \`<div class="think-prompt"><strong><i class="fas fa-brain"></i> Pause & Reflect:</strong> [question]</div>\`
+6.  **NOTICE BOXES**: For language awareness, use \`<div class="notice-box"><strong><i class="fas fa-eye"></i> Notice:</strong> [pattern]</div>\`
+7.  **SUCCESS INDICATORS**: Use \`<div class="success-badge"><i class="fas fa-star"></i> [achievement]</div>\` for positive reinforcement
+8.  **SENTENCE STEMS**: When providing scaffolding, use:
+    \`\`\`html
+    <div class="sentence-stems">
+        <h4><i class="fas fa-comments"></i> Use these sentence starters:</h4>
+        <div class="stem-option">In my opinion, ___ because ___</div>
+        <div class="stem-option">I believe that ___, whereas ___</div>
+    </div>
+    \`\`\`
+9.  **SELF-ASSESSMENT**: After teaching moments, prompt metacognition:
+    \`\`\`html
+    <div class="self-check">
+        <h4>How confident do you feel?</h4>
+        <p style="font-size:0.9rem; margin:0.5rem 0;">Think about what we just covered...</p>
+    </div>
+    \`\`\`
+
+### PEDAGOGICAL FRAMEWORK (SACRED PRINCIPLES)
+
+#### 1. ZONE OF PROXIMAL DEVELOPMENT (ZPD)
+- Continuously assess student's current level through their responses
+- Provide scaffolding that is "i+1" (just beyond current ability)
+- If student struggles: simplify, model, provide sentence stems, break into smaller steps
+- If student excels: extend with deeper questions, add complexity, encourage elaboration
+- Use the carousel to offer differentiated difficulty options when appropriate
+
+#### 2. SCAFFOLDING TECHNIQUES
+- **Modeling**: Show examples before asking students to produce
+- **Think-Alouds**: Verbalize your reasoning process in cards
+- **Sentence Stems**: Provide frames like "In my opinion, ___ because ___"
+- **Gradual Release**: I do → We do → You do with support → You do independently
+- **Multimodal Support**: Combine text, dialogue examples, and visual cards
+
+#### 3. ERROR CORRECTION STRATEGIES (VARY YOUR APPROACH)
+- **Recasts**: Subtly reformulate errors correctly without explicit correction
+  Example: Student: "He go to work" → You: "Ah yes, he goes to work every day, doesn't he?"
+- **Clarification Requests**: "I'm not sure I understood, could you say that again?"
+- **Metalinguistic Feedback**: Use \`<span class="hl-grammar">\` and explain the rule in a card
+- **Elicitation**: Pause before the error and let student self-correct: "He ___?"
+- **Explicit Correction**: Only for persistent errors. Use \`<span class="hl-feedback">\`
+- CRITICAL: Don't correct everything. Prioritize errors that impede communication or match lesson focus.
+- **IMPORTANT**: Do NOT use \`<span class="hl-feedback">\` or any highlighting for emphasis. Only use it when actually correcting an error the student made.
+
+#### 4. SOCRATIC QUESTIONING
+Layer your questions to build critical thinking:
+- **Clarifying**: "What do you mean by...?"
+- **Probing Assumptions**: "What are we assuming here?"
+- **Probing Reasons/Evidence**: "Why do you think that?"
+- **Viewpoints**: "What might someone who disagrees say?"
+- **Implications**: "If that's true, then what else must be true?"
+- **Meta-questions**: "Why do you think I asked that question?"
+
+#### 5. FORMATIVE ASSESSMENT (CONSTANT MONITORING)
+- Ask check-in questions: "Does this make sense so far?"
+- Use concept checks: "So if I say 'If I had time', am I talking about now or the past?"
+- Observe response time, complexity, accuracy, fluency
+- Adjust pacing based on student readiness signals
+- Provide immediate, specific, actionable feedback
+
+#### 6. RETRIEVAL PRACTICE
+- Regularly circle back to previous vocabulary/concepts without warning
+- Use the \`<div class="think-prompt">\` to ask: "Earlier we discussed X. What do you remember about...?"
+- Space repetitions across the session (not blocked practice)
+- Test before teaching to activate prior knowledge
+
+#### 7. METACOGNITION & SELF-REGULATION
+- Make thinking visible: "Let me show you how I would approach this..."
+- Ask reflective questions: "What strategy did you just use?" "What was challenging about that?"
+- Encourage self-assessment: Use carousel with options like "I'm confident / I need more practice / I'm unsure"
+- End segments with: "What's one thing you learned? One thing you're still wondering?"
+
+#### 8. ENGAGEMENT & AFFECT
+- Use warm, encouraging language with specific praise: "I love how you used 'whereas' to show contrast!"
+- Acknowledge difficulty: "This is a tricky structure - even native speakers mix it up"
+- Connect to student's life/interests from their responses
+- Maintain curiosity and enthusiasm in your tone
+- Use the success badge sparingly for genuine achievements
+
+#### 9. WAIT TIME
+- After asking a complex question, explicitly say: "Take your time to think..."
+- Don't rush to fill silence - students need processing time
+- For deep questions, use the think-prompt widget to signal thinking is valued
+
+#### 10. DUAL CODING
+- Always pair abstract grammar with concrete examples in dialogues
+- Use visual layout (cards, carousels) to complement verbal explanations
+- When teaching vocabulary, embed it in meaningful context (dialogue) not just definitions
+
+#### 11. INTERLEAVING & DISTRIBUTED PRACTICE
+- Don't block all vocabulary together, then all grammar - mix them
+- Return to earlier concepts while introducing new ones
+- Connect new language to previously learned structures
+
+#### 12. OUTPUT MAXIMIZATION
+- Keep YOUR turns concise to maximize STUDENT talk time
+- Use elicitation over explanation: "Can you give me an example?" rather than giving examples
+- Encourage elaboration: "Tell me more about that" "What else?"
+- Create genuine communication gaps that require language use
+
+### TRACKER CONTROL
+At the start of every message, you MUST output a hidden tag indicating the current stage from this list: [${STAGES.join(', ')}].
+Format: \`[[STAGE: Pre task A (Activate)]]\`
+
+### CONVERSATION PRINCIPLES (CRITICAL)
+- Respond to what the student ACTUALLY says, not a script
+- Follow natural conversation flow while gently guiding toward learning goals
+- Be genuinely curious about their ideas
+- Balance warmth with rigor
+
+### LANGUAGE & VERBOSITY (CRITICAL - READ CAREFULLY)
+1. **Match Student's Level**: Use B2-appropriate language. Avoid overly academic or complex teacher language. If the lesson is for B2 students, you should speak at a B1-B2 level yourself.
+   - GOOD (B2): "Let's look at how we use this in everyday situations."
+   - BAD (Too advanced): "Let's examine the pragmatic implications of this linguistic structure in various sociolinguistic contexts."
+
+2. **Keep Teacher Talk Low**:
+   - Your messages should be SHORT (2-4 sentences maximum for instructions)
+   - Ask ONE question at a time
+   - Let the student do most of the talking
+   - GOOD: "What do you think about working from home? Tell me more."
+   - BAD: "So, what are your thoughts on working from home? Do you think it's effective? How does it compare to office work? What challenges have you faced? Let me know all your thoughts."
+
+3. **NO REPETITION Between Text and Cards**:
+   - If you put information in a card, DO NOT repeat it in surrounding text
+   - Use cards FOR instructions/options, use text ONLY for dialogue/questions
+   - GOOD: [Shows cards with three questions] → "Pick one that interests you."
+   - BAD: "I'm going to ask you three questions. Question 1 is about X, Question 2 is about Y..." [then shows the same three questions in cards]
+
+4. **Be Dialogic, Not Monologic**:
+   - Have a CONVERSATION, don't give lectures
+   - After presenting something, immediately ask for the student's reaction
+   - Use back-and-forth exchanges, not long explanations
+   - Trust that students learn by doing, not by being told
+
+5. **Concrete Over Abstract**:
+   - Use real examples, not abstract descriptions
+   - Show, don't explain
+   - "Here's how someone might say it..." (then show example) rather than "This structure is used to..."
+
+### EXAMPLES OF GOOD vs BAD PRACTICE
+
+**BAD (Too verbose, repetitive, too much teacher talk):**
+"Now we're going to look at three different questions about work. The first question asks about your preferences, the second asks about challenges, and the third asks about the future. Take a look at these questions and choose one:
+[Cards with the 3 questions]
+So, which question would you like to answer? Think carefully about which topic interests you most."
+
+**GOOD (Concise, dialogic, no repetition):**
+"[Cards with 3 questions about work]
+Which one speaks to you?"
+
+**BAD (Too complex language for B2):**
+"Let's examine the utilization of conditional structures in hypothetical discourse to facilitate the articulation of counterfactual scenarios."
+
+**GOOD (B2-appropriate):**
+"Let's see how we talk about imaginary situations - things that didn't happen but we wish they did."
+
+**BAD (Lecture mode):**
+"This grammar structure is called the second conditional. We use it when we want to talk about unreal present situations. The form is: if + past simple, would + base verb. For example, 'If I had time, I would travel more.' Notice how we use past simple after 'if' even though we're talking about now. This is important because..."
+
+**GOOD (Dialogic, concise):**
+"Look at this: 'If I had time, I'd travel more.' What do you notice about the verb after 'if'?"
+
+### GOLDEN RULE
+**If in doubt, SAY LESS. Ask a question. Wait for the student to respond. Trust the process.**
+
+### LEARNING PLAN PREVIEW & AI TRANSPARENCY (CRITICAL)
+At the START of your very first message (after the privacy disclaimer), you MUST provide a learning plan preview that shows the student:
+1. What topics will be covered today based on analysis of their history
+2. Persistent errors you've identified from their progress data (if available)
+3. Strengths you've noticed that you'll build upon
+
+Use this format:
+\`\`\`html
+<div class="learning-plan-box">
+    <div class="learning-plan-header">
+        <i class="fas fa-route"></i>
+        <span>Today's Learning Journey</span>
+    </div>
+    <div class="learning-plan-section">
+        <h4><i class="fas fa-bullseye"></i> Our Focus Areas</h4>
+        <ul class="learning-plan-list">
+            <li>[Topic 1 from lesson or identified need]</li>
+            <li>[Topic 2 from lesson or identified need]</li>
+            <li>[Topic 3 from lesson or identified need]</li>
+        </ul>
+    </div>
+    <div class="learning-plan-section">
+        <h4><i class="fas fa-chart-line"></i> Building on Your Strengths</h4>
+        <p>[Mention 1-2 specific strengths from their history, or general encouragement if no history]</p>
+    </div>
+    <div class="learning-plan-section">
+        <h4><i class="fas fa-tools"></i> Areas We'll Work On</h4>
+        <p>[Mention 1-2 persistent errors or challenges from their history, or "We'll discover together" if no history]</p>
+    </div>
+</div>
+\`\`\`
+
+### PERSISTENT ERROR DETECTION & INTERVENTION
+Throughout the session:
+1. **Track Recurring Patterns**: If a student makes the same type of error 2+ times (e.g., third conditional, article usage, subject-verb agreement), flag it mentally
+2. **Targeted Intervention**: After identifying a persistent error:
+   - Don't correct immediately every time
+   - After 2-3 occurrences, use a targeted mini-lesson with a card showing the pattern
+   - Use metalinguistic feedback: "I notice we've seen this pattern a few times..."
+   - Provide focused practice opportunities
+3. **Celebration of Progress**: When a student successfully uses a structure they previously struggled with, acknowledge it with a success badge or brief celebration
+
+### MILESTONE DETECTION & CELEBRATION TRIGGERS
+Watch for these achievement moments and trigger celebrations by including \`[[CELEBRATE: reason]]\` in your response:
+- Student completes a full stage successfully (Main Task, Reporting, Feedback)
+- Student uses a difficult structure correctly after previous errors
+- Student demonstrates significant improvement in fluency or complexity
+- Student reaches the end of the lesson (Feedback stage completed)
+- Student successfully uses 5+ new vocabulary words in context
+
+When you detect a milestone, include this marker: \`[[CELEBRATE: Completed Main Task with excellent reasoning]]\`
+The system will show a full-screen celebration with Noor's avatar.
+
+### VISUAL ENHANCEMENT: SAFE IMAGE INTEGRATION (OPTIONAL)
+**IMPORTANT: This feature is DISABLED by default. Only use if explicitly enabled by the user.**
+
+If image features are enabled, you can enhance lessons with relevant, educational images from Pexels by using this special marker:
+\`[[IMAGE: search_query]]\`
+
+**Content Safety Rules (CRITICAL):**
+1. **ONLY use professional, educational search terms**. Examples of SAFE queries:
+   - \`[[IMAGE: business meeting]]\` - for workplace topics
+   - \`[[IMAGE: city architecture]]\` - for urban planning discussions
+   - \`[[IMAGE: technology workspace]]\` - for software/tech topics
+   - \`[[IMAGE: nature landscape]]\` - for travel/environment topics
+   - \`[[IMAGE: traditional cuisine]]\` - for cultural topics
+
+2. **NEVER use these types of queries:**
+   - People-focused queries without professional context (e.g., "woman", "man", "person")
+   - Body-related terms (e.g., "fitness", "health", "beauty")
+   - Romantic or intimate contexts (e.g., "couple", "dating", "relationship")
+   - Casual clothing contexts (e.g., "fashion", "style", "outfit")
+   - Any term from the blocklist
+
+3. **Best Practices:**
+   - Add "professional" or specific professional context to queries
+   - Focus on objects, places, activities, not people
+   - Use specific, concrete terms (e.g., "software code on screen" not "programmer")
+   - Limit to 1-2 images per lesson stage to avoid overwhelming the student
+   - Only use images when they genuinely enhance understanding
+
+**Example Usage:**
+\`\`\`
+We're going to discuss software project management. Let me show you a typical workspace environment.
+
+[[IMAGE: modern office workspace technology]]
+
+Now, imagine you're leading a project team...
+\`\`\`
+
+The system will automatically validate your search query for safety. If blocked, no image will appear.
+`;
+
+
+        // ===================================================================
+        // RAG SYSTEM: STATE VARIABLES
+        // ===================================================================
+        let currentLesson = null;        // Parsed XML lesson data
+        let studentProgress = null;      // Parsed JSON progress data
+        let lessonEmbeddings = [];       // Embeddings for lesson content
+        let progressEmbeddings = [];     // Embeddings for progress data
+
+        // Default lesson plan (fallback if no XML loaded)
+        const DEFAULT_LESSON_PLAN = `
+### LESSON PLAN (DEFAULT - Software Project Management)
+1.  **Lead-in**: Ask a somatic grounding question. Connect body → mind → language.
+2.  **Pre task A (Activate)**: Elicit prior knowledge about software projects using Socratic questions. Use carousel for memory retrieval options.
+3.  **Pre task B (Model)**: Present a rich dialogue between Nadia and Omar about 'Dependencies'. After, use concept check questions.
+4.  **Pre task C (Lang Focus)**: Analyze 'Second Conditional' with CARD layout. Include notice boxes for pattern recognition. Provide multiple examples.
+5.  **Pre task D (Pron)**: Focus on weak forms, stress patterns. Use think prompts for noticing. Model then elicit.
+6.  **Task Prep**: Assign roles (Monolith vs Microservices). Provide thinking time, sentence stems, vocabulary support via carousel.
+7.  **Main Task**: Facilitate roleplay debate. Monitor and note errors WITHOUT interrupting. Encourage extended turns.
+8.  **Reporting**: Have student reflect on their performance. Ask what went well, what was challenging.
+9.  **Feedback**: Provide corrections using highlights. Focus on 2-3 priority areas. Use varied correction strategies. End with specific praise and one concrete goal.
+
+Start the conversation now with authentic presence.
+`;
+
+        // ===================================================================
+        // RAG SYSTEM: CORE FUNCTIONS
+        // ===================================================================
+
+        // --- XML LESSON PARSER ---
+        function parseXMLLesson(xmlString) {
+            const parser = new DOMParser();
+            const xmlDoc = parser.parseFromString(xmlString, 'text/xml');
+
+            if (xmlDoc.querySelector('parsererror')) {
+                throw new Error('Invalid XML format');
+            }
+
+            const lesson = {
+                metadata: {
+                    title: xmlDoc.querySelector('metadata title')?.textContent || 'Untitled Lesson',
+                    level: xmlDoc.querySelector('metadata level')?.textContent || 'A1',
+                    duration: xmlDoc.querySelector('metadata duration')?.textContent || '60',
+                    topic: xmlDoc.querySelector('metadata topic')?.textContent || '',
+                    keywords: xmlDoc.querySelector('metadata keywords')?.textContent || ''
+                },
+                objectives: [],
+                lessonPlan: {},
+                vocabularyBank: [],
+                commonErrors: [],
+                culturalContext: xmlDoc.querySelector('culturalContext')?.textContent?.trim() || ''
+            };
+
+            // Parse objectives
+            xmlDoc.querySelectorAll('objectives objective').forEach(obj => {
+                lesson.objectives.push(obj.textContent.trim());
+            });
+
+            // Parse lesson plan stages
+            xmlDoc.querySelectorAll('lessonPlan stage').forEach(stage => {
+                const stageName = stage.getAttribute('name');
+                const stageData = {
+                    order: stage.getAttribute('order'),
+                    description: stage.querySelector('description')?.textContent?.trim() || '',
+                    dialogue: null,
+                    conceptChecks: stage.querySelector('conceptChecks')?.textContent?.trim() || '',
+                    grammarFocus: stage.querySelector('grammarFocus')?.textContent?.trim() || '',
+                    pronunciationFocus: stage.querySelector('pronunciationFocus')?.textContent?.trim() || '',
+                    taskSetup: stage.querySelector('taskSetup')?.textContent?.trim() || '',
+                    activity: stage.querySelector('activity')?.textContent?.trim() || '',
+                    reflection: stage.querySelector('reflection')?.textContent?.trim() || '',
+                    feedbackGuidance: stage.querySelector('feedbackGuidance')?.textContent?.trim() || ''
+                };
+
+                // Parse dialogue if present
+                const dialogueEl = stage.querySelector('dialogue');
+                if (dialogueEl) {
+                    stageData.dialogue = {
+                        title: dialogueEl.querySelector('title')?.textContent?.trim() || '',
+                        context: dialogueEl.querySelector('context')?.textContent?.trim() || '',
+                        speakers: []
+                    };
+                    dialogueEl.querySelectorAll('speaker').forEach(speaker => {
+                        stageData.dialogue.speakers.push({
+                            name: speaker.getAttribute('name'),
+                            text: speaker.textContent.trim()
+                        });
+                    });
+                }
+
+                lesson.lessonPlan[stageName] = stageData;
+            });
+
+            // Parse vocabulary bank
+            xmlDoc.querySelectorAll('vocabularyBank word').forEach(word => {
+                lesson.vocabularyBank.push({
+                    context: word.getAttribute('context'),
+                    words: word.textContent.trim()
+                });
+            });
+
+            // Parse common errors
+            xmlDoc.querySelectorAll('commonErrors error').forEach(error => {
+                lesson.commonErrors.push(error.textContent.trim());
+            });
+
+            return lesson;
         }
-        rolls.sort((a, b) => b - a);
-        return rolls[0] + rolls[1] + 2; // slightly heroic curve
-      }
 
-      statMightInput.value = rollStat();
-      statInsightInput.value = rollStat();
-      statCharmInput.value = rollStat();
-      statResolveInput.value = rollStat();
+        // --- GENERATE LESSON PROMPT FROM XML ---
+        function generateLessonPrompt(lesson) {
+            if (!lesson) return DEFAULT_LESSON_PLAN;
 
-      charHpInput.value = 10 + Math.floor(Math.random() * 6);
-      charStressInput.value = 0;
+            let prompt = `\n### LESSON INFORMATION
+**Title**: ${lesson.metadata.title}
+**Level**: ${lesson.metadata.level}
+**Duration**: ${lesson.metadata.duration} minutes
+**Topic**: ${lesson.metadata.topic}
 
-      addMessage("system", "Character stats refreshed with a quick dice spread.");
-      rebuildSystemPrompt();
-    }
+### LESSON OBJECTIVES
+${lesson.objectives.map((obj, i) => `${i + 1}. ${obj}`).join('\n')}
 
-    function takeRest() {
-      const currentHp = Number(charHpInput.value) || 0;
-      const currentStress = Number(charStressInput.value) || 0;
-      charHpInput.value = currentHp + 2;
-      charStressInput.value = Math.max(0, currentStress - 2);
-      addMessage("system", "You take a quiet rest. HP rises a little and stress eases.");
-      rebuildSystemPrompt();
-    }
+### LESSON PLAN
+`;
 
-    function startSession() {
-      rebuildSystemPrompt();
-      state.messages = [];
-      state.sessionActive = true;
-      chatLogEl.innerHTML = "";
-      addMessage("system", "Session created. Say how your character enters the scene, or ask for an opening framing.");
-    }
+            // Add each stage
+            const stageOrder = Object.keys(lesson.lessonPlan).sort((a, b) => {
+                return parseInt(lesson.lessonPlan[a].order) - parseInt(lesson.lessonPlan[b].order);
+            });
 
-    function exportLog() {
-      const lines = [];
-      for (const msg of state.messages) {
-        const role = msg.role.toUpperCase();
-        lines.push(`=== ${role} ===`);
-        lines.push(msg.content);
-        lines.push("");
-      }
-      const blob = new Blob([lines.join("\n")], { type: "text/plain;charset=utf-8" });
-      const url = URL.createObjectURL(blob);
-      const link = document.createElement("a");
-      link.href = url;
-      link.download = "larp_session_log.txt";
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-      URL.revokeObjectURL(url);
-    }
+            stageOrder.forEach((stageName, index) => {
+                const stage = lesson.lessonPlan[stageName];
+                prompt += `\n${index + 1}. **${stageName}**: `;
 
-    // Event wiring
-    sendBtn.addEventListener("click", handleSend);
-    userInputEl.addEventListener("keydown", handleKeydown);
-    rollBtn.addEventListener("click", rollD20);
-    startBtn.addEventListener("click", startSession);
-    exportBtn.addEventListener("click", exportLog);
-    clearBtn.addEventListener("click", clearSession);
-    randomizeStatsBtn.addEventListener("click", randomizeStats);
-    restBtn.addEventListener("click", takeRest);
+                if (stage.description) prompt += `\n${stage.description}`;
 
-    tempSlider.addEventListener("input", () => {
-      tempLabel.innerText = tempSlider.value;
-    });
+                if (stage.dialogue) {
+                    prompt += `\n\n**Dialogue: ${stage.dialogue.title}**\n`;
+                    prompt += `Context: ${stage.dialogue.context}\n\n`;
+                    stage.dialogue.speakers.forEach(speaker => {
+                        prompt += `${speaker.name}: ${speaker.text}\n\n`;
+                    });
+                }
 
-    // Initial gentle system line
-    addMessage(
-      "system",
-      "Welcome to the LARP engine. Fill in your character and setting, paste your GLM-4.6V-Flash key, then press Begin LARP."
-    );
-  </script>
+                if (stage.conceptChecks) prompt += `\n\n**Concept Checks**:\n${stage.conceptChecks}`;
+                if (stage.grammarFocus) prompt += `\n\n**Grammar Focus**:\n${stage.grammarFocus}`;
+                if (stage.pronunciationFocus) prompt += `\n\n**Pronunciation**:\n${stage.pronunciationFocus}`;
+                if (stage.taskSetup) prompt += `\n\n**Task Setup**:\n${stage.taskSetup}`;
+                if (stage.activity) prompt += `\n\n**Activity**:\n${stage.activity}`;
+                if (stage.reflection) prompt += `\n\n**Reflection**:\n${stage.reflection}`;
+                if (stage.feedbackGuidance) prompt += `\n\n**Feedback Guidance**:\n${stage.feedbackGuidance}`;
+
+                prompt += '\n';
+            });
+
+            if (lesson.vocabularyBank.length > 0) {
+                prompt += `\n### VOCABULARY BANK\n`;
+                lesson.vocabularyBank.forEach(item => {
+                    prompt += `- ${item.context}: ${item.words}\n`;
+                });
+            }
+
+            if (lesson.commonErrors.length > 0) {
+                prompt += `\n### COMMON ERRORS TO WATCH FOR\n`;
+                lesson.commonErrors.forEach(error => {
+                    prompt += `- ${error}\n`;
+                });
+            }
+
+            if (lesson.culturalContext) {
+                prompt += `\n### CULTURAL CONTEXT\n${lesson.culturalContext}\n`;
+            }
+
+            prompt += `\nStart the conversation now with authentic presence.\n`;
+
+            return prompt;
+        }
+
+        // --- GEMINI EMBEDDING API ---
+        async function generateEmbedding(text) {
+            const url = `https://generativelanguage.googleapis.com/v1beta/models/text-embedding-004:embedContent?key=${GEMINI_API_KEY}`;
+
+            try {
+                const response = await fetch(url, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        model: 'models/text-embedding-004',
+                        content: { parts: [{ text }] }
+                    })
+                });
+
+                if (!response.ok) {
+                    throw new Error(`Embedding API error: ${response.status}`);
+                }
+
+                const data = await response.json();
+                return data.embedding.values;
+            } catch (error) {
+                console.error('Error generating embedding:', error);
+                return null;
+            }
+        }
+
+        // --- COSINE SIMILARITY ---
+        function cosineSimilarity(vecA, vecB) {
+            if (!vecA || !vecB || vecA.length !== vecB.length) return 0;
+
+            let dotProduct = 0;
+            let normA = 0;
+            let normB = 0;
+
+            for (let i = 0; i < vecA.length; i++) {
+                dotProduct += vecA[i] * vecB[i];
+                normA += vecA[i] * vecA[i];
+                normB += vecB[i] * vecB[i];
+            }
+
+            return dotProduct / (Math.sqrt(normA) * Math.sqrt(normB));
+        }
+
+        // --- SAFE PEXELS IMAGE INTEGRATION ---
+        // Sanitizes search queries and fetches safe, educational images from Pexels API
+
+        /**
+         * Validates and sanitizes an image search query to ensure safe, educational content
+         * @param {string} query - The search query to validate
+         * @returns {object} - {isValid: boolean, sanitizedQuery: string, reason: string}
+         */
+        function validateImageSearchQuery(query) {
+            if (!query || typeof query !== 'string') {
+                return { isValid: false, sanitizedQuery: '', reason: 'Empty or invalid query' };
+            }
+
+            const lowercaseQuery = query.toLowerCase().trim();
+
+            // Check against blocklist
+            for (const blockedTerm of IMAGE_SEARCH_BLOCKLIST) {
+                if (lowercaseQuery.includes(blockedTerm)) {
+                    return {
+                        isValid: false,
+                        sanitizedQuery: '',
+                        reason: `Query contains inappropriate term: "${blockedTerm}"`
+                    };
+                }
+            }
+
+            // Sanitize: remove special characters, limit length
+            const sanitized = query
+                .trim()
+                .replace(/[^\w\s-]/g, '')
+                .substring(0, 100);
+
+            // Prefer educational/professional context by appending safe category
+            const educationalQuery = `${sanitized} professional`;
+
+            return {
+                isValid: true,
+                sanitizedQuery: educationalQuery,
+                reason: 'Valid search query'
+            };
+        }
+
+        /**
+         * Fetches safe images from Pexels API with content filtering
+         * @param {string} query - The search query (will be validated and sanitized)
+         * @param {number} perPage - Number of results (max 80, default 5)
+         * @returns {Promise<Array>} - Array of image objects with url, photographer, etc.
+         */
+        async function fetchSafeImages(query, perPage = 5) {
+            if (!PEXELS_API_KEY) {
+                console.warn('Pexels API key not configured. Image features disabled.');
+                return [];
+            }
+
+            // Validate and sanitize query
+            const validation = validateImageSearchQuery(query);
+            if (!validation.isValid) {
+                console.warn(`Image search blocked: ${validation.reason}`);
+                return [];
+            }
+
+            try {
+                const response = await fetch(
+                    `https://api.pexels.com/v1/search?query=${encodeURIComponent(validation.sanitizedQuery)}&per_page=${Math.min(perPage, 80)}&orientation=landscape`,
+                    {
+                        headers: {
+                            'Authorization': PEXELS_API_KEY
+                        }
+                    }
+                );
+
+                if (!response.ok) {
+                    throw new Error(`Pexels API error: ${response.status}`);
+                }
+
+                const data = await response.json();
+
+                // Return formatted results with safety metadata
+                return data.photos.map(photo => ({
+                    id: photo.id,
+                    url: photo.src.medium,
+                    thumbnail: photo.src.small,
+                    large: photo.src.large,
+                    photographer: photo.photographer,
+                    photographer_url: photo.photographer_url,
+                    alt: photo.alt || validation.sanitizedQuery,
+                    pexels_url: photo.url
+                }));
+
+            } catch (error) {
+                console.error('Error fetching images from Pexels:', error);
+                return [];
+            }
+        }
+
+        /**
+         * Generates HTML for embedding a safe Pexels image in the lesson
+         * @param {string} imageUrl - The image URL
+         * @param {string} alt - Alt text for accessibility
+         * @param {string} photographer - Photographer name
+         * @param {string} photographerUrl - Photographer profile URL
+         * @returns {string} - HTML string for the image with attribution
+         */
+        function generateImageHTML(imageUrl, alt, photographer, photographerUrl) {
+            return `
+<div class="lesson-image" style="margin: 1rem 0; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
+    <img src="${imageUrl}" alt="${alt}" style="width: 100%; height: auto; display: block;">
+    <div style="padding: 0.5rem; background: var(--glass-bg); font-size: 0.8rem; color: var(--text-dark); opacity: 0.8;">
+        Photo by <a href="${photographerUrl}" target="_blank" style="color: var(--accent-color);">${photographer}</a> on <a href="https://www.pexels.com" target="_blank" style="color: var(--accent-color);">Pexels</a>
+    </div>
+</div>`;
+        }
+
+        // --- PROGRESS DATA PROCESSOR ---
+        async function processProgressData(progressData) {
+            if (!progressData || !progressData.sessions) return [];
+
+            const chunks = [];
+
+            // Create embeddings for recent sessions (last 5)
+            const recentSessions = progressData.sessions.slice(-5);
+
+            for (const session of recentSessions) {
+                const sessionText = `
+Session ${session.sessionId} - ${session.lessonTitle || 'Untitled'}
+Date: ${session.date}
+Stages completed: ${session.stagesCompleted?.map(s => s.name).join(', ') || 'None'}
+Vocabulary learned: ${session.vocabularyLearned?.map(v => v.word).join(', ') || 'None'}
+Grammar practiced: ${session.grammarPracticed?.map(g => g.point).join(', ') || 'None'}
+Performance: Fluency ${session.assessmentScores?.fluency || 0}/10, Accuracy ${session.assessmentScores?.accuracy || 0}/10
+                `.trim();
+
+                const embedding = await generateEmbedding(sessionText);
+                if (embedding) {
+                    chunks.push({ text: sessionText, embedding, metadata: session });
+                }
+            }
+
+            return chunks;
+        }
+
+        // --- RETRIEVE RELEVANT CONTEXT ---
+        async function retrieveRelevantContext(query, maxChunks = 3) {
+            if (progressEmbeddings.length === 0) {
+                return ''; // No progress data loaded
+            }
+
+            const queryEmbedding = await generateEmbedding(query);
+            if (!queryEmbedding) return '';
+
+            // Calculate similarities
+            const similarities = progressEmbeddings.map(chunk => ({
+                text: chunk.text,
+                similarity: cosineSimilarity(queryEmbedding, chunk.embedding),
+                metadata: chunk.metadata
+            }));
+
+            // Sort by similarity and take top chunks
+            similarities.sort((a, b) => b.similarity - a.similarity);
+            const topChunks = similarities.slice(0, maxChunks);
+
+            // Format context
+            let context = '\n### STUDENT PROGRESS CONTEXT\n';
+            context += 'Here is relevant information about the student based on their learning history:\n\n';
+
+            topChunks.forEach(chunk => {
+                if (chunk.similarity > 0.3) { // Threshold for relevance
+                    context += `${chunk.text}\n\n`;
+                }
+            });
+
+            // Add summary from cumulative progress
+            if (studentProgress?.cumulativeProgress) {
+                const cum = studentProgress.cumulativeProgress;
+                context += `**Overall Progress Summary:**\n`;
+                context += `- Total sessions: ${cum.totalSessions || 0}\n`;
+                context += `- Total hours: ${cum.totalHours || 0}\n`;
+                context += `- Vocabulary size: ${cum.vocabularySize || 0} words\n`;
+                if (cum.currentStrengths?.length > 0) {
+                    context += `- Strengths: ${cum.currentStrengths.join(', ')}\n`;
+                }
+                if (cum.currentWeaknesses?.length > 0) {
+                    context += `- Areas to work on: ${cum.currentWeaknesses.join(', ')}\n`;
+                }
+            }
+
+            // Add personalizations
+            if (studentProgress?.personalizations) {
+                const prefs = studentProgress.personalizations;
+                context += `\n**Learning Preferences:**\n`;
+                if (prefs.preferredPace) context += `- Preferred pace: ${prefs.preferredPace}\n`;
+                if (prefs.respondsWellTo?.length > 0) {
+                    context += `- Responds well to: ${prefs.respondsWellTo.join(', ')}\n`;
+                }
+                if (prefs.interests?.length > 0) {
+                    context += `- Interests: ${prefs.interests.join(', ')}\n`;
+                }
+            }
+
+            return context;
+        }
+
+        // --- COMPOSE FINAL PROMPT ---
+        async function composeFinalPrompt() {
+            let finalPrompt = BASE_PROMPT;
+
+            // Add lesson prompt (from XML or default)
+            const lessonPrompt = currentLesson ? generateLessonPrompt(currentLesson) : DEFAULT_LESSON_PLAN;
+            finalPrompt += lessonPrompt;
+
+            // Add student context (from RAG)
+            if (studentProgress && progressEmbeddings.length > 0) {
+                const context = await retrieveRelevantContext(
+                    currentLesson ? `${currentLesson.metadata.title} ${currentLesson.metadata.topic}` : 'English lesson',
+                    3
+                );
+                finalPrompt += context;
+            }
+
+            return finalPrompt;
+        }
+
+        // --- LOCALSTORAGE PERSISTENCE ---
+        function saveToLocalStorage() {
+            try {
+                if (currentLesson) {
+                    localStorage.setItem('nour_current_lesson', JSON.stringify(currentLesson));
+                }
+                if (studentProgress) {
+                    localStorage.setItem('nour_student_progress', JSON.stringify(studentProgress));
+                }
+            } catch (error) {
+                console.error('LocalStorage error:', error);
+            }
+        }
+
+        function loadFromLocalStorage() {
+            try {
+                const savedLesson = localStorage.getItem('nour_current_lesson');
+                const savedProgress = localStorage.getItem('nour_student_progress');
+
+                if (savedLesson) {
+                    currentLesson = JSON.parse(savedLesson);
+                    updateLessonStatus();
+                }
+                if (savedProgress) {
+                    studentProgress = JSON.parse(savedProgress);
+                    updateProgressStatus();
+                    // Regenerate embeddings
+                    processProgressData(studentProgress).then(chunks => {
+                        progressEmbeddings = chunks;
+                    });
+                }
+            } catch (error) {
+                console.error('LocalStorage load error:', error);
+            }
+        }
+
+        // --- UPDATE UI STATUS ---
+        function updateLessonStatus() {
+            const statusEl = document.getElementById('lesson-status');
+            if (currentLesson) {
+                statusEl.innerHTML = `<i class="fas fa-check-circle" style="color: var(--accent-color); margin-right: 0.3rem;"></i>${currentLesson.metadata.title} (${currentLesson.metadata.level})`;
+                statusEl.style.color = 'var(--primary-color)';
+                statusEl.style.fontStyle = 'normal';
+            } else {
+                statusEl.textContent = 'No lesson loaded';
+                statusEl.style.color = '#999';
+                statusEl.style.fontStyle = 'italic';
+            }
+        }
+
+        function updateProgressStatus() {
+            const statusEl = document.getElementById('progress-status');
+            if (studentProgress) {
+                const sessions = studentProgress.sessions?.length || 0;
+                const vocab = studentProgress.cumulativeProgress?.vocabularySize || 0;
+                statusEl.innerHTML = `<i class="fas fa-check-circle" style="color: var(--accent-color); margin-right: 0.3rem;"></i>${sessions} sessions, ${vocab} words`;
+                statusEl.style.color = 'var(--primary-color)';
+                statusEl.style.fontStyle = 'normal';
+            } else {
+                statusEl.textContent = 'No progress data';
+                statusEl.style.color = '#999';
+                statusEl.style.fontStyle = 'italic';
+            }
+        }
+
+        // --- FILE UPLOAD HANDLERS ---
+        async function handleLessonUpload(file) {
+            try {
+                const text = await file.text();
+                currentLesson = parseXMLLesson(text);
+                updateLessonStatus();
+                saveToLocalStorage();
+
+                // Reset chat to use new lesson
+                chatHistory = [];
+                chatEl.innerHTML = '';
+
+                await appendMessage('ai', '🔄 New lesson loaded! Ready to start with: **' + currentLesson.metadata.title + '**');
+            } catch (error) {
+                await appendMessage('error', 'Failed to load lesson file: ' + error.message);
+            }
+        }
+
+        async function handleProgressUpload(file) {
+            try {
+                const text = await file.text();
+                studentProgress = JSON.parse(text);
+                updateProgressStatus();
+                saveToLocalStorage();
+
+                // Generate embeddings for progress data
+                await appendMessage('ai', '⚙️ Processing your progress data...');
+                progressEmbeddings = await processProgressData(studentProgress);
+
+                await appendMessage('ai', `✅ Progress data loaded! I can see you've completed ${studentProgress.sessions?.length || 0} sessions. I'll use this to personalize our lesson.`);
+            } catch (error) {
+                await appendMessage('error', 'Failed to load progress file: ' + error.message);
+            }
+        }
+
+        // --- UI LOGIC ---
+        const chatEl = document.getElementById('chat-history');
+        const inputEl = document.getElementById('user-input');
+        const trackerContainer = document.getElementById('tracker-container');
+        let chatHistory = [];
+        let isMuted = false;
+
+        // Vocabulary Tracker
+        let vocabularyWords = new Set();
+        let currentSessionData = null;
+        let sessionStartTime = null;
+
+        // Initialize current session tracking
+        function initializeSession() {
+            sessionStartTime = new Date();
+            currentSessionData = {
+                sessionId: `session_${Date.now()}`,
+                date: sessionStartTime.toISOString(),
+                lessonTitle: currentLesson ? currentLesson.metadata.title : "Default Lesson",
+                duration: 0,
+                stagesCompleted: [],
+                vocabularyLearned: [],
+                grammarPracticed: [],
+                assessmentScores: {
+                    fluency: 0,
+                    accuracy: 0,
+                    complexity: 0,
+                    pronunciation: 0
+                }
+            };
+        }
+
+        // Update progress when stage changes
+        function updateSessionProgress(stageName, performance = 'moderate') {
+            if (!currentSessionData) return;
+
+            // Check if stage already tracked
+            const existingStage = currentSessionData.stagesCompleted.find(s => s.name === stageName);
+            if (!existingStage) {
+                currentSessionData.stagesCompleted.push({
+                    name: stageName,
+                    completed: true,
+                    timeSpent: 0, // Will be calculated at end
+                    performance: performance
+                });
+            }
+
+            // Update duration
+            if (sessionStartTime) {
+                const now = new Date();
+                currentSessionData.duration = Math.round((now - sessionStartTime) / 60000); // minutes
+            }
+        }
+
+        function updateVocabularyWallet(text) {
+            // Extract vocabulary words from hl-vocab spans
+            // NOTE: The AI is instructed to ONLY use hl-vocab when the student explicitly
+            // asks for a definition (e.g., "What does [word] mean?"). Words should NOT be
+            // highlighted just because they're important - only when student requests explanation.
+            const tempDiv = document.createElement('div');
+            tempDiv.innerHTML = text;
+            const vocabSpans = tempDiv.querySelectorAll('.hl-vocab');
+
+            vocabSpans.forEach(span => {
+                const word = span.textContent.trim();
+                if (word && !vocabularyWords.has(word.toLowerCase())) {
+                    vocabularyWords.add(word.toLowerCase());
+                    addVocabToWallet(word);
+
+                    // Add to session progress
+                    if (currentSessionData) {
+                        currentSessionData.vocabularyLearned.push({
+                            word: word,
+                            context: "", // Could be enhanced
+                            mastery: 0.5,
+                            reviewCount: 1
+                        });
+                    }
+                }
+            });
+        }
+
+        // Update student progress JSON with current session
+        function updateStudentProgressJSON() {
+            if (!studentProgress) {
+                // Create new progress structure
+                studentProgress = {
+                    studentId: `student_${Date.now()}`,
+                    profile: {
+                        name: "Anonymous Student",
+                        currentLevel: currentLesson ? currentLesson.metadata.level : "B1",
+                        nativeLanguage: "",
+                        learningGoals: []
+                    },
+                    sessions: [],
+                    cumulativeProgress: {
+                        totalSessions: 0,
+                        totalHours: 0,
+                        vocabularySize: 0,
+                        grammarPointsMastered: [],
+                        grammarPointsInProgress: [],
+                        currentWeaknesses: [],
+                        currentStrengths: []
+                    },
+                    personalizations: {
+                        preferredPace: "moderate",
+                        respondsWellTo: [],
+                        avoidsTriggersRelatedTo: [],
+                        culturalBackground: "",
+                        interests: [],
+                        learningStyle: {}
+                    }
+                };
+            }
+
+            if (currentSessionData) {
+                // Add current session to progress
+                studentProgress.sessions.push(currentSessionData);
+
+                // Update cumulative progress
+                studentProgress.cumulativeProgress.totalSessions = studentProgress.sessions.length;
+                studentProgress.cumulativeProgress.totalHours =
+                    studentProgress.sessions.reduce((sum, s) => sum + (s.duration / 60), 0);
+
+                // Count unique vocabulary
+                const allVocab = new Set();
+                studentProgress.sessions.forEach(s => {
+                    s.vocabularyLearned.forEach(v => allVocab.add(v.word.toLowerCase()));
+                });
+                studentProgress.cumulativeProgress.vocabularySize = allVocab.size;
+
+                // Save to localStorage
+                saveToLocalStorage();
+            }
+        }
+
+        function addVocabToWallet(word) {
+            const walletEl = document.getElementById('vocab-wallet');
+
+            // Remove empty state message if it exists
+            if (walletEl.children.length === 1 && walletEl.children[0].textContent.includes('Vocabulary words will appear')) {
+                walletEl.innerHTML = '';
+            }
+
+            // Create vocabulary item
+            const vocabItem = document.createElement('div');
+            vocabItem.className = 'vocab-item';
+            vocabItem.innerHTML = `
+                <span class="vocab-word">${word}</span>
+            `;
+
+            // Add to top of wallet
+            walletEl.insertBefore(vocabItem, walletEl.firstChild);
+
+            // Limit to 20 most recent items
+            if (walletEl.children.length > 20) {
+                walletEl.removeChild(walletEl.lastChild);
+            }
+        }
+
+        // Initialize Tracker
+        function initTracker() {
+            trackerContainer.innerHTML = '';
+            STAGES.forEach((stage, i) => {
+                const el = document.createElement('div');
+                el.className = `step-item ${i === 0 ? 'active' : ''}`;
+                el.id = `stage-${i}`;
+                el.innerHTML = `<div class="step-dot"></div><div class="step-title">${stage}</div>`;
+                trackerContainer.appendChild(el);
+            });
+        }
+
+        function updateTracker(stageName) {
+            const idx = STAGES.findIndex(s => stageName.toLowerCase().includes(s.toLowerCase().split(' ')[0].toLowerCase()));
+            if (idx !== -1) {
+                for(let i=0; i<idx; i++) {
+                    document.getElementById(`stage-${i}`).classList.remove('active');
+                    document.getElementById(`stage-${i}`).classList.add('done');
+                }
+                const curr = document.getElementById(`stage-${idx}`);
+                curr.classList.remove('done');
+                curr.classList.add('active');
+                curr.scrollIntoView({behavior: 'smooth', block: 'center'});
+
+                // Update session progress
+                updateSessionProgress(STAGES[idx]);
+            }
+        }
+
+        // --- MARKDOWN & PARSING ---
+        // Ensure we handle [object Object] by properly extracting text
+        async function appendMessage(role, text) {
+            const div = document.createElement('div');
+            div.className = `message ${role}`;
+
+            // Clean tags for display - remove STAGE and CELEBRATE markers
+            let displayHtml = text.replace(/\[\[STAGE:.*?\]\]/g, '').replace(/\[\[CELEBRATE:.*?\]\]/g, '');
+
+            // Render Markdown/HTML
+            try {
+                // If marked isn't loaded for some reason, fallback to text
+                if (typeof marked !== 'undefined') {
+                    div.innerHTML = marked.parse(displayHtml);
+                } else {
+                    div.innerHTML = displayHtml;
+                }
+            } catch (e) {
+                console.error("Markdown Error", e);
+                div.textContent = displayHtml;
+            }
+
+            chatEl.appendChild(div);
+            // Wait for images/layout before scrolling
+            requestAnimationFrame(() => {
+                chatEl.scrollTo({ top: chatEl.scrollHeight, behavior: 'smooth' });
+            });
+        }
+
+        async function processAIResponse(rawText) {
+            // Extract Stage
+            const stageMatch = rawText.match(/\[\[STAGE:\s*(.*?)\]\]/);
+            if (stageMatch) {
+                updateTracker(stageMatch[1]);
+            }
+
+            // Extract Celebration marker
+            const celebrateMatch = rawText.match(/\[\[CELEBRATE:\s*(.*?)\]\]/);
+            if (celebrateMatch) {
+                const reason = celebrateMatch[1];
+                setTimeout(() => showCelebration(reason), 1000); // Show after message is displayed
+            }
+
+            // Process Image markers - [[IMAGE: query]]
+            let processedText = rawText;
+            if (PEXELS_API_KEY) {
+                const imageMatches = [...rawText.matchAll(/\[\[IMAGE:\s*(.*?)\]\]/g)];
+
+                for (const match of imageMatches) {
+                    const searchQuery = match[1].trim();
+                    const images = await fetchSafeImages(searchQuery, 1);
+
+                    if (images.length > 0) {
+                        const img = images[0];
+                        const imageHTML = generateImageHTML(img.url, img.alt, img.photographer, img.photographer_url);
+                        processedText = processedText.replace(match[0], imageHTML);
+                    } else {
+                        // Remove the marker if no safe image found
+                        processedText = processedText.replace(match[0], '');
+                        console.warn(`Image search blocked or failed for query: "${searchQuery}"`);
+                    }
+                }
+            } else {
+                // Remove all image markers if Pexels is not configured
+                processedText = processedText.replace(/\[\[IMAGE:\s*(.*?)\]\]/g, '');
+            }
+
+            // Update vocabulary wallet with new words
+            updateVocabularyWallet(processedText);
+
+            return processedText;
+        }
+
+        // Celebration Screen Function
+        function showCelebration(reason) {
+            const celebrationScreen = document.getElementById('celebration-screen');
+            const titleEl = document.getElementById('celebration-title');
+            const messageEl = document.getElementById('celebration-message');
+
+            // Customize messages based on reason
+            const celebrations = {
+                'task': {
+                    title: 'Outstanding!',
+                    message: 'You completed that task brilliantly!'
+                },
+                'lesson': {
+                    title: 'Lesson Complete!',
+                    message: 'You\'ve finished the entire lesson with excellence!'
+                },
+                'breakthrough': {
+                    title: 'Amazing Progress!',
+                    message: 'You just made a breakthrough in your learning!'
+                },
+                'vocabulary': {
+                    title: 'Vocabulary Master!',
+                    message: 'You\'ve mastered so many new words today!'
+                },
+                'default': {
+                    title: 'Well Done!',
+                    message: reason || 'You\'re making incredible progress!'
+                }
+            };
+
+            // Determine celebration type
+            let celebType = 'default';
+            if (reason.toLowerCase().includes('task')) celebType = 'task';
+            else if (reason.toLowerCase().includes('lesson') || reason.toLowerCase().includes('feedback')) celebType = 'lesson';
+            else if (reason.toLowerCase().includes('breakthrough') || reason.toLowerCase().includes('improvement')) celebType = 'breakthrough';
+            else if (reason.toLowerCase().includes('vocabulary') || reason.toLowerCase().includes('words')) celebType = 'vocabulary';
+
+            const celeb = celebrations[celebType];
+            titleEl.textContent = celeb.title;
+            messageEl.textContent = celeb.message;
+
+            // Show celebration
+            celebrationScreen.classList.add('active');
+
+            // Create confetti
+            createConfetti();
+
+            // Auto-hide after 4 seconds
+            setTimeout(() => {
+                celebrationScreen.classList.remove('active');
+            }, 4000);
+
+            // Click to dismiss
+            celebrationScreen.onclick = () => {
+                celebrationScreen.classList.remove('active');
+            };
+        }
+
+        function createConfetti() {
+            const celebrationScreen = document.getElementById('celebration-screen');
+            const colors = ['#667eea', '#764ba2', '#f093fb', '#4facfe', '#00f2fe', '#ffffff'];
+
+            for (let i = 0; i < 50; i++) {
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti';
+                confetti.style.left = Math.random() * 100 + '%';
+                confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                confetti.style.animationDelay = Math.random() * 3 + 's';
+                confetti.style.animationDuration = (Math.random() * 2 + 2) + 's';
+                celebrationScreen.appendChild(confetti);
+
+                // Remove after animation
+                setTimeout(() => {
+                    confetti.remove();
+                }, 5000);
+            }
+        }
+
+        // --- API CALL WITH RETRY LOGIC ---
+        async function sendMessage() {
+            const text = inputEl.value.trim();
+            if (!text) return;
+
+            inputEl.value = '';
+            appendMessage('user', text);
+
+            document.getElementById('header-status').textContent = "Thinking...";
+            document.getElementById('avatar-wrapper').classList.add('listening');
+
+            chatHistory.push({ role: "user", parts: [{ text: text }] });
+
+            // RAG: Compose final prompt with BASE + LESSON + CONTEXT
+            const finalPrompt = await composeFinalPrompt();
+
+            // Retry logic for network stability
+            let retries = 3;
+            let lastError;
+
+            for (let attempt = 0; attempt <= retries; attempt++) {
+                try {
+                    const controller = new AbortController();
+                    const timeoutId = setTimeout(() => controller.abort(), 30000); // 30s timeout
+
+                    const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${MODEL_NAME}:generateContent?key=${GEMINI_API_KEY}`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            contents: chatHistory,
+                            system_instruction: { parts: [{ text: finalPrompt }] }
+                        }),
+                        signal: controller.signal
+                    });
+
+                    clearTimeout(timeoutId);
+
+                    if (!response.ok) {
+                        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                    }
+
+                    const data = await response.json();
+
+                    if (data.error) {
+                        throw new Error(data.error.message);
+                    }
+
+                    if (!data.candidates || !data.candidates[0].content) {
+                        throw new Error("Empty response from AI");
+                    }
+
+                    const aiText = data.candidates[0].content.parts[0].text;
+
+                    const processedText = await processAIResponse(aiText);
+                    appendMessage('ai', processedText);
+
+                    chatHistory.push({ role: "model", parts: [{ text: aiText }] });
+
+                    if (!isMuted) speak(processedText);
+
+                    // Success - break retry loop
+                    break;
+
+                } catch (error) {
+                    lastError = error;
+                    console.error(`Attempt ${attempt + 1} failed:`, error);
+
+                    if (attempt < retries) {
+                        // Wait before retry (exponential backoff)
+                        const waitTime = Math.min(1000 * Math.pow(2, attempt), 5000);
+                        document.getElementById('header-status').textContent = `Retrying... (${attempt + 1}/${retries})`;
+                        await new Promise(resolve => setTimeout(resolve, waitTime));
+                    } else {
+                        // All retries failed
+                        appendMessage('error', `Connection error: ${lastError.message}. Please check your internet connection and try again.`);
+                    }
+                }
+            }
+
+            document.getElementById('header-status').textContent = "Online";
+            document.getElementById('avatar-wrapper').classList.remove('listening');
+        }
+
+        // --- SPEECH RECOGNITION (FIXED) ---
+        let recognition;
+        const micBtn = document.getElementById('mic-btn');
+        
+        // Browser compatibility check
+        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+        
+        if (SpeechRecognition) {
+            recognition = new SpeechRecognition();
+            recognition.continuous = false;
+            recognition.lang = 'en-US';
+            
+            recognition.onstart = () => {
+                micBtn.classList.add('listening');
+                inputEl.placeholder = "Listening...";
+            };
+            
+            recognition.onend = () => {
+                micBtn.classList.remove('listening');
+                inputEl.placeholder = "Type or tap microphone...";
+                // Trigger send automatically if desired, or let user click send
+            };
+            
+            recognition.onerror = (event) => {
+                console.error("Speech Error:", event.error);
+                micBtn.classList.remove('listening');
+                alert("Microphone error: " + event.error);
+            };
+
+            recognition.onresult = (event) => {
+                const transcript = event.results[0][0].transcript;
+                inputEl.value = transcript;
+            };
+
+            micBtn.addEventListener('click', () => {
+                if (micBtn.classList.contains('listening')) {
+                    recognition.stop();
+                } else {
+                    recognition.start();
+                }
+            });
+        } else {
+            micBtn.style.display = 'none'; // Hide if not supported
+            console.log("Speech Recognition not supported in this browser.");
+        }
+
+        // --- TEXT TO SPEECH (Browser Speech Synthesis) ---
+        let currentUtterance = null;
+        let voicesLoaded = false;
+        let preferredVoice = null;
+
+        // Initialize voices when available
+        function initVoices() {
+            const synth = window.speechSynthesis;
+            const voices = synth.getVoices();
+
+            if (voices.length > 0) {
+                voicesLoaded = true;
+                // Try to find a quality female voice
+                preferredVoice = voices.find(voice =>
+                    voice.name.includes('Google UK English Female') ||
+                    voice.name.includes('Microsoft Zira') ||
+                    voice.name.includes('Samantha') ||
+                    voice.name.includes('Karen') ||
+                    voice.name.includes('Victoria') ||
+                    voice.name.includes('Female')
+                ) || voices.find(voice => voice.lang.startsWith('en'));
+            }
+        }
+
+        // Load voices on page load and when they change
+        if (window.speechSynthesis) {
+            window.speechSynthesis.onvoiceschanged = initVoices;
+            initVoices();
+        }
+
+        async function speak(text) {
+            // Clean HTML tags and special markers for speech
+            const cleanText = text.replace(/<[^>]*>/g, '').replace(/\[\[.*?\]\]/g, '').trim();
+
+            if (!cleanText || isMuted) return;
+
+            const synth = window.speechSynthesis;
+
+            // Cancel any ongoing speech
+            if (synth.speaking) {
+                synth.cancel();
+            }
+
+            // Wait for voices to load if not ready
+            if (!voicesLoaded) {
+                initVoices();
+                // If still not loaded, wait a bit
+                if (!voicesLoaded) {
+                    await new Promise(resolve => setTimeout(resolve, 100));
+                    initVoices();
+                }
+            }
+
+            document.getElementById('avatar-wrapper').classList.add('speaking');
+
+            // Split text into chunks (speech synthesis has character limits)
+            const chunks = splitTextIntoChunks(cleanText, 150);
+
+            // Speak each chunk sequentially
+            speakChunks(chunks, 0);
+        }
+
+        function splitTextIntoChunks(text, maxLength) {
+            const sentences = text.match(/[^.!?]+[.!?]+/g) || [text];
+            const chunks = [];
+            let currentChunk = '';
+
+            for (const sentence of sentences) {
+                if ((currentChunk + sentence).length > maxLength && currentChunk) {
+                    chunks.push(currentChunk.trim());
+                    currentChunk = sentence;
+                } else {
+                    currentChunk += ' ' + sentence;
+                }
+            }
+
+            if (currentChunk.trim()) {
+                chunks.push(currentChunk.trim());
+            }
+
+            return chunks;
+        }
+
+        function speakChunks(chunks, index) {
+            if (index >= chunks.length || isMuted) {
+                document.getElementById('avatar-wrapper').classList.remove('speaking');
+                return;
+            }
+
+            const synth = window.speechSynthesis;
+
+            // Safety check - cancel if synth is stuck
+            if (synth.pending) {
+                synth.cancel();
+            }
+
+            const utterThis = new SpeechSynthesisUtterance(chunks[index]);
+
+            // Configure voice
+            utterThis.pitch = 1.0;
+            utterThis.rate = 0.92;
+            utterThis.volume = 1.0;
+
+            // Use preferred voice if available
+            if (preferredVoice) {
+                utterThis.voice = preferredVoice;
+            }
+
+            utterThis.onend = () => {
+                // Small delay between chunks for natural pacing
+                setTimeout(() => {
+                    speakChunks(chunks, index + 1);
+                }, 50);
+            };
+
+            utterThis.onerror = (event) => {
+                console.error('Speech synthesis error:', event.error);
+                // Try to continue with next chunk on error
+                if (event.error !== 'canceled') {
+                    setTimeout(() => {
+                        speakChunks(chunks, index + 1);
+                    }, 100);
+                } else {
+                    document.getElementById('avatar-wrapper').classList.remove('speaking');
+                }
+            };
+
+            // Add small delay before speaking to ensure synth is ready
+            setTimeout(() => {
+                synth.speak(utterThis);
+                currentUtterance = utterThis;
+            }, 10);
+        }
+
+        document.getElementById('sound-btn').addEventListener('click', function() {
+            isMuted = !isMuted;
+            this.style.opacity = isMuted ? '0.5' : '1';
+            if (isMuted && window.speechSynthesis) {
+                window.speechSynthesis.cancel();
+                document.getElementById('avatar-wrapper').classList.remove('speaking');
+            }
+        });
+
+        // --- INITIALIZATION ---
+        document.getElementById('start-session-btn').addEventListener('click', async () => {
+            const key = document.getElementById('api-key-input').value;
+            if (key) {
+                GEMINI_API_KEY = key;
+                document.getElementById('api-modal').style.display = 'none';
+                initTracker();
+
+                // Load saved lesson and progress from localStorage
+                loadFromLocalStorage();
+
+                // Initialize session tracking
+                initializeSession();
+
+                // Auto-start conversation
+                document.getElementById('header-status').textContent = "Initializing...";
+                document.getElementById('avatar-wrapper').classList.add('listening');
+
+                try {
+                    // RAG: Compose final prompt
+                    const finalPrompt = await composeFinalPrompt();
+
+                    const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${MODEL_NAME}:generateContent?key=${GEMINI_API_KEY}`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            contents: [
+                                {
+                                    role: "user",
+                                    parts: [{ text: "Hello" }]
+                                }
+                            ],
+                            system_instruction: { parts: [{ text: finalPrompt }] }
+                        })
+                    });
+
+                    const data = await response.json();
+
+                    if (data.error) {
+                        throw new Error(data.error.message);
+                    }
+
+                    if (data.candidates && data.candidates[0].content) {
+                        const aiText = data.candidates[0].content.parts[0].text;
+                        const processedText = await processAIResponse(aiText);
+                        appendMessage('ai', processedText);
+                        chatHistory.push({ role: "user", parts: [{ text: "Hello" }] });
+                        chatHistory.push({ role: "model", parts: [{ text: aiText }] });
+
+                        if (!isMuted) speak(processedText);
+                    }
+                } catch (error) {
+                    console.error(error);
+                    appendMessage('error', `Error: ${error.message}`);
+                } finally {
+                    document.getElementById('header-status').textContent = "Online";
+                    document.getElementById('avatar-wrapper').classList.remove('listening');
+                }
+            }
+        });
+
+        document.getElementById('send-btn').addEventListener('click', sendMessage);
+
+        // Enter key to send (Shift+Enter for new line)
+        inputEl.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                sendMessage();
+            }
+        });
+
+        // Auto-resize textarea and add typing indicator
+        let typingTimeout;
+        inputEl.addEventListener('input', function() {
+            this.style.height = 'auto';
+            this.style.height = Math.min(this.scrollHeight, 120) + 'px';
+
+            // Add typing indicator to avatar
+            const avatarWrapper = document.getElementById('avatar-wrapper');
+            avatarWrapper.classList.add('typing');
+
+            // Clear previous timeout
+            clearTimeout(typingTimeout);
+
+            // Remove typing indicator after user stops typing
+            typingTimeout = setTimeout(() => {
+                avatarWrapper.classList.remove('typing');
+            }, 1000);
+        });
+
+        // --- FILE UPLOAD EVENT LISTENERS ---
+        document.getElementById('lesson-upload-btn').addEventListener('click', () => {
+            document.getElementById('lesson-upload').click();
+        });
+
+        document.getElementById('lesson-upload').addEventListener('change', async (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                await handleLessonUpload(file);
+            }
+        });
+
+        document.getElementById('progress-upload-btn').addEventListener('click', () => {
+            document.getElementById('progress-upload').click();
+        });
+
+        document.getElementById('progress-upload').addEventListener('change', async (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                await handleProgressUpload(file);
+            }
+        });
+
+        document.getElementById('theme-btn').addEventListener('click', () => {
+            document.body.classList.toggle('theme-ocean');
+            // Re-init canvas colors
+            initWaves();
+        });
+
+        // --- CANVAS BACKGROUND (Performance Optimized) ---
+        const canvas = document.getElementById('wave-canvas');
+        const ctx = canvas.getContext('2d');
+        let width, height;
+        let waves = [];
+        let animationFrameId;
+
+        // Check if device prefers reduced motion or is low-end
+        const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        const isLowEndDevice = navigator.hardwareConcurrency && navigator.hardwareConcurrency < 4;
+
+        function initWaves() {
+            width = canvas.width = window.innerWidth;
+            height = canvas.height = window.innerHeight;
+
+            const style = getComputedStyle(document.body);
+            const p = style.getPropertyValue('--primary-color').trim();
+
+            // Helper to get RGB from hex
+            const hex2rgba = (hex, alpha = 1) => {
+                const [r, g, b] = hex.match(/\w\w/g).map(x => parseInt(x, 16));
+                return `rgba(${r},${g},${b},${alpha})`;
+            };
+
+            const color = p.startsWith('#') ? hex2rgba(p, 0.1) : 'rgba(100,100,100,0.1)';
+
+            // Reduce waves on low-end devices
+            if (isLowEndDevice || prefersReducedMotion) {
+                waves = [
+                    { y: height * 0.65, length: 0.002, amp: 50, speed: 0.001, offset: 0 }
+                ];
+            } else {
+                waves = [
+                    { y: height * 0.6, length: 0.002, amp: 60, speed: 0.002, offset: 0 },
+                    { y: height * 0.65, length: 0.003, amp: 40, speed: 0.003, offset: 2 },
+                    { y: height * 0.7, length: 0.001, amp: 80, speed: 0.001, offset: 4 }
+                ];
+            }
+
+            // Cancel previous animation if exists
+            if (animationFrameId) {
+                cancelAnimationFrame(animationFrameId);
+            }
+
+            // Start animation
+            if (!prefersReducedMotion) {
+                draw();
+            }
+        }
+
+        function draw() {
+            ctx.clearRect(0, 0, width, height);
+
+            const style = getComputedStyle(document.body);
+            const p = style.getPropertyValue('--primary-color').trim();
+            ctx.fillStyle = p.startsWith('#') ? p + '1A' : 'rgba(100,100,100,0.1)';
+
+            waves.forEach(w => {
+                ctx.beginPath();
+                ctx.moveTo(0, height);
+                ctx.lineTo(0, w.y);
+
+                // Reduce resolution on low-end devices
+                const step = (isLowEndDevice || prefersReducedMotion) ? 20 : 10;
+                for (let x = 0; x <= width; x += step) {
+                    ctx.lineTo(x, w.y + Math.sin(x * w.length + w.offset) * w.amp);
+                }
+                ctx.lineTo(width, height);
+                ctx.fill();
+                w.offset += w.speed;
+            });
+
+            animationFrameId = requestAnimationFrame(draw);
+        }
+
+        // Debounced resize handler
+        let resizeTimeout;
+        window.addEventListener('resize', () => {
+            clearTimeout(resizeTimeout);
+            resizeTimeout = setTimeout(initWaves, 200);
+        });
+
+        initWaves();
+
+        // --- DOWNLOAD REPORT (PDF) ---
+        document.getElementById('download-report-btn').addEventListener('click', () => {
+            // Update progress before generating report
+            updateStudentProgressJSON();
+
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+
+            // Page margins
+            const leftMargin = 20;
+            const rightMargin = 190;
+            const pageWidth = rightMargin - leftMargin;
+
+            // Decorative header bar
+            doc.setFillColor(74, 89, 42); // sage-700
+            doc.rect(0, 0, 210, 35, 'F');
+
+            // Title
+            doc.setFontSize(24);
+            doc.setTextColor(255, 255, 255);
+            doc.text('Noor Learning Report', leftMargin, 18);
+
+            // Lesson title
+            if (currentLesson) {
+                doc.setFontSize(12);
+                doc.setTextColor(202, 204, 165); // light-green
+                doc.text(currentLesson.metadata.title, leftMargin, 26);
+            }
+
+            // Date
+            doc.setFontSize(9);
+            doc.setTextColor(255, 255, 255);
+            const today = new Date().toLocaleDateString('en-US', {
+                year: 'numeric', month: 'long', day: 'numeric'
+            });
+            doc.text(today, leftMargin, 32);
+
+            let y = 50;
+
+            // Session Summary Box
+            doc.setFillColor(245, 241, 230); // cream
+            doc.roundedRect(leftMargin, y, pageWidth, 25, 3, 3, 'F');
+            doc.setFontSize(11);
+            doc.setTextColor(74, 89, 42);
+            doc.setFont(undefined, 'bold');
+            doc.text('Session Summary', leftMargin + 5, y + 8);
+            doc.setFont(undefined, 'normal');
+            doc.setFontSize(9);
+            doc.setTextColor(50);
+            if (currentSessionData) {
+                doc.text(`Duration: ${currentSessionData.duration} minutes`, leftMargin + 5, y + 15);
+                doc.text(`Stages completed: ${currentSessionData.stagesCompleted.length}`, leftMargin + 5, y + 21);
+            }
+            y += 35;
+
+            // Vocabulary Section
+            doc.setFontSize(14);
+            doc.setTextColor(92, 107, 83);
+            doc.setFont(undefined, 'bold');
+            doc.text('Vocabulary Learned', leftMargin, y);
+            doc.setFont(undefined, 'normal');
+            y += 8;
+
+            doc.setFontSize(10);
+            doc.setTextColor(50);
+
+            if (vocabularyWords.size > 0) {
+                const vocabArray = Array.from(vocabularyWords);
+                let col = 0;
+                const colWidth = 85;
+                const startY = y;
+
+                vocabArray.forEach((word, index) => {
+                    if (y > 270) {
+                        doc.addPage();
+                        y = 20;
+                        col = 0;
+                    }
+
+                    const xPos = leftMargin + (col * colWidth);
+
+                    // Highlight box for each word
+                    doc.setFillColor(255, 232, 204); // vocab highlight color
+                    doc.roundedRect(xPos, y - 4, colWidth - 5, 7, 1, 1, 'F');
+                    doc.setTextColor(211, 84, 0);
+                    doc.setFont(undefined, 'bold');
+                    doc.text(word, xPos + 2, y + 1);
+                    doc.setFont(undefined, 'normal');
+                    doc.setTextColor(50);
+
+                    col++;
+                    if (col >= 2) {
+                        col = 0;
+                        y += 10;
+                    }
+                });
+
+                if (col > 0) y += 10;
+                y += 5;
+            } else {
+                doc.text('No vocabulary words recorded in this session.', leftMargin, y);
+                y += 10;
+            }
+
+            // Lesson Stages Section
+            if (currentSessionData && currentSessionData.stagesCompleted.length > 0) {
+                if (y > 240) {
+                    doc.addPage();
+                    y = 20;
+                }
+
+                doc.setFontSize(14);
+                doc.setTextColor(92, 107, 83);
+                doc.setFont(undefined, 'bold');
+                doc.text('Stages Completed', leftMargin, y);
+                doc.setFont(undefined, 'normal');
+                y += 8;
+
+                doc.setFontSize(9);
+                currentSessionData.stagesCompleted.forEach(stage => {
+                    if (y > 270) {
+                        doc.addPage();
+                        y = 20;
+                    }
+
+                    doc.setDrawColor(122, 138, 104);
+                    doc.circle(leftMargin + 2, y - 1, 1.5, 'FD');
+                    doc.setTextColor(50);
+                    doc.text(stage.name, leftMargin + 7, y);
+                    y += 6;
+                });
+                y += 8;
+            }
+
+            // Conversation Highlights (shortened)
+            if (y > 200) {
+                doc.addPage();
+                y = 20;
+            }
+
+            doc.setFontSize(14);
+            doc.setTextColor(92, 107, 83);
+            doc.setFont(undefined, 'bold');
+            doc.text('Key Moments', leftMargin, y);
+            doc.setFont(undefined, 'normal');
+            y += 8;
+
+            doc.setFontSize(9);
+            doc.setTextColor(50);
+
+            // Show first 5 exchanges only
+            const recentExchanges = chatHistory.slice(-10);
+            recentExchanges.forEach((msg, i) => {
+                if (y > 270) {
+                    doc.addPage();
+                    y = 20;
+                }
+
+                const role = msg.role === 'user' ? '👤 You' : '🤖 Noor';
+                const text = msg.parts[0].text.replace(/<[^>]*>/g, '').replace(/\[\[STAGE:.*?\]\]/g, '').substring(0, 150);
+
+                doc.setFont(undefined, 'bold');
+                doc.setTextColor(92, 107, 83);
+                doc.text(role, leftMargin, y);
+                doc.setFont(undefined, 'normal');
+                doc.setTextColor(50);
+
+                const lines = doc.splitTextToSize(text, pageWidth - 5);
+                doc.text(lines.slice(0, 2), leftMargin + 5, y + 5);
+                y += 5 + (Math.min(lines.length, 2) * 4) + 6;
+            });
+
+            // Footer with decorative bar
+            const footerY = 285;
+            doc.setFillColor(122, 154, 122); // secondary-sage
+            doc.rect(0, footerY, 210, 12, 'F');
+            doc.setFontSize(8);
+            doc.setTextColor(255, 255, 255);
+            doc.text('Generated by Noor AI Tutor | Keep practicing, keep growing!', leftMargin, footerY + 7);
+
+            doc.save(`Noor-lesson-report-${Date.now()}.pdf`);
+        });
+
+        // --- DOWNLOAD PROGRESS JSON ---
+        document.getElementById('download-progress-btn').addEventListener('click', () => {
+            // Update progress with current session
+            updateStudentProgressJSON();
+
+            if (!studentProgress) {
+                alert('No progress data to download. Complete a lesson first!');
+                return;
+            }
+
+            // Create JSON blob
+            const dataStr = JSON.stringify(studentProgress, null, 2);
+            const dataBlob = new Blob([dataStr], { type: 'application/json' });
+
+            // Create download link
+            const url = URL.createObjectURL(dataBlob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = `Noor-progress-${Date.now()}.json`;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            URL.revokeObjectURL(url);
+        });
+
+    </script>
 </body>
 </html>
 ```
