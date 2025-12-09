@@ -550,6 +550,29 @@
         .upload-trigger-btn { width: 100%; padding: 10px; background: var(--secondary-color); color: white; border: none; border-radius: 12px; font-size: 0.85rem; font-weight: 600; cursor: pointer; transition: all 0.2s ease; }
         .upload-trigger-btn:hover { background: var(--primary-color); transform: translateY(-1px); }
 
+        /* Settings Modal */
+        #settings-modal { position: fixed; inset: 0; background: rgba(0, 0, 0, 0.5); z-index: 998; display: none; align-items: center; justify-content: center; backdrop-filter: blur(5px); }
+        #settings-modal.show { display: flex; }
+        .settings-content { background: white; padding: 2rem; border-radius: 24px; width: 90%; max-width: 500px; max-height: 80vh; overflow-y: auto; box-shadow: 0 20px 60px rgba(0,0,0,0.2); }
+        .settings-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; border-bottom: 2px solid #f0f0f0; padding-bottom: 1rem; }
+        .settings-header h2 { margin: 0; font-family: var(--font-display); color: var(--primary-color); }
+        .settings-close { background: none; border: none; font-size: 24px; cursor: pointer; color: #999; transition: color 0.2s; }
+        .settings-close:hover { color: var(--primary-color); }
+        .settings-group { margin: 1.5rem 0; }
+        .settings-group h3 { font-size: 0.9rem; font-family: var(--font-ui); color: var(--secondary-color); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 1rem; }
+        .setting-item { display: flex; justify-content: space-between; align-items: center; padding: 1rem; background: #f9f9f9; border-radius: 12px; margin-bottom: 0.75rem; }
+        .setting-label { font-weight: 600; color: var(--text-dark); }
+        .toggle-switch { position: relative; width: 50px; height: 26px; }
+        .toggle-switch input { opacity: 0; width: 0; height: 0; }
+        .toggle-slider { position: absolute; cursor: pointer; inset: 0; background-color: #ccc; border-radius: 26px; transition: 0.3s; }
+        .toggle-slider:before { position: absolute; content: ""; height: 20px; width: 20px; left: 3px; bottom: 3px; background-color: white; border-radius: 50%; transition: 0.3s; }
+        .toggle-switch input:checked + .toggle-slider { background-color: var(--primary-color); }
+        .toggle-switch input:checked + .toggle-slider:before { transform: translateX(24px); }
+        .theme-selector { display: flex; gap: 0.5rem; }
+        .theme-option { flex: 1; padding: 0.75rem; border: 2px solid #e0e0e0; border-radius: 12px; text-align: center; cursor: pointer; transition: all 0.2s; font-size: 0.85rem; }
+        .theme-option.active { border-color: var(--primary-color); background: var(--primary-color); color: white; font-weight: 700; }
+        .theme-option:hover { transform: translateY(-2px); }
+
         /* Mobile Responsive Design */
         @media (max-width: 1024px) {
             #activity-container {
@@ -910,11 +933,8 @@
                 </div>
 
                 <div style="display:flex; gap:10px;">
-                    <button class="icon-btn" id="sound-btn" title="Toggle Sound">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg>
-                    </button>
-                    <button class="icon-btn" id="theme-btn" title="Switch Theme">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+                    <button class="icon-btn" id="settings-btn" title="Settings">
+                        <i class="fas fa-cog" style="font-size: 20px;"></i>
                     </button>
                 </div>
             </div>
@@ -979,18 +999,65 @@
         </div>
     </div>
 
-    <!-- MODAL -->
+    <!-- API MODAL -->
     <div id="api-modal">
         <div class="modal-box">
             <h1 style="font-family:var(--font-display); color:var(--primary-color);">Welcome</h1>
-            <p>Please enter your Gemini API Key to begin.</p>
+            <p>Please enter your Groq API Key to begin.</p>
             <div style="background: #f0f5f5; padding: 0.75rem; border-radius: 8px; margin: 1rem 0; font-size: 0.9rem;">
                 <strong><i class="fas fa-info-circle"></i> Don't have an API key?</strong><br>
-                Get a free key at <a href="https://aistudio.google.com/app/apikey" target="_blank" style="color: var(--accent-color); text-decoration: underline;">Google AI Studio</a>
-                <br><small style="opacity: 0.8;">Your key is stored locally and only sent to Google's Gemini API.</small>
+                Get a free key at <a href="https://console.groq.com/keys" target="_blank" style="color: var(--accent-color); text-decoration: underline;">Groq Console</a>
+                <br><small style="opacity: 0.8;">Your key is stored locally and only sent to Groq's API.</small>
             </div>
             <input type="password" id="api-key-input" class="api-input" placeholder="Paste API Key here...">
             <button class="start-btn" id="start-session-btn">Start Session</button>
+        </div>
+    </div>
+
+    <!-- SETTINGS MODAL -->
+    <div id="settings-modal">
+        <div class="settings-content">
+            <div class="settings-header">
+                <h2><i class="fas fa-cog"></i> Settings</h2>
+                <button class="settings-close" id="settings-close">&times;</button>
+            </div>
+
+            <div class="settings-group">
+                <h3>Appearance</h3>
+                <div class="setting-item">
+                    <span class="setting-label">Theme</span>
+                    <div class="theme-selector">
+                        <div class="theme-option active" data-theme="sage">Sage</div>
+                        <div class="theme-option" data-theme="ocean">Ocean</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="settings-group">
+                <h3>Audio</h3>
+                <div class="setting-item">
+                    <span class="setting-label">Sound Effects</span>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="sound-toggle" checked>
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+                <div class="setting-item">
+                    <span class="setting-label">Voice Output</span>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="voice-toggle" checked>
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="settings-group">
+                <h3>API Configuration</h3>
+                <div class="setting-item" style="flex-direction: column; align-items: flex-start; gap: 0.75rem;">
+                    <span class="setting-label">Groq API Key</span>
+                    <button class="upload-trigger-btn" id="reset-api-btn" style="width: 100%;">Reset API Key</button>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -1012,8 +1079,11 @@
 
     <script>
         // --- CONFIGURATION ---
-        const MODEL_NAME = 'gemini-2.5-flash';
-        let GEMINI_API_KEY = '';
+        const MODEL_NAME = 'llama-3.3-70b-versatile';
+        const GROQ_API_URL = 'https://api.groq.com/openai/v1/chat/completions';
+        let GROQ_API_KEY = '';
+        let soundEnabled = true;
+        let voiceEnabled = true;
 
         // --- PEXELS CONFIGURATION ---
         // To enable safe image integration, get a free API key from https://www.pexels.com/api/
@@ -1046,6 +1116,18 @@
             "Reporting",
             "Feedback"
         ];
+
+        // Check for stored API key on page load
+        const storedApiKey = localStorage.getItem('groq_api_key');
+        if (storedApiKey) {
+            GROQ_API_KEY = storedApiKey;
+            document.getElementById('api-modal').style.display = 'none';
+            // Initialize tracker and load saved data
+            setTimeout(() => {
+                initTracker();
+                loadFromLocalStorage();
+            }, 100);
+        }
 
         // --- SYSTEM PROMPT (Pedagogically Enhanced) ---
         // ===================================================================
@@ -1543,47 +1625,44 @@ ${lesson.objectives.map((obj, i) => `${i + 1}. ${obj}`).join('\n')}
             return prompt;
         }
 
-        // --- GEMINI EMBEDDING API ---
-        async function generateEmbedding(text) {
-            const url = `https://generativelanguage.googleapis.com/v1beta/models/text-embedding-004:embedContent?key=${GEMINI_API_KEY}`;
+        // --- KEYWORD-BASED SEMANTIC SEARCH (REPLACEMENT FOR EMBEDDINGS) ---
+        // Simple but effective TF-IDF-like approach for RAG without external API calls
 
-            try {
-                const response = await fetch(url, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        model: 'models/text-embedding-004',
-                        content: { parts: [{ text }] }
-                    })
-                });
-
-                if (!response.ok) {
-                    throw new Error(`Embedding API error: ${response.status}`);
-                }
-
-                const data = await response.json();
-                return data.embedding.values;
-            } catch (error) {
-                console.error('Error generating embedding:', error);
-                return null;
-            }
+        function tokenize(text) {
+            // Convert to lowercase, remove punctuation, split into words
+            return text.toLowerCase()
+                .replace(/[^\w\s]/g, ' ')
+                .split(/\s+/)
+                .filter(word => word.length > 2); // Filter out very short words
         }
 
-        // --- COSINE SIMILARITY ---
-        function cosineSimilarity(vecA, vecB) {
-            if (!vecA || !vecB || vecA.length !== vecB.length) return 0;
+        function calculateKeywordSimilarity(query, document) {
+            const queryTokens = new Set(tokenize(query));
+            const docTokens = tokenize(document);
 
-            let dotProduct = 0;
-            let normA = 0;
-            let normB = 0;
+            if (queryTokens.size === 0 || docTokens.length === 0) return 0;
 
-            for (let i = 0; i < vecA.length; i++) {
-                dotProduct += vecA[i] * vecB[i];
-                normA += vecA[i] * vecA[i];
-                normB += vecB[i] * vecB[i];
+            // Calculate overlap - how many query terms appear in document
+            let matches = 0;
+            const docSet = new Set(docTokens);
+
+            queryTokens.forEach(token => {
+                if (docSet.has(token)) {
+                    matches++;
+                }
+            });
+
+            // Normalize by query length (precision-like metric)
+            const score = matches / queryTokens.size;
+
+            // Boost score if there are exact phrase matches
+            const queryText = query.toLowerCase();
+            const docText = document.toLowerCase();
+            if (docText.includes(queryText)) {
+                return score + 0.5; // Significant boost for exact matches
             }
 
-            return dotProduct / (Math.sqrt(normA) * Math.sqrt(normB));
+            return score;
         }
 
         // --- SAFE PEXELS IMAGE INTEGRATION ---
@@ -1705,7 +1784,7 @@ ${lesson.objectives.map((obj, i) => `${i + 1}. ${obj}`).join('\n')}
 
             const chunks = [];
 
-            // Create embeddings for recent sessions (last 5)
+            // Create text chunks for recent sessions (last 5) - no embeddings needed
             const recentSessions = progressData.sessions.slice(-5);
 
             for (const session of recentSessions) {
@@ -1718,10 +1797,7 @@ Grammar practiced: ${session.grammarPracticed?.map(g => g.point).join(', ') || '
 Performance: Fluency ${session.assessmentScores?.fluency || 0}/10, Accuracy ${session.assessmentScores?.accuracy || 0}/10
                 `.trim();
 
-                const embedding = await generateEmbedding(sessionText);
-                if (embedding) {
-                    chunks.push({ text: sessionText, embedding, metadata: session });
-                }
+                chunks.push({ text: sessionText, metadata: session });
             }
 
             return chunks;
@@ -1733,13 +1809,10 @@ Performance: Fluency ${session.assessmentScores?.fluency || 0}/10, Accuracy ${se
                 return ''; // No progress data loaded
             }
 
-            const queryEmbedding = await generateEmbedding(query);
-            if (!queryEmbedding) return '';
-
-            // Calculate similarities
+            // Calculate similarities using keyword-based approach
             const similarities = progressEmbeddings.map(chunk => ({
                 text: chunk.text,
-                similarity: cosineSimilarity(queryEmbedding, chunk.embedding),
+                similarity: calculateKeywordSimilarity(query, chunk.text),
                 metadata: chunk.metadata
             }));
 
@@ -2273,12 +2346,30 @@ Performance: Fluency ${session.assessmentScores?.fluency || 0}/10, Accuracy ${se
                     const controller = new AbortController();
                     const timeoutId = setTimeout(() => controller.abort(), 30000); // 30s timeout
 
-                    const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${MODEL_NAME}:generateContent?key=${GEMINI_API_KEY}`, {
+                    // Convert Gemini format to OpenAI/Groq format
+                    const messages = [
+                        { role: "system", content: finalPrompt }
+                    ];
+
+                    // Convert chat history from Gemini to OpenAI format
+                    chatHistory.forEach(msg => {
+                        messages.push({
+                            role: msg.role === "model" ? "assistant" : msg.role,
+                            content: msg.parts[0].text
+                        });
+                    });
+
+                    const response = await fetch(GROQ_API_URL, {
                         method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${GROQ_API_KEY}`
+                        },
                         body: JSON.stringify({
-                            contents: chatHistory,
-                            system_instruction: { parts: [{ text: finalPrompt }] }
+                            model: MODEL_NAME,
+                            messages: messages,
+                            temperature: 0.7,
+                            max_tokens: 2000
                         }),
                         signal: controller.signal
                     });
@@ -2295,18 +2386,18 @@ Performance: Fluency ${session.assessmentScores?.fluency || 0}/10, Accuracy ${se
                         throw new Error(data.error.message);
                     }
 
-                    if (!data.candidates || !data.candidates[0].content) {
+                    if (!data.choices || !data.choices[0].message) {
                         throw new Error("Empty response from AI");
                     }
 
-                    const aiText = data.candidates[0].content.parts[0].text;
+                    const aiText = data.choices[0].message.content;
 
                     const processedText = await processAIResponse(aiText);
                     appendMessage('ai', processedText);
 
                     chatHistory.push({ role: "model", parts: [{ text: aiText }] });
 
-                    if (!isMuted) speak(processedText);
+                    if (soundEnabled && voiceEnabled && !isMuted) speak(processedText);
 
                     // Success - break retry loop
                     break;
@@ -2377,7 +2468,7 @@ Performance: Fluency ${session.assessmentScores?.fluency || 0}/10, Accuracy ${se
             console.log("Speech Recognition not supported in this browser.");
         }
 
-        // --- TEXT TO SPEECH (Browser Speech Synthesis) ---
+        // --- TEXT TO SPEECH (Enhanced Browser Speech Synthesis) ---
         let currentUtterance = null;
         let voicesLoaded = false;
         let preferredVoice = null;
@@ -2389,15 +2480,20 @@ Performance: Fluency ${session.assessmentScores?.fluency || 0}/10, Accuracy ${se
 
             if (voices.length > 0) {
                 voicesLoaded = true;
-                // Try to find a quality female voice
+                // Try to find a quality voice - prefer natural sounding voices
                 preferredVoice = voices.find(voice =>
                     voice.name.includes('Google UK English Female') ||
+                    voice.name.includes('Google US English') ||
                     voice.name.includes('Microsoft Zira') ||
                     voice.name.includes('Samantha') ||
                     voice.name.includes('Karen') ||
                     voice.name.includes('Victoria') ||
-                    voice.name.includes('Female')
-                ) || voices.find(voice => voice.lang.startsWith('en'));
+                    voice.name.includes('Natural') ||
+                    (voice.lang.startsWith('en') && voice.name.includes('Female'))
+                ) || voices.find(voice => voice.lang.startsWith('en-US') || voice.lang.startsWith('en-GB'))
+                  || voices[0]; // Fallback to first available voice
+
+                console.log('Selected voice:', preferredVoice?.name || 'Default');
             }
         }
 
@@ -2511,12 +2607,48 @@ Performance: Fluency ${session.assessmentScores?.fluency || 0}/10, Accuracy ${se
             }, 10);
         }
 
-        document.getElementById('sound-btn').addEventListener('click', function() {
-            isMuted = !isMuted;
-            this.style.opacity = isMuted ? '0.5' : '1';
-            if (isMuted && window.speechSynthesis) {
+        // --- SETTINGS MODAL ---
+        document.getElementById('settings-btn').addEventListener('click', () => {
+            document.getElementById('settings-modal').classList.add('show');
+        });
+
+        document.getElementById('settings-close').addEventListener('click', () => {
+            document.getElementById('settings-modal').classList.remove('show');
+        });
+
+        // Close settings when clicking outside
+        document.getElementById('settings-modal').addEventListener('click', (e) => {
+            if (e.target.id === 'settings-modal') {
+                document.getElementById('settings-modal').classList.remove('show');
+            }
+        });
+
+        // Sound toggle
+        document.getElementById('sound-toggle').addEventListener('change', function() {
+            soundEnabled = this.checked;
+            isMuted = !this.checked;
+            if (!soundEnabled && window.speechSynthesis) {
                 window.speechSynthesis.cancel();
                 document.getElementById('avatar-wrapper').classList.remove('speaking');
+            }
+        });
+
+        // Voice toggle
+        document.getElementById('voice-toggle').addEventListener('change', function() {
+            voiceEnabled = this.checked;
+            if (!voiceEnabled && window.speechSynthesis) {
+                window.speechSynthesis.cancel();
+                document.getElementById('avatar-wrapper').classList.remove('speaking');
+            }
+        });
+
+        // Reset API key
+        document.getElementById('reset-api-btn').addEventListener('click', () => {
+            if (confirm('Are you sure you want to reset your API key? You will need to enter it again.')) {
+                GROQ_API_KEY = '';
+                localStorage.removeItem('groq_api_key');
+                document.getElementById('settings-modal').classList.remove('show');
+                document.getElementById('api-modal').style.display = 'flex';
             }
         });
 
@@ -2524,7 +2656,8 @@ Performance: Fluency ${session.assessmentScores?.fluency || 0}/10, Accuracy ${se
         document.getElementById('start-session-btn').addEventListener('click', async () => {
             const key = document.getElementById('api-key-input').value;
             if (key) {
-                GEMINI_API_KEY = key;
+                GROQ_API_KEY = key;
+                localStorage.setItem('groq_api_key', key);
                 document.getElementById('api-modal').style.display = 'none';
                 initTracker();
 
@@ -2542,17 +2675,20 @@ Performance: Fluency ${session.assessmentScores?.fluency || 0}/10, Accuracy ${se
                     // RAG: Compose final prompt
                     const finalPrompt = await composeFinalPrompt();
 
-                    const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${MODEL_NAME}:generateContent?key=${GEMINI_API_KEY}`, {
+                    const response = await fetch(GROQ_API_URL, {
                         method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${GROQ_API_KEY}`
+                        },
                         body: JSON.stringify({
-                            contents: [
-                                {
-                                    role: "user",
-                                    parts: [{ text: "Hello" }]
-                                }
+                            model: MODEL_NAME,
+                            messages: [
+                                { role: "system", content: finalPrompt },
+                                { role: "user", content: "Hello" }
                             ],
-                            system_instruction: { parts: [{ text: finalPrompt }] }
+                            temperature: 0.7,
+                            max_tokens: 2000
                         })
                     });
 
@@ -2562,14 +2698,14 @@ Performance: Fluency ${session.assessmentScores?.fluency || 0}/10, Accuracy ${se
                         throw new Error(data.error.message);
                     }
 
-                    if (data.candidates && data.candidates[0].content) {
-                        const aiText = data.candidates[0].content.parts[0].text;
+                    if (data.choices && data.choices[0].message) {
+                        const aiText = data.choices[0].message.content;
                         const processedText = await processAIResponse(aiText);
                         appendMessage('ai', processedText);
                         chatHistory.push({ role: "user", parts: [{ text: "Hello" }] });
                         chatHistory.push({ role: "model", parts: [{ text: aiText }] });
 
-                        if (!isMuted) speak(processedText);
+                        if (soundEnabled && voiceEnabled && !isMuted) speak(processedText);
                     }
                 } catch (error) {
                     console.error(error);
@@ -2633,10 +2769,18 @@ Performance: Fluency ${session.assessmentScores?.fluency || 0}/10, Accuracy ${se
             }
         });
 
-        document.getElementById('theme-btn').addEventListener('click', () => {
-            document.body.classList.toggle('theme-ocean');
-            // Re-init canvas colors
-            initWaves();
+        // Theme selector
+        document.querySelectorAll('.theme-option').forEach(option => {
+            option.addEventListener('click', function() {
+                document.querySelectorAll('.theme-option').forEach(opt => opt.classList.remove('active'));
+                this.classList.add('active');
+
+                const theme = this.getAttribute('data-theme');
+                document.body.className = theme === 'ocean' ? 'theme-ocean' : 'theme-sage';
+
+                // Re-init canvas colors
+                initWaves();
+            });
         });
 
         // --- CANVAS BACKGROUND (Performance Optimized) ---
