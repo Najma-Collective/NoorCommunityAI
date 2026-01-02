@@ -1,10 +1,10 @@
 
 
-#  Nour AI Tutor - RAG System Documentation
+#  Noor AI Tutor - RAG System Documentation
 
 ## Overview
 
-The Nour AI Tutor now features a **Retrieval Augmented Generation (RAG)** system that enables:
+The Noor AI Tutor now features a **Retrieval Augmented Generation (RAG)** system that enables:
 
 1. **Customizable Lessons**: Load XML lesson files to teach any topic while preserving all pedagogical features
 2. **Student Progress Tracking**: Upload JSON files containing years of student learning history
@@ -22,7 +22,7 @@ FINAL_PROMPT = BASE_PROMPT + LESSON_PROMPT + STUDENT_CONTEXT
 ```
 
 1. **BASE_PROMPT** (Constant)
-   - Nour's identity and personality
+   - Noor's identity and personality
    - Privacy guidelines and trauma-informed practices
    - All 9 HTML visual components (carousel, cards, dialogue boxes, etc.)
    - All 12 pedagogical principles (ZPD, scaffolding, error correction, Socratic questioning, etc.)
@@ -104,7 +104,7 @@ Noor can enhance lessons with relevant, educational images from Pexels. This fea
 1. Click **"Choose Lesson File"** in the sidebar
 2. Select an XML lesson file (samples provided in `/lessons/` folder)
 3. The lesson will load and chat will reset
-4. Nour will greet you and begin the lesson
+4. Noor will greet you and begin the lesson
 
 **Sample Lessons Included:**
 - `lesson-present-perfect-b1.xml` - Present Perfect for life experiences (B1)
@@ -115,17 +115,17 @@ Noor can enhance lessons with relevant, educational images from Pexels. This fea
 
 1. Click **"Choose Progress File"** in the sidebar
 2. Select a JSON progress file (template: `sample-student-progress.json`)
-3. Nour will process the data using semantic search
+3. Noor will process the data using semantic search
 4. Teaching will be personalized based on student history
 
 **What Happens:**
 - System generates embeddings for recent sessions
 - When you chat, relevant context is retrieved using semantic similarity
-- Nour references your past performance, vocabulary, and preferences
+- Noor references your past performance, vocabulary, and preferences
 
 ### Step 3: Chat with Personalized Learning
 
-- Nour adapts to your level based on progress data
+- Noor adapts to your level based on progress data
 - Avoids re-teaching mastered vocabulary
 - Focuses on weaknesses identified in history
 - Uses your interests to contextualize examples
@@ -235,7 +235,7 @@ Noor can enhance lessons with relevant, educational images from Pexels. This fea
 
 ### Key Features
 
-- **All 9 stages preserved**: Nour follows the full TBL (Task-Based Learning) methodology
+- **All 9 stages preserved**: Noor follows the full TBL (Task-Based Learning) methodology
 - **Rich dialogue support**: Multi-speaker conversations with context
 - **Detailed grammar**: Explanations formatted with cards, notice boxes, examples
 - **Pronunciation guidance**: Weak forms, connected speech, stress patterns
@@ -333,7 +333,7 @@ Noor can enhance lessons with relevant, educational images from Pexels. This fea
 5. Context is injected into the system prompt
 
 **Result:**
-- Nour says things like: "I remember you struggled with irregular past tense in session 2"
+- Noor says things like: "I remember you struggled with irregular past tense in session 2"
 - Avoids re-teaching vocabulary you've mastered
 - Adapts difficulty based on past performance
 - Uses your interests for examples
@@ -391,7 +391,7 @@ POST https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:ge
 
 1. **Continuous Learning Journey**
    - Load progress file at start of each session
-   - Nour remembers what you've learned
+   - Noor remembers what you've learned
    - Seamless progression across lessons
    - Export updated progress when done
 
@@ -468,11 +468,11 @@ Potential improvements to the RAG system:
 5. **Add vocabulary bank** (categorized)
 6. **List common errors** to watch for
 7. **Include cultural context** notes
-8. **Test with Nour** - upload and chat!
+8. **Test with Noor** - upload and chat!
 
 ### Best Practices
 
-- **Be specific**: Detailed guidance helps Nour teach better
+- **Be specific**: Detailed guidance helps Noor teach better
 - **Use examples**: Include 3-5 examples for each grammar point
 - **Scaffold heavily**: Provide sentence stems, vocabulary support
 - **Cultural sensitivity**: Note potential triggers or assumptions
@@ -495,7 +495,7 @@ Potential improvements to the RAG system:
 - Ensure all required fields are present
 - Check date format is ISO 8601: `2024-11-15T14:30:00Z`
 
-### Nour Doesn't Use Progress Data
+### Noor Doesn't Use Progress Data
 
 - Wait 2-3 seconds after upload for embeddings to generate
 - Check browser console for errors
